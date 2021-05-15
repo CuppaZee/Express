@@ -1,0 +1,7 @@
+{
+  "name": "cuppazee-express",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
