@@ -1,0 +1,50 @@
+.login-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-content {
+    width: 500px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+ion-card ion-item {
+    --background: var(--ion-card-background, var(--ion-item-background, var(--ion-background-color, #fff)));
+}
+
+.login-legal-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+    padding-top: 0;
+}
+
+.login-legal-buttons ion-button {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+}
+
+.login-login-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+}
+
+.login-login-buttons ion-button {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+}
+
+.login-continue {
+    margin-left: 16px;
+    margin-right: 16px;
+}
+
+.login-continue-message {
+    text-align: center;
+}

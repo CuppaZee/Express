@@ -1,0 +1,12 @@
+.md .tab-icon-avatar {
+    height: 22px;
+    width: 22px;
+    margin-top: 6px;
+    margin-bottom: 2px; 
+}
+.ios .tab-icon-avatar {
+    height: 30px;
+    width: 30px;
+    margin-top: 2px;
+    margin-bottom: 2px; 
+}

@@ -1,0 +1,33 @@
+.activity-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.activity-wrapper-centred .activity-row {
+    justify-content: center;
+}
+
+.activity-wrapper-centred h2 {
+    justify-content: center;
+    text-align: center;
+}
+
+.activity-wrapper h2 {
+    font-weight: bold;
+    color: var(--ion-color-dark);
+}
+
+.activity-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.activity-img-skeleton {
+    margin: 0;
+    width: 24px;
+    margin-left: 2px;
+    margin-right: 2px;
+    height: 44px;
+}

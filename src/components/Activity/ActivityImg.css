@@ -1,0 +1,37 @@
+.activity-img-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+}
+
+.activity-img-wrapper-small {
+  font-size: 10px;
+}
+
+.activity-img-wrapper .activity-img {
+  height: 28px;
+  width: 28px;
+}
+
+.activity-img-wrapper-small .activity-img {
+  height: 20px;
+  width: 20px;
+}
+
+.activity-img-popover .popover-viewport {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.activity-img-popover .activity-img {
+  height: 48px;
+  width: 48px;
+}
+
+.activity-img-popover p {
+  margin: 0;
+}
