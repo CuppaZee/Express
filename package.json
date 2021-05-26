@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@byteowls/capacitor-oauth2": "2.1.0",
-    "@capacitor/core": "2.4.7",
-    "@capacitor/ios": "^2.4.7",
+    "@byteowls/capacitor-oauth2": "https://github.com/CuppaZee/capacitor-oauth2.git#feat/capacitor_3",
+    "@capacitor/core": "^3.0.0",
+    "@capacitor/ios": "3.0.0",
     "@cuppazee/types": "^0.0.54",
     "@cuppazee/utils": "^0.0.2",
     "@ionic-native/deeplinks": "^5.33.0",
@@ -24,9 +24,9 @@
     "dayjs": "^1.10.4",
     "fast-json-stable-stringify": "^2.1.0",
     "fuse.js": "^6.4.6",
-    "ionic-plugin-deeplinks": "^1.0.22",
     "ionicons": "^5.4.0",
     "jotai": "^0.16.5",
+    "jsonfile": "^6.1.0",
     "mapbox-gl": "^2.2.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -75,7 +75,7 @@
     ]
   },
   "devDependencies": {
-    "@capacitor/cli": "2.4.7",
+    "@capacitor/cli": "^3.0.0",
     "@cuppazee/api": "^0.0.12"
   },
   "description": "CuppaZee Express"

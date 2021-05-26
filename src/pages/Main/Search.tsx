@@ -11,8 +11,10 @@ import {
   IonSegment,
   IonSegmentButton,
   IonToolbar,
+  useIonViewDidEnter,
+  useIonViewWillEnter,
 } from "@ionic/react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Header from "../../components/Header";
 import useCuppaZeeData from "../../utils/useCuppaZeeData";
 import useMunzeeData from "../../utils/useMunzeeData";
@@ -37,6 +39,8 @@ function Search() {
     params: { format: "list" },
   });
 
+  const searchbarRef = useRef<HTMLIonSearchbarElement>(null);
+
   const fuse = useMemo(
     () =>
       new Fuse(
@@ -54,6 +58,10 @@ function Search() {
   );
   const results = useMemo(() => fuse.search(search).map(i => i.item), [fuse, search]);
 
+  useEffect(() => {
+    setTimeout(() => searchbarRef.current?.setFocus(), 500);
+  }, [])
+
   return (
     <>
       <Header title={pageTitle}>
@@ -61,6 +69,7 @@ function Search() {
           <IonSearchbar
             defaultValue={value.current}
             onIonChange={ev => onValue(ev.detail.value ?? "")}
+            ref={searchbarRef}
           />
         </IonToolbar>
         <IonToolbar>

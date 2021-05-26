@@ -1,4 +1,4 @@
-import { Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import {
   IonApp,
   IonAvatar,
@@ -63,8 +63,8 @@ const App: React.FC = () => {
     registerWebPlugin(OAuth2Client);
   }, []);
   const [theme] = useStorage(ThemeStorage);
-  const [ready] = useStorage(ReadyStorage);
-  const [accounts] = useStorage(AccountsStorage);
+  const [ready, _1, readyLoaded] = useStorage(ReadyStorage);
+  const [accounts, _2, accountsLoaded] = useStorage(AccountsStorage);
   useEffect(() => {
     // Use matchMedia to check the user preference
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
@@ -89,9 +89,9 @@ const App: React.FC = () => {
     return () => prefersDark.removeEventListener("change", toggleDarkTheme);
   }, [theme]);
   return (
-    <IonApp>
+    <IonApp> 
       <IonReactRouter>
-        {ready.date === "2021-05-18" ? (
+        {!readyLoaded || !accountsLoaded ? null : (ready.date === "2021-05-18" ? (
           <IonPage>
             <Switch>
               <Route exact path="/user/:username">
@@ -103,7 +103,7 @@ const App: React.FC = () => {
               <Route exact path="/search">
                 <Search />
               </Route>
-              <Route path="/">Home</Route>
+              <Route path="/"><Redirect to={`/user/${Object.values(accounts)[0]?.username}`} /></Route>
             </Switch>
             <IonTabBar>
               <IonTabButton tab="search" href="/search">
@@ -131,7 +131,7 @@ const App: React.FC = () => {
           </IonPage>
         ) : (
           <Login />
-        )}
+        ))}
       </IonReactRouter>
     </IonApp>
   );
