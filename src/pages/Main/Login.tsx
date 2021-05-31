@@ -29,6 +29,7 @@ import omit from "../../utils/omit";
 import { arrowForward, close } from "ionicons/icons";
 import { ThemeStorage } from "../../storage/Theme";
 import { ReadyStorage } from "../../storage/Ready";
+import Header from "../../components/Header";
 const configs = {
   main: {
     redirect_uri: "https://server.cuppazee.app/auth/auth/v1",
@@ -76,11 +77,7 @@ function Login() {
   }, [params.get("access_token")]);
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>{pageTitle}</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <Header title={pageTitle} />
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
@@ -90,10 +87,6 @@ function Login() {
         <div className="login-content-wrapper">
           <div className="login-content">
             <IonCard>
-              {/* <IonCardHeader>
-                <IonCardTitle>Boring Legal Stuff</IonCardTitle>
-              </IonCardHeader> */}
-
               <IonCardContent>
                 By continuing to use CuppaZee Express, you agree to CuppaZee's Terms of Service and
                 Privacy Policy.

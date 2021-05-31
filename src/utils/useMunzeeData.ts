@@ -2,15 +2,18 @@ import { FetchRequest, FetchResponse, Endpoints } from "@cuppazee/api";
 import { useQuery, UseQueryOptions, UseQueryResult } from "react-query";
 import stringify from "fast-json-stable-stringify";
 import useToken, { useTokenStatus } from "./useToken";
+import { IonToast } from "@ionic/react";
 
 const getMunzeeData = async <Path extends keyof Endpoints>(
   endpoint: FetchRequest<Path>["endpoint"],
   params: FetchRequest<Path>["params"] & {httpMethod?: "get"},
   token: string
 ): Promise<FetchResponse<Path> | null> => {
+  const start = performance.now();
   var body = new FormData();
   body.append("data", JSON.stringify(params));
   body.append("access_token", token);
+  const mid = performance.now();
   var response = await fetch(
     "https://api.munzee.com/" +
       endpoint?.replace(/{([A-Za-z0-9_]+)}/g, string => {
@@ -22,7 +25,9 @@ const getMunzeeData = async <Path extends keyof Endpoints>(
       body: params.httpMethod === "get" ? undefined : body,
     }
   );
-  
+  // alert(
+  //   `Done getting data: ${endpoint}, ${mid - start}ms + ${performance.now() - mid}ms = ${performance.now() - start}ms`
+  // );
   // TODO: FROM value
   return await response.json();
 };

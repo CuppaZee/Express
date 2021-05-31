@@ -19,7 +19,7 @@ export interface AccessToken {
 
 const baseURL = 'https://server.cuppazee.app'
 
-const getToken = async (teaken: string, user_id: number): Promise<{data: AccessToken}> => {
+const getToken = async (teaken: string, user_id: number): Promise<{ data: AccessToken }> => {
   const response = await fetch(
     `${baseURL}/auth/get/v2?teaken=${encodeURIComponent(teaken)}&user_id=${encodeURIComponent(
       user_id

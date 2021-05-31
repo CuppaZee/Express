@@ -5,14 +5,12 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonPage,
   IonRefresher,
   IonRefresherContent,
   IonSearchbar,
   IonSegment,
   IonSegmentButton,
-  IonToolbar,
-  useIonViewDidEnter,
-  useIonViewWillEnter,
 } from "@ionic/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Header from "../../components/Header";
@@ -21,8 +19,8 @@ import useMunzeeData from "../../utils/useMunzeeData";
 import { useLazySearch } from "../../utils/useSearch";
 import "./Search.css";
 import Fuse from "fuse.js";
-import types from "@cuppazee/types";
-import { CZTypeImg } from "../../components/CZImg";
+import Tabs from "../../components/Tabs";
+import { addUserIDs } from "../../utils/useUserID";
 
 function Search() {
   const pageTitle = "Search";
@@ -34,6 +32,11 @@ function Search() {
     params: { text: search },
     options: { enabled: !!search, keepPreviousData: true },
   });
+  useEffect(() => {
+    if (users.data?.data) {
+      addUserIDs(users.data.data.users.map(i => [i.username, Number(i.user_id)]));
+    }
+  }, [users.dataUpdatedAt]);
   const clans = useCuppaZeeData<{ data: { clan_id: number; name: string; tagline: string }[] }>({
     endpoint: "clan/list",
     params: { format: "list" },
@@ -60,34 +63,30 @@ function Search() {
 
   useEffect(() => {
     setTimeout(() => searchbarRef.current?.setFocus(), 500);
-  }, [])
+  }, []);
 
   return (
-    <>
+    <IonPage>
       <Header title={pageTitle}>
-        <IonToolbar>
-          <IonSearchbar
-            defaultValue={value.current}
-            onIonChange={ev => onValue(ev.detail.value ?? "")}
-            ref={searchbarRef}
-          />
-        </IonToolbar>
-        <IonToolbar>
-          <IonSegment value={filter} onIonChange={e => setFilter(e.detail.value ?? "")}>
-            <IonSegmentButton value="all">
-              <IonLabel>All</IonLabel>
-            </IonSegmentButton>
-            <IonSegmentButton value="players">
-              <IonLabel>Players</IonLabel>
-            </IonSegmentButton>
-            <IonSegmentButton value="clans">
-              <IonLabel>Clans</IonLabel>
-            </IonSegmentButton>
-            {/* <IonSegmentButton value="types">
+        <IonSearchbar
+          defaultValue={value.current}
+          onIonChange={ev => onValue(ev.detail.value ?? "")}
+          ref={searchbarRef}
+        />
+        <IonSegment value={filter} onIonChange={e => setFilter(e.detail.value ?? "")}>
+          <IonSegmentButton value="all">
+            <IonLabel>All</IonLabel>
+          </IonSegmentButton>
+          <IonSegmentButton value="players">
+            <IonLabel>Players</IonLabel>
+          </IonSegmentButton>
+          <IonSegmentButton value="clans">
+            <IonLabel>Clans</IonLabel>
+          </IonSegmentButton>
+          {/* <IonSegmentButton value="types">
               <IonLabel>Types</IonLabel>
             </IonSegmentButton> */}
-          </IonSegment>
-        </IonToolbar>
+        </IonSegment>
       </Header>
       <IonContent>
         <IonRefresher
@@ -126,7 +125,7 @@ function Search() {
                     <IonLabel>{i.name}</IonLabel>
                   </IonItem>
                 );
-              }// else {
+              } // else {
               //   return (
               //     <IonItem key={`type_${i.id.toString()}`} routerLink={`/type/${i.name}`}>
               //       <CZTypeImg img={i.icon} slot="start" className="search-type-image" />
@@ -138,7 +137,8 @@ function Search() {
           </IonList>
         </div>
       </IonContent>
-    </>
+      <Tabs />
+    </IonPage>
   );
 }
 

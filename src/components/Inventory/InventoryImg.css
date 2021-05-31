@@ -1,0 +1,33 @@
+.inventory-img-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px;
+}
+
+.inventory-img-wrapper .inventory-img {
+  height: 32px;
+  width: 32px;
+}
+
+.inventory-img-wrapper-none {
+  filter: grayscale(1);
+  opacity: 0.4;
+}
+
+.inventory-img-popover .popover-viewport {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.inventory-img-popover .inventory-img {
+  height: 48px;
+  width: 48px;
+}
+
+.inventory-img-popover p {
+  margin: 0;
+}

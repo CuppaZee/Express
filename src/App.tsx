@@ -1,17 +1,9 @@
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Route } from "react-router-dom";
 import {
   IonApp,
-  IonAvatar,
-  IonIcon,
-  IonLabel,
-  IonPage,
   IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { grid, search } from "ionicons/icons";
 import UserMainPage from "./pages/User/Main";
 
 /* Core CSS required for Ionic components to work properly */
@@ -33,8 +25,8 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 
-import "./App.css"
-import { useEffect } from "react";
+import "./App.css";
+import { useEffect, useRef, useState } from "react";
 
 import { registerWebPlugin } from "@capacitor/core";
 import { OAuth2Client } from "@byteowls/capacitor-oauth2";
@@ -49,22 +41,19 @@ import { AccountsStorage } from "./storage/Account";
 
 import "./utils/dayjs";
 import Search from "./pages/Main/Search";
+import UserActivityPage from "./pages/User/Activity";
+import UserInventoryPage from "./pages/User/Inventory";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 300000
-    }
-  }
+      staleTime: 300000,
+    },
+  },
 });
 
-const App: React.FC = () => {
-  useEffect(() => {
-    registerWebPlugin(OAuth2Client);
-  }, []);
+const ThemeHandler: React.FC = () => {
   const [theme] = useStorage(ThemeStorage);
-  const [ready, _1, readyLoaded] = useStorage(ReadyStorage);
-  const [accounts, _2, accountsLoaded] = useStorage(AccountsStorage);
   useEffect(() => {
     // Use matchMedia to check the user preference
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
@@ -88,50 +77,41 @@ const App: React.FC = () => {
 
     return () => prefersDark.removeEventListener("change", toggleDarkTheme);
   }, [theme]);
+  return null;
+};
+
+const App: React.FC = () => {
+  useEffect(() => {
+    registerWebPlugin(OAuth2Client);
+  }, []);
+  const [ready, _1, readyLoaded] = useStorage(ReadyStorage);
+  const [accounts, _2, accountsLoaded] = useStorage(AccountsStorage);
+  useEffect(() => {
+    if (accountsLoaded && window.location.pathname === "/") {
+      window.location.pathname = `/user/${Object.values(accounts)[0]?.username}`;
+    }
+  }, [accountsLoaded]);
   return (
-    <IonApp> 
+    <IonApp>
       <IonReactRouter>
-        {!readyLoaded || !accountsLoaded ? null : (ready.date === "2021-05-18" ? (
-          <IonPage>
-            <Switch>
-              <Route exact path="/user/:username">
-                <UserMainPage />
-              </Route>
-              <Route exact path="/tools">
-                Tools
-              </Route>
-              <Route exact path="/search">
-                <Search />
-              </Route>
-              <Route path="/"><Redirect to={`/user/${Object.values(accounts)[0]?.username}`} /></Route>
-            </Switch>
-            <IonTabBar>
-              <IonTabButton tab="search" href="/search">
-                <IonIcon icon={search} />
-                <IonLabel>Search</IonLabel>
-              </IonTabButton>
-              {Object.values(accounts).map(acc => (
-                <IonTabButton key={acc.username} tab={`user/${acc.username}`} href={`/user/${acc.username}`}>
-                  <IonIcon style={{ display: "none" }} />
-                  <IonAvatar className="tab-icon-avatar">
-                    <img
-                      src={`https://munzee.global.ssl.fastly.net/images/avatars/ua${Number(
-                        acc.user_id
-                      ).toString(36)}.png`}
-                    />
-                  </IonAvatar>
-                  <IonLabel>{acc.username}</IonLabel>
-                </IonTabButton>
-              ))}
-              <IonTabButton tab="tools" href={`/tools`}>
-                <IonIcon icon={grid} />
-                <IonLabel>More</IonLabel>
-              </IonTabButton>
-            </IonTabBar>
-          </IonPage>
+        <ThemeHandler />
+        {!readyLoaded || !accountsLoaded ? null : ready.date === "2021-05-18" ? (
+          <IonRouterOutlet>
+            <Route exact path="/search" component={Search} />
+            <Route exact path="/more" component={Login} />
+            <Route exact path="/user/:username" component={UserMainPage} />
+            <Route exact path="/user/:username/activity" component={UserActivityPage} />
+            <Route exact path="/user/:username/activity/:date" component={UserActivityPage} />
+            <Route exact path="/user/:username/inventory" component={UserInventoryPage} />
+            <Route
+              render={() => {
+                return null;
+              }}
+            />
+          </IonRouterOutlet>
         ) : (
           <Login />
-        ))}
+        )}
       </IonReactRouter>
     </IonApp>
   );

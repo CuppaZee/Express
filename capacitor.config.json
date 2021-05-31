@@ -1,6 +1,6 @@
 {
   "appId": "app.cuppazee.express",
-  "appName": "cuppazee-express",
+  "appName": "Express",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "build",
