@@ -3,9 +3,22 @@
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 .inventory-history-title {
   margin-left: 16px;
-  margin-bottom: -16px;
+}
+
+.inventory-overview-card {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.inventory-history-card ion-note {
+  font-size: 0.8em;
 }

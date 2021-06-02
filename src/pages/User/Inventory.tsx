@@ -8,7 +8,9 @@ import {
   IonContent,
   IonItem,
   IonLabel,
+  IonNote,
   IonPage,
+  IonText,
   IonTitle,
 } from "@ionic/react";
 import "./Inventory.css";
@@ -84,9 +86,10 @@ const UserInventoryPage: React.FC = () => {
           <IonCard key={`card_${g.title}_${g.time.format()}`} className="inventory-history-card">
             <IonCardHeader>
               <IonCardSubtitle>{g.time.format("L LT")}</IonCardSubtitle>
-              <IonCardTitle>
+              <IonCardTitle className="small">
                 {typeof g.title === "string" ? g.title : g.title[0].slice(15)}
               </IonCardTitle>
+              {g.description && <IonText>{g.description}</IonText>}
             </IonCardHeader>
             <IonCardContent className="inventory-row">
               {g.types.map(i => (

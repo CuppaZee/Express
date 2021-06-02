@@ -1266,10 +1266,10 @@
   resolved "https://registry.yarnpkg.com/@cuppazee/types/-/types-0.0.55.tgz#dd5835fd0855ec56ea79591c336f8cf4cbf405ac"
   integrity sha512-NBG3lImLPsZaOJ5IhrKxcZsom6rqc6HehhOIgsfr+dwYiUh9c8CFFLKO04HXmC/TdwuwCWMaAabmWolOMs2eyA==
 
-"@cuppazee/utils@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@cuppazee/utils/-/utils-0.0.6.tgz#9f9134b4c1554e9776d38ce9319028a7c3118f37"
-  integrity sha512-5d8MlzgJEyc3f33gFZdv1iotF+zTOIEhExsxN3Q017sFQiwxdnT2FWa6Xw3CXoyOEpB9jgMoWmqsgiG3favzXw==
+"@cuppazee/utils@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@cuppazee/utils/-/utils-0.0.11.tgz#dd1ba4711a24af7e770e4961abcd8ed82397b3bc"
+  integrity sha512-XLIlYES422ARG6xzk+2g0XfBpDKGXgP7JvcYUeWrytXtrgu94V/0MpZ2SU7rhuSpU0lwqwcQoEIuZpGyslpz7g==
   dependencies:
     "@cuppazee/types" "^0.0.55"
     dayjs "^1.10.5"

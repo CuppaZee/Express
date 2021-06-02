@@ -1,4 +1,5 @@
 import {
+  IonAvatar,
   IonCard,
   IonCardContent,
   IonCardSubtitle,
@@ -6,6 +7,7 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonImg,
   IonItem,
   IonLabel,
   IonPage,
@@ -66,12 +68,12 @@ const UserMainPage: React.FC = () => {
           <ActivityOverview d={d} day={day} />
         </IonCard>
         <IonCard>
-          <IonCardContent>
+          {/* <IonCardContent>
             <IonCardSubtitle>
               Level {user.data?.data?.level} - {user.data?.data?.points.toLocaleString()} Points
             </IonCardSubtitle>
             <IonCardTitle>{user.data?.data?.username ?? params?.username}</IonCardTitle>
-          </IonCardContent>
+          </IonCardContent> */}
           <IonItem
             detail
             routerLink={`/user/${user.data?.data?.username ?? params?.username}/activity`}>
@@ -84,10 +86,23 @@ const UserMainPage: React.FC = () => {
             <IonIcon slot="start" icon={bagHandleOutline} />
             <IonLabel>Inventory</IonLabel>
           </IonItem>
-          <IonItem detail>
-            <IonIcon slot="start" icon={shieldOutline} />
-            <IonLabel>Clan Progress</IonLabel>
-          </IonItem>
+          {user.data?.data?.clan ? (
+            <IonItem lines="none" detail routerLink={`/clan/${user.data.data.clan.id}`}>
+              <IonAvatar className="item-avatar" slot="start">
+                <IonImg
+                  src={`https://munzee.global.ssl.fastly.net/images/clan_logos/${Number(
+                    user.data.data.clan.id
+                  ).toString(36)}.png`}
+                />
+              </IonAvatar>
+              <IonLabel>{user.data.data.clan.name}</IonLabel>
+            </IonItem>
+          ) : (
+            <IonItem lines="none" detail>
+              <IonIcon slot="start" icon={shieldOutline} />
+              <IonLabel>Clan Progress</IonLabel>
+            </IonItem>
+          )}
         </IonCard>
       </IonContent>
       <Tabs />

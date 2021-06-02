@@ -43,6 +43,7 @@ import "./utils/dayjs";
 import Search from "./pages/Main/Search";
 import UserActivityPage from "./pages/User/Activity";
 import UserInventoryPage from "./pages/User/Inventory";
+import ClanStatsPage from "./pages/Clan/Stats";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -99,6 +100,7 @@ const App: React.FC = () => {
           <IonRouterOutlet>
             <Route exact path="/search" component={Search} />
             <Route exact path="/more" component={Login} />
+            <Route exact path="/clan/:id" component={ClanStatsPage} />
             <Route exact path="/user/:username" component={UserMainPage} />
             <Route exact path="/user/:username/activity" component={UserActivityPage} />
             <Route exact path="/user/:username/activity/:date" component={UserActivityPage} />

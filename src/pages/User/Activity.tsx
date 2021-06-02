@@ -76,8 +76,8 @@ const ListWrapper = forwardRef(function({ children, ...props }: any, ref) {
       return (
         <div ref={r => {
           const res = new ResizeObserver(e => {
-            const h = e[0].contentRect.height + (mode === "ios" ? 48 : 0);
-            if (h > 200 && overviewSize !== h) {
+            const h = e[0].contentRect.height + 16;
+            if (h > 200 && overviewSize !== h && Math.abs(h - overviewSize) > 4) {
               setOverviewSize(h);
             }
           });
@@ -241,14 +241,14 @@ const ListWrapper = forwardRef(function({ children, ...props }: any, ref) {
               itemData={[overviewSize]}
               itemSize={i => {
                 if (i === 0) {
-                  return overviewSize;
+                  return overviewSize - 8;
                 }
                 const l = d?.list[i - 1];
                 if (!l) return 0;
                 const main =
                   l.type === "capture" ? (mode === "ios" ? 73 : 70) : mode === "ios" ? 67 : 64;
                 const subs = (mode === "ios" ? 45 : 40) * (l.sub_captures?.length ?? 0);
-                return main + ((subs || 1) - 1);
+                return main + ((subs || 1) - 1) - 8;
               }}
               width={width}>
               {Row}

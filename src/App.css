@@ -1,16 +1,35 @@
 .md .tab-icon-avatar {
-    height: 22px;
-    width: 22px;
-    margin-top: 6px;
-    margin-bottom: 2px; 
+  height: 22px;
+  width: 22px;
+  margin-top: 6px;
+  margin-bottom: 2px;
 }
 .ios .tab-icon-avatar {
-    height: 30px;
-    width: 30px;
-    margin-top: 2px;
-    margin-bottom: 2px; 
+  height: 30px;
+  width: 30px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+ion-card {
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 
 ion-card ion-item {
-    --background: transparent;
+  --background: transparent;
+}
+
+.item-avatar {
+  margin-right: 24px;
+  margin-left: -8px;
+}
+
+.ios .item-avatar {
+  margin-right: 12px;
+  margin-left: -4px;
+}
+
+.ios ion-card-title {
+  font-size: 22px;
 }
