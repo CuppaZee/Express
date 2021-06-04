@@ -20,8 +20,9 @@ import {
   useIonToast,
 } from "@ionic/react";
 import "./Login.css";
-import { Plugins } from "@capacitor/core";
-import { useHistory, useLocation, useParams } from "react-router-dom";
+import { Browser } from "@capacitor/browser";
+import { App } from "@capacitor/app";
+import { useHistory, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import useStorage from "../../utils/useStorage";
 import { AccountsStorage } from "../../storage/Account";
@@ -52,11 +53,7 @@ const config = configs.main;
 const path = "login";
 const redirectUri = !isPlatform("capacitor")
   ? [window.location.origin, path].filter(Boolean).join("/")
-  : `app.cuppazee.express://`;
-
-interface LoginParams {
-  access_token: string;
-}
+  : `app.cuppazee.express://login`;
 
 function Login() {
   const pageTitle = "CuppaZee Express";
@@ -73,8 +70,30 @@ function Login() {
       setAccounts({ ...accounts, [user_id]: { teaken, username, user_id: Number(user_id) } }).then(
         () => history.replace("/login")
       );
+      present({
+        duration: 2000,
+        color: "success",
+        message: `Successfully logged in as ${username}`,
+      });
     }
   }, [params.get("access_token")]);
+  useEffect(() => {
+    App.addListener("appUrlOpen", async o => {
+      try {
+        await Browser.close();
+      } catch (e) {}
+      const params = new URL(o.url).searchParams;
+      const [teaken, username, user_id] = decodeURIComponent(
+        params.get("access_token") || ""
+      ).split("/");
+      setAccounts({ ...accounts, [user_id]: { teaken, username, user_id: Number(user_id) } });
+      present({
+        duration: 2000,
+        color: "success",
+        message: `Successfully logged in as ${username}`,
+      });
+    });
+  }, [])
   return (
     <IonPage>
       <Header title={pageTitle} />
@@ -162,50 +181,23 @@ function Login() {
                       )}`;
                       return;
                     }
-                    Plugins.OAuth2Client.authenticate({
-                      authorizationBaseUrl: "https://api.munzee.com/oauth",
-                      resourceUrl: "https://server.cuppazee.app/auth/get/v2",
-                      scope: "read",
-                      appId: config.client_id,
-                      responseType: "token",
-                      redirectUrl: config.redirect_uri,
-                      state: t.toString(),
-                      additionalParameters: {
-                        response_type: "code",
-                        state: JSON.stringify({
-                          redirect: redirectUri,
-                          platform: isPlatform("android")
-                            ? "android"
-                            : isPlatform("ios")
-                            ? "ios"
-                            : "web",
-                          ionic: t.toString(),
-                        }),
-                      },
-                    })
-                      .then((response: any) => {
-                        const [teaken, username, user_id] = decodeURIComponent(
-                          response.data.access_token
-                        ).split("/");
-                        setAccounts({
-                          ...accounts,
-                          [user_id]: { teaken, username, user_id: Number(user_id) },
-                        });
-                        present({
-                          duration: 2000,
-                          color: "success",
-                          message: `Successfully logged in as ${username}`,
-                        });
-                      })
-                      .catch((reason: any) => {
-                        if (reason?.message !== "USER_CANCELLED") {
-                          present({
-                            duration: 2000,
-                            color: "danger",
-                            message: "Oops, something went wrong when logging in.",
-                          });
-                        }
-                      });
+                    await Browser.open({
+                      url: `https://api.munzee.com/oauth?client_id=${config.client_id
+                        }&redirect_uri=${encodeURIComponent(
+                          config.redirect_uri
+                        )}&scope=read&response_type=code&state=${encodeURIComponent(
+                          JSON.stringify({
+                            redirect: redirectUri,
+                            platform: isPlatform("android")
+                              ? "android"
+                              : isPlatform("ios")
+                                ? "ios"
+                                : "web",
+                            ionic: t.toString(),
+                          })
+                        )}`,
+                        presentationStyle: "popover"
+                    });
                   }}>
                   Login with Munzee
                 </IonButton>
@@ -221,6 +213,7 @@ function Login() {
               disabled={Object.keys(accounts).length === 0}
               color="primary"
               onClick={() => {
+                window.location.pathname = `/user/${Object.values(accounts)[0]?.username}`;
                 setReady({ date: "2021-05-18" });
               }}>
               Continue <IonIcon icon={arrowForward} />

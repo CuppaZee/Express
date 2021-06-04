@@ -1200,9 +1200,15 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@byteowls/capacitor-oauth2@https://github.com/CuppaZee/capacitor-oauth2.git#feat/capacitor_3":
-  version "3.0.0"
-  resolved "https://github.com/CuppaZee/capacitor-oauth2.git#b0fb23155f641cef53f00a1f88139fcab6ab1167"
+"@capacitor/app@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/app/-/app-1.0.0.tgz#38e092de0448f1b230cfc289d65337e802357638"
+  integrity sha512-ie8BNPoyQV300BQ7ckucc4xdcTOcxcII9YH2kOcffHfXjrqYMo+2srkoaAbYs6ivjse+rWfNVFZN9CjAbep8qQ==
+
+"@capacitor/browser@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/browser/-/browser-1.0.0.tgz#84d5e3af1beeefc161228e31927877c655b26e87"
+  integrity sha512-eynPNOcV7j40jEIB/xNpLbazbGia3nA7/MueYkTvjhvxXgiwwKg4fHAOfMNj5bzAVk1O8raO2MUGF1Lui1EIZQ==
 
 "@capacitor/cli@^3.0.0":
   version "3.0.0"

@@ -8,10 +8,8 @@ import {
   IonContent,
   IonItem,
   IonLabel,
-  IonNote,
   IonPage,
   IonText,
-  IonTitle,
 } from "@ionic/react";
 import "./Inventory.css";
 import Header from "../../components/Header";
@@ -35,8 +33,9 @@ const UserInventoryPage: React.FC = () => {
   const userID = useUserID(params?.username);
   const data = useCuppaZeeData<{ data: UserInventoryInputData }>({
     endpoint: "user/inventory",
-    params: { user_id: userID },
+    params: {},
     options: { enabled: !!userID },
+    user_id: userID,
   });
   const d = useMemo(
     () =>

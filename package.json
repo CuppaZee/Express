@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@byteowls/capacitor-oauth2": "https://github.com/CuppaZee/capacitor-oauth2.git#feat/capacitor_3",
+    "@capacitor/app": "^1.0.0",
+    "@capacitor/browser": "^1.0.0",
     "@capacitor/core": "^3.0.0",
     "@capacitor/ios": "3.0.0",
     "@cuppazee/types": "^0.0.55",

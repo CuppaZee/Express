@@ -26,10 +26,8 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 
 import "./App.css";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 
-import { registerWebPlugin } from "@capacitor/core";
-import { OAuth2Client } from "@byteowls/capacitor-oauth2";
 import Login from "./pages/Main/Login";
 
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -82,9 +80,6 @@ const ThemeHandler: React.FC = () => {
 };
 
 const App: React.FC = () => {
-  useEffect(() => {
-    registerWebPlugin(OAuth2Client);
-  }, []);
   const [ready, _1, readyLoaded] = useStorage(ReadyStorage);
   const [accounts, _2, accountsLoaded] = useStorage(AccountsStorage);
   useEffect(() => {
@@ -96,7 +91,7 @@ const App: React.FC = () => {
     <IonApp>
       <IonReactRouter>
         <ThemeHandler />
-        {!readyLoaded || !accountsLoaded ? null : ready.date === "2021-05-18" ? (
+        {!readyLoaded || !accountsLoaded ? null : (ready.date === "2021-05-18" && Object.keys(accounts).length > 0) ? (
           <IonRouterOutlet>
             <Route exact path="/search" component={Search} />
             <Route exact path="/more" component={Login} />
