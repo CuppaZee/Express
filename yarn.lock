@@ -1200,6 +1200,11 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@capacitor/android@3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-3.0.0.tgz#0d8ce965fa19d9f1412a468476525af2b92a151e"
+  integrity sha512-qyvI3LzfGvVnSK7Dw3dXXLSJjfj816EfWHiyGzV4Rg5r2XkvPa8IqjHT3lmyxwNJjGdHl3TTn9Q6YvM6XD70cQ==
+
 "@capacitor/app@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@capacitor/app/-/app-1.0.0.tgz#38e092de0448f1b230cfc289d65337e802357638"
@@ -1267,17 +1272,20 @@
   resolved "https://registry.npmjs.org/@cuppazee/api/-/api-0.0.12.tgz"
   integrity sha512-DldHDAnyjZ/cs0o0A5XkxV92yu3ciNKYrVylQ8kqwB9+u3UZD8JHJullbgNiCEof9MR5tA4QholaNNb9hTXeVw==
 
-"@cuppazee/types@^0.0.55":
-  version "0.0.55"
-  resolved "https://registry.yarnpkg.com/@cuppazee/types/-/types-0.0.55.tgz#dd5835fd0855ec56ea79591c336f8cf4cbf405ac"
-  integrity sha512-NBG3lImLPsZaOJ5IhrKxcZsom6rqc6HehhOIgsfr+dwYiUh9c8CFFLKO04HXmC/TdwuwCWMaAabmWolOMs2eyA==
-
-"@cuppazee/utils@^0.0.11":
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/@cuppazee/utils/-/utils-0.0.11.tgz#dd1ba4711a24af7e770e4961abcd8ed82397b3bc"
-  integrity sha512-XLIlYES422ARG6xzk+2g0XfBpDKGXgP7JvcYUeWrytXtrgu94V/0MpZ2SU7rhuSpU0lwqwcQoEIuZpGyslpz7g==
+"@cuppazee/db@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@cuppazee/db/-/db-0.0.2.tgz#ffd81ccf11cb414e3d9d955909714ce846dc33f3"
+  integrity sha512-XZ6xIYG+utdO7eoRD0wk8p6KO+ApfEKKDhkMTh+Ceb160cHBH/HsotAoI2s75LVbb4W3WcSiSbOFWsL7HJYWnA==
   dependencies:
-    "@cuppazee/types" "^0.0.55"
+    "@msgpack/msgpack" "^2.7.0"
+    lzwcompress "^1.1.0"
+
+"@cuppazee/utils@^0.0.12":
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/@cuppazee/utils/-/utils-0.0.12.tgz#98fb105a31e7c9bce29b3a1de2295a2b921d6c20"
+  integrity sha512-snLPq4QXscXuNyoCzzU1k0b5DNZyNlKX4nGC/38DdBpU5swc/ftPufq9yP7mGbdzgpxCLlvzKlmyqNONo+DTtg==
+  dependencies:
+    "@cuppazee/db" "^0.0.2"
     dayjs "^1.10.5"
 
 "@eslint/eslintrc@^0.4.1":
@@ -1694,6 +1702,11 @@
   dependencies:
     "@babel/runtime" "^7.12.0"
     gl-matrix "^3.0.0"
+
+"@msgpack/msgpack@^2.7.0":
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/@msgpack/msgpack/-/msgpack-2.7.0.tgz#3a0fbe4e0406f6576895f990857e19da97376f18"
+  integrity sha512-mlRYq9FSsOd4m+3wZWatemn3hGFZPWNJ4JQOdrir4rrMK2PyIk26idKBoUWrqF3HJJHl+5GpRU+M0wEruJwecg==
 
 "@nodelib/fs.scandir@2.1.4":
   version "2.1.4"
@@ -7525,6 +7538,11 @@ lz-string@^1.4.4:
   version "1.4.4"
   resolved "https://registry.npmjs.org/lz-string/-/lz-string-1.4.4.tgz"
   integrity sha1-wNjq82BZ9wV5bh40SBHPTEmNOiY=
+
+lzwcompress@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/lzwcompress/-/lzwcompress-1.1.0.tgz#e4dd0826dfd1e53fe1335163570e361634f39ca2"
+  integrity sha512-92sbAKG+fkTWPQ7cImKjD3p4elxyIc0+uWgXNLwk9OwzwCX7j6KXl/CJ0zpVsFPRyjuOFUcDuhGWRUAMjGMY7g==
 
 magic-string@^0.25.0, magic-string@^0.25.7:
   version "0.25.7"

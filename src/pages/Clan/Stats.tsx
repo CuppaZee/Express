@@ -14,7 +14,7 @@ import React, { useMemo } from "react";
 import Tabs from "../../components/Tabs";
 import useCZParams from "../../utils/useCZParams";
 import useMunzeeData from "../../utils/useMunzeeData";
-import { ClanShadowData, GameID, generateClanRequirements, generateClanStats, requirementMeta } from "@cuppazee/utils/lib";
+import { ClanShadowData, GameID, generateClanRequirements, generateClanStats, requirementMeta } from "@cuppazee/utils";
 import useCuppaZeeData from "../../utils/useCuppaZeeData";
 import "./Clan.css";
 
@@ -26,11 +26,11 @@ const ClanStatsPage: React.FC = () => {
   });
   const requirements = useMunzeeData({
     endpoint: "clan/v2/requirements",
-    params: { clan_id: Number(params?.id), game_id: new GameID().game_id - 1 },
+    params: { clan_id: Number(params?.id), game_id: new GameID().game_id },
   });
   const shadow = useCuppaZeeData<{ data: ClanShadowData }>({
     endpoint: "clan/shadow/v1",
-    params: { clan_id: Number(params?.id), game_id: new GameID().game_id - 1 },
+    params: { clan_id: Number(params?.id), game_id: new GameID().game_id },
   });
 
   const reqs = useMemo(

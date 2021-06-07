@@ -17,6 +17,7 @@ import {
   IonTitle,
   IonToolbar,
   isPlatform,
+  useIonRouter,
   useIonToast,
 } from "@ionic/react";
 import "./Login.css";
@@ -31,6 +32,7 @@ import { arrowForward, close } from "ionicons/icons";
 import { ThemeStorage } from "../../storage/Theme";
 import { ReadyStorage } from "../../storage/Ready";
 import Header from "../../components/Header";
+import blankAnimation from "../../utils/blankAnimation";
 const configs = {
   main: {
     redirect_uri: "https://server.cuppazee.app/auth/auth/v1",
@@ -58,7 +60,7 @@ const redirectUri = !isPlatform("capacitor")
 function Login() {
   const pageTitle = "CuppaZee Express";
   const location = useLocation();
-  const history = useHistory();
+  const history = useIonRouter();
   const params = new URLSearchParams(location.search);
   const [present] = useIonToast();
   const [accounts, setAccounts] = useStorage(AccountsStorage);
@@ -68,7 +70,14 @@ function Login() {
     if (params.get("access_token")) {
       const [teaken, username, user_id] = decodeURIComponent(params.get("access_token") || "").split("/");
       setAccounts({ ...accounts, [user_id]: { teaken, username, user_id: Number(user_id) } }).then(
-        () => history.replace("/login")
+        () => {
+                    history.push(
+                      `/login`,
+                      undefined,
+                      "replace",
+                      undefined,
+                      blankAnimation
+                    );}
       );
       present({
         duration: 2000,
@@ -213,7 +222,13 @@ function Login() {
               disabled={Object.keys(accounts).length === 0}
               color="primary"
               onClick={() => {
-                window.location.pathname = `/user/${Object.values(accounts)[0]?.username}`;
+                    history.push(
+                      `/user/${Object.values(accounts)[0]?.username}`,
+                      undefined,
+                      "replace",
+                      undefined,
+                      blankAnimation
+                    );
                 setReady({ date: "2021-05-18" });
               }}>
               Continue <IonIcon icon={arrowForward} />

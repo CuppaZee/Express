@@ -25,6 +25,7 @@ import {
   UserInventoryInputData,
 } from "@cuppazee/utils";
 import InventoryImg from "../../components/Inventory/InventoryImg";
+import useDB from "../../utils/useDB";
 
 const UserInventoryPage: React.FC = () => {
   const [hideZeroes, setHideZeroes] = React.useState(false);
@@ -37,9 +38,10 @@ const UserInventoryPage: React.FC = () => {
     options: { enabled: !!userID },
     user_id: userID,
   });
+  const db = useDB();
   const d = useMemo(
     () =>
-      data.data ? generateInventoryData(data.data.data, { hideZeroes, groupByState }) : undefined,
+      data.data ? generateInventoryData(db, data.data.data, { hideZeroes, groupByState }) : undefined,
     [data.dataUpdatedAt, hideZeroes, groupByState]
   );
 

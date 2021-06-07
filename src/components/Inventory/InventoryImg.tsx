@@ -2,7 +2,7 @@ import { IonPopover } from "@ionic/react";
 import usePopover from "../../utils/usePopover";
 import { CZTypeImg } from "../CZImg";
 import "./InventoryImg.css";
-import { UserInventoryItem } from "@cuppazee/utils/lib";
+import { UserInventoryItem } from "@cuppazee/utils";
 
 export interface InventoryImgProps {
   item: UserInventoryItem;

@@ -1,5 +1,5 @@
 import { IonImg } from "@ionic/react";
-import types from "@cuppazee/types";
+import useDB from "../utils/useDB";
 
 type IonImgProps = NonNullable<typeof IonImg["defaultProps"]>;
 
@@ -15,7 +15,8 @@ export interface CZTypeImgProps extends Omit<IonImgProps, "src"> {
 }
 
 export function CZTypeImg({ img, ...props }: CZTypeImgProps) {
-  return <CZImg {...props} img={types.strip(img)} type="types" />
+  const db = useDB();
+  return <CZImg {...props} img={db.strip(img)} type="types" />
 }
 
 export function CZImg({ img, type, size, ...props }: CZImgProps) {

@@ -13,7 +13,7 @@ import "./Activity.css";
 import Header from "../../components/Header";
 
 import { generateUserActivityData } from "@cuppazee/utils";
-import React, { forwardRef, Fragment, HTMLAttributes, useCallback, useMemo, useRef, useState } from "react";
+import React, { forwardRef, useMemo, useState } from "react";
 import useUserID from "../../utils/useUserID";
 import useActivity from "../../utils/useActivity";
 import dayjs from "dayjs";
@@ -27,6 +27,7 @@ import useCZParams from "../../utils/useCZParams";
 import blankAnimation from "../../utils/blankAnimation";
 import { VariableSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
+import useDB from "../../utils/useDB";
 
 const UserActivityPage: React.FC = () => {
   const params = useCZParams<{ username: string; date: string }>(
@@ -42,11 +43,13 @@ const UserActivityPage: React.FC = () => {
     endpoint: "user",
     params: { username: params?.username ?? "" },
   });
+  const db = useDB();
   const history = useIonRouter();
   const d = useMemo(
     () =>
       data.data
         ? generateUserActivityData(
+            db,
             data.data.data,
             {
               activity: new Set(),
@@ -56,7 +59,7 @@ const UserActivityPage: React.FC = () => {
             params?.username ?? ""
           )
         : undefined,
-    [data.dataUpdatedAt]
+    [data.dataUpdatedAt, db]
   );
 
   const mode: "ios" | "md" | undefined = (

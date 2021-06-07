@@ -7,7 +7,7 @@ export function storageAtom<T>(key: string, initial: T) {
   return atom<StorageElement<T>>({ key: "@czexpress/" + key, loaded: false, data: initial });
 }
 
-const store = new Storage().create();
+export const store = new Storage().create();
 
 export interface StorageElement<T> {
   data: T;

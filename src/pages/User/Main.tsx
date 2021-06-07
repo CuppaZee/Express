@@ -28,12 +28,14 @@ import CZRefresher from "../../components/CZRefresher";
 import ActivityOverview from "../../components/Activity/ActivityOverview";
 import Tabs from "../../components/Tabs";
 import useCZParams from "../../utils/useCZParams";
+import useDB from "../../utils/useDB";
 
 const UserMainPage: React.FC = () => {
   // alert('render');
   const params = useCZParams<{ username: string }>("/user/:username");
   const userID = useUserID(params?.username);
   const day = dayjs.mhqNow();
+  const db = useDB();
   const data = useActivity(userID || undefined, day.format("YYYY-MM-DD"));
   const user = useMunzeeData({
     endpoint: "user",
@@ -43,6 +45,7 @@ const UserMainPage: React.FC = () => {
     () =>
       data.data
         ? generateUserActivityData(
+            db,
             data.data.data,
             {
               activity: new Set(),
@@ -52,7 +55,7 @@ const UserMainPage: React.FC = () => {
             params?.username
           )
         : undefined,
-    [data.dataUpdatedAt]
+    [data.dataUpdatedAt, db]
   );
   return (
     <IonPage>
@@ -98,7 +101,7 @@ const UserMainPage: React.FC = () => {
               <IonLabel>{user.data.data.clan.name}</IonLabel>
             </IonItem>
           ) : (
-            <IonItem lines="none" detail>
+            <IonItem disabled lines="none" detail>
               <IonIcon slot="start" icon={shieldOutline} />
               <IonLabel>Clan Progress</IonLabel>
             </IonItem>

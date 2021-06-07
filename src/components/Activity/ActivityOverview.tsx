@@ -1,4 +1,4 @@
-import { UserActivityData } from "@cuppazee/utils/lib";
+import { UserActivityData } from "@cuppazee/utils";
 import {
   IonCardContent,
   IonCardHeader,

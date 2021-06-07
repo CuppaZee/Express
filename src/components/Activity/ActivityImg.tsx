@@ -1,8 +1,8 @@
 import { IonPopover } from "@ionic/react";
+import useDB from "../../utils/useDB";
 import usePopover from "../../utils/usePopover";
 import { CZTypeImg } from "../CZImg";
 import "./ActivityImg.css";
-import types from "@cuppazee/types";
 
 export interface ActivityImgProps {
   icon: string;
@@ -11,13 +11,14 @@ export interface ActivityImgProps {
 }
 
 export default function ActivityImg(props: ActivityImgProps) {
+  const db = useDB();
   const [popoverState, show] = usePopover();
   return (
     <>
       <IonPopover cssClass="activity-img-popover" {...popoverState}>
         <CZTypeImg className="activity-img" img={props.icon} />
         <p>
-          {props.amount}x {types.getType(props.icon)?.name ?? types.strip(props.icon)}
+          {props.amount}x {db.getType(props.icon)?.name ?? db.strip(props.icon)}
         </p>
       </IonPopover>
       <div
