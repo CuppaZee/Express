@@ -43,6 +43,10 @@ import UserActivityPage from "./pages/User/Activity";
 import UserInventoryPage from "./pages/User/Inventory";
 import ClanStatsPage from "./pages/Clan/Stats";
 
+
+import { useIonRouter } from '@ionic/react';
+import { App as CapApp } from '@capacitor/app';
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -50,6 +54,18 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+const BackHandler: React.FC = () => {
+  const ionRouter = useIonRouter();
+  useEffect(() => {
+    CapApp.addListener("backButton", (ev) => {
+      if (!ionRouter.canGoBack()) {
+        CapApp.exitApp();
+      }
+    });
+  }, [])
+  return null;
+}
 
 const ThemeHandler: React.FC = () => {
   const [theme] = useStorage(ThemeStorage);
@@ -91,7 +107,9 @@ const App: React.FC = () => {
     <IonApp>
       <IonReactRouter>
         <ThemeHandler />
-        {!readyLoaded || !accountsLoaded ? null : (ready.date === "2021-05-18" && Object.keys(accounts).length > 0) ? (
+        <BackHandler />
+        {!readyLoaded || !accountsLoaded ? null : ready.date === "2021-05-18" &&
+          Object.keys(accounts).length > 0 ? (
           <IonRouterOutlet>
             <Route exact path="/search" component={Search} />
             <Route exact path="/more" component={Login} />

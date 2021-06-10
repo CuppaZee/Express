@@ -28,6 +28,7 @@ import blankAnimation from "../../utils/blankAnimation";
 import { VariableSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 import useDB from "../../utils/useDB";
+import { Browser } from "@capacitor/browser";
 
 const UserActivityPage: React.FC = () => {
   const params = useCZParams<{ username: string; date: string }>(
@@ -120,14 +121,17 @@ const ListWrapper = forwardRef(function({ children, ...props }: any, ref) {
     const l = d?.list[i.index - 1];
     if (!l) return null;
     return (
-      <div
-        className="activity-list-card-wrapper"
-        style={i.style}
-        key={l.key}>
+      <div className="activity-list-card-wrapper" style={i.style} key={l.key}>
         <IonCard className="activity-list-card">
           {[l, ...(l.sub_captures ?? [])].map((i, n, a) => (
             <IonItem
+              detail={false}
               key={i.key}
+              href={`https://www.munzee.com/m/${i.creator}/${i.code}`}
+              onClick={e => {
+                e.preventDefault();
+                Browser.open({ url: e.currentTarget.href ?? "" })
+              }}
               lines={n !== a.length - 1 ? "full" : "none"}
               className={`activity-list-item activity-list-item-${i.type}`}>
               <div slot="start" className="activity-list-left">

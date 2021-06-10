@@ -21,6 +21,7 @@ import "./Search.css";
 import Fuse from "fuse.js";
 import Tabs from "../../components/Tabs";
 import { addUserIDs } from "../../utils/useUserID";
+import useDB from "../../utils/useDB";
 
 function Search() {
   const pageTitle = "Search";
@@ -44,13 +45,15 @@ function Search() {
 
   const searchbarRef = useRef<HTMLIonSearchbarElement>(null);
 
+  // const db = useDB();
+
   const fuse = useMemo(
     () =>
       new Fuse(
         [
           ...(filter === "all" || filter === "clans" ? clans.data?.data ?? [] : []),
-          // ...(filter === "all" || filter === "types" ? types.types : []),
-          // ...(filter === "all" || filter === "types" ? types.categories : []),
+          // ...(filter === "all" || filter === "types" ? db.types : []),
+          // ...(filter === "all" || filter === "types" ? db.categories : []),
           ...(filter === "all" || filter === "players" ? users.data?.data?.users ?? [] : []),
         ],
         {
@@ -84,8 +87,8 @@ function Search() {
             <IonLabel>Clans</IonLabel>
           </IonSegmentButton>
           {/* <IonSegmentButton value="types">
-              <IonLabel>Types</IonLabel>
-            </IonSegmentButton> */}
+            <IonLabel>Types</IonLabel>
+          </IonSegmentButton> */}
         </IonSegment>
       </Header>
       <IonContent>
