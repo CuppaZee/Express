@@ -4,9 +4,11 @@ import { useIsFetching } from "react-query";
 
 export default function Header({
   title,
+  extra,
   children,
 }: {
   title?: string;
+  extra?: PropsWithChildren<{}>["children"];
   children?: PropsWithChildren<{}>["children"];
 }) {
   const isFetching = useIsFetching();
@@ -21,14 +23,17 @@ export default function Header({
         </IonButtons>
         <IonTitle>{title}</IonTitle>
       </IonToolbar>
-      {React.Children.map(children, (i, n) => (
-        <IonToolbar>
-          {i}
-          {React.Children.count(children) - 1 === n && isFetching ? (
-            <IonProgressBar type="indeterminate" />
-          ) : null}
-        </IonToolbar>
-      ))}
+      {React.Children.map(children, (i, n) => {
+        return (
+          <IonToolbar>
+            {i}
+            {React.Children.count(children) - 1 === n && isFetching ? (
+              <IonProgressBar type="indeterminate" />
+            ) : null}
+          </IonToolbar>
+        );
+      })}
+      {extra}
     </IonHeader>
   );
 }

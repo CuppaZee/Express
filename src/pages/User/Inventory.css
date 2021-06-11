@@ -22,3 +22,8 @@
 .inventory-history-card ion-note {
   font-size: 0.8em;
 }
+
+.inventory-header-tabs,
+.inventory-header-tabs ion-tab-button {
+  background: none;
+}

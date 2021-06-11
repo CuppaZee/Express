@@ -253,12 +253,12 @@ const ClanStatsPage: React.FC = () => {
                   </div>
                   <div
                     className={`clan-table-cell clan-table-cell-data clan-level-${
-                      reqs.tasks.individual[req]?.[clanSettings.goal - 1]
+                      reqs.tasks.individual[req]?.[clanSettings.goal]
                         ? clanSettings.goal
                         : "null"
                     }`}
                     key="indiv">
-                    {reqs.tasks.individual[req]?.[clanSettings.goal - 1]?.toLocaleString() ?? "-"}
+                    {reqs.tasks.individual[req]?.[clanSettings.goal]?.toLocaleString() ?? "-"}
                   </div>
                   {users.map(user => (
                     <div
@@ -272,10 +272,10 @@ const ClanStatsPage: React.FC = () => {
                   </div>
                   <div
                     className={`clan-table-cell clan-table-cell-data clan-level-${
-                      reqs.tasks.group[req]?.[clanSettings.goal - 1] ? clanSettings.goal : "null"
+                      reqs.tasks.group[req]?.[clanSettings.goal] ? clanSettings.goal : "null"
                     }`}
                     key="group">
-                    {reqs.tasks.group[req]?.[clanSettings.goal - 1]?.toLocaleString() ?? "-"}
+                    {reqs.tasks.group[req]?.[clanSettings.goal]?.toLocaleString() ?? "-"}
                   </div>
                 </div>
               ))}

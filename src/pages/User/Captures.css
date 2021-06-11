@@ -1,0 +1,42 @@
+.capture-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.capture-history-title {
+  margin-left: 16px;
+}
+
+.capture-overview-card {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.capture-history-card ion-note {
+  font-size: 0.8em;
+}
+
+.capture-header-tabs,
+.capture-header-tabs ion-tab-button {
+  background: none;
+}
+
+.captures-category-image {
+  height: 36px;
+  width: 36px;
+  margin-left: -4px;
+  margin-right: 16px;
+}
+
+.md .captures-category-image {
+  height: 40px;
+  width: 40px;
+  margin-right: 16px;
+}

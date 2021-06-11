@@ -1,0 +1,33 @@
+.capture-img-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px;
+}
+
+.capture-img-wrapper .capture-img {
+  height: 32px;
+  width: 32px;
+}
+
+.capture-img-wrapper-none {
+  filter: grayscale(1);
+  opacity: 0.4;
+}
+
+.capture-img-popover .popover-viewport {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.capture-img-popover .capture-img {
+  height: 48px;
+  width: 48px;
+}
+
+.capture-img-popover p {
+  margin: 0;
+}

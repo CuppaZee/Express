@@ -46,6 +46,7 @@ import ClanStatsPage from "./pages/Clan/Stats";
 
 import { useIonRouter } from '@ionic/react';
 import { App as CapApp } from '@capacitor/app';
+import UserCapturesPage from "./pages/User/Captures";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -98,7 +99,7 @@ const ThemeHandler: React.FC = () => {
 const App: React.FC = () => {
   const [ready, _1, readyLoaded] = useStorage(ReadyStorage);
   const [accounts, _2, accountsLoaded] = useStorage(AccountsStorage);
-  useEffect(() => {
+  useEffect(() => { 
     if (accountsLoaded && window.location.pathname === "/") {
       window.location.pathname = `/user/${Object.values(accounts)[0]?.username}`;
     }
@@ -118,6 +119,7 @@ const App: React.FC = () => {
             <Route exact path="/user/:username/activity" component={UserActivityPage} />
             <Route exact path="/user/:username/activity/:date" component={UserActivityPage} />
             <Route exact path="/user/:username/inventory" component={UserInventoryPage} />
+            <Route exact path="/user/:username/captures/:type" component={UserCapturesPage} />
             <Route
               render={() => {
                 return null;

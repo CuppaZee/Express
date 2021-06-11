@@ -29,6 +29,17 @@ import ActivityOverview from "../../components/Activity/ActivityOverview";
 import Tabs from "../../components/Tabs";
 import useCZParams from "../../utils/useCZParams";
 import useDB from "../../utils/useDB";
+import { CZTypeImg } from "../../components/CZImg";
+import useCuppaZeeData from "../../utils/useCuppaZeeData";
+
+interface UserCuppaZeeData {
+  shadowClan: {
+    clan_id: number;
+    group: string;
+    group_admins: string[];
+    name?: string;
+  };
+}
 
 const UserMainPage: React.FC = () => {
   // alert('render');
@@ -40,6 +51,13 @@ const UserMainPage: React.FC = () => {
   const user = useMunzeeData({
     endpoint: "user",
     params: { username: params?.username ?? "" },
+  });
+  const userCuppaZee = useCuppaZeeData<{ data: UserCuppaZeeData }>({
+    endpoint: "user/cuppazee",
+    params: { user_id: userID },
+    options: {
+      enabled: !!userID,
+    },
   });
   const d = useMemo(
     () =>
@@ -89,23 +107,45 @@ const UserMainPage: React.FC = () => {
             <IonIcon slot="start" icon={bagHandleOutline} />
             <IonLabel>Inventory</IonLabel>
           </IonItem>
-          {user.data?.data?.clan ? (
-            <IonItem lines="none" detail routerLink={`/clan/${user.data.data.clan.id}`}>
+          {(user.data?.data?.clan || userCuppaZee.data?.data.shadowClan) && (
+            <IonItem
+              lines="none"
+              detail
+              routerLink={`/clan/${
+                user.data?.data?.clan?.id ?? userCuppaZee.data?.data.shadowClan?.clan_id
+              }`}>
               <IonAvatar className="item-avatar" slot="start">
                 <IonImg
-                  src={`https://munzee.global.ssl.fastly.net/images/clan_logos/${Number(
-                    user.data.data.clan.id
-                  ).toString(36)}.png`}
+                  src={`https://munzee.global.ssl.fastly.net/images/clan_logos/${
+                    Number(user.data?.data?.clan?.id ?? userCuppaZee.data?.data.shadowClan?.clan_id).toString(36)
+                  }.png`}
                 />
               </IonAvatar>
-              <IonLabel>{user.data.data.clan.name}</IonLabel>
+              <IonLabel>
+                {(user.data?.data?.clan ?? userCuppaZee.data?.data.shadowClan)?.name ?? "??? Shadow Clan ???"}
+              </IonLabel>
             </IonItem>
-          ) : (
+          )}
+          {!user.data?.data?.clan && (
             <IonItem disabled lines="none" detail>
               <IonIcon slot="start" icon={shieldOutline} />
               <IonLabel>Clan Progress</IonLabel>
             </IonItem>
           )}
+        </IonCard>
+        <IonCard>
+          {db.categories
+            .filter(i => i.parents.some(i => i?.id === "root"))
+            .map(i => (
+              <IonItem
+                detail
+                routerLink={`/user/${user.data?.data?.username ?? params?.username}/captures/${
+                  i.id
+                }`}>
+                <CZTypeImg img={i.icon} slot="start" className="user-captures-image" />
+                <IonLabel>{i.name}</IonLabel>
+              </IonItem>
+            ))}
         </IonCard>
       </IonContent>
       <Tabs />

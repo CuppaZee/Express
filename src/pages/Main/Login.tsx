@@ -53,9 +53,8 @@ const configs = {
   },
 };
 const config = configs.main;
-const path = "login";
 const redirectUri = !isPlatform("capacitor")
-  ? [window.location.origin, path].filter(Boolean).join("/")
+  ? [window.location.origin, window.location.pathname.slice(1)].filter(Boolean).join("/")
   : `app.cuppazee.express://login`;
 
 function Login() {

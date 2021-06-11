@@ -56,7 +56,12 @@
 
 .clan-table-cell ion-select {
   padding-left: 0;
+  width: 100%;
   font-weight: bold;
+}
+
+.clan-table-cell ion-icon {
+  contain: initial;
 }
 
 .clan-table-cell ion-select::part(text) {
