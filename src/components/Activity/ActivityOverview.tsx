@@ -7,6 +7,7 @@ import {
   IonSkeletonText,
 } from "@ionic/react";
 import { Dayjs } from "dayjs";
+import { useTranslation } from "react-i18next";
 import { CZLoadText } from "../CZLoad";
 import ActivityImg from "./ActivityImg";
 import "./ActivityOverview.css";
@@ -17,18 +18,22 @@ export interface ActivityOverviewProps {
 }
 
 export default function ActivityOverview({ d, day }: ActivityOverviewProps) {
+  const { t } = useTranslation();
   return (
     <>
       <IonCardHeader>
         <IonCardSubtitle>{day.format("L")}</IonCardSubtitle>
         <IonCardTitle>
-          <CZLoadText loading={!d}>{d?.points} Points</CZLoadText>
+          <CZLoadText loading={!d}>
+            {t("user_activity:overview_points", { count: d?.points })}
+          </CZLoadText>
         </IonCardTitle>
       </IonCardHeader>
       <IonCardContent className="activity-wrapper activity-wrapper-centred">
         <h2>
           <CZLoadText loading={!d}>
-            {d?.overview.capture?.count ?? 0} Captures - {d?.overview.capture?.points ?? 0} Points
+            {t("user_activity:overview_captures", { count: d?.overview.capture?.count ?? 0 })} -{" "}
+            {t("user_activity:overview_points", { count: d?.overview.capture?.points ?? 0 })}
           </CZLoadText>
         </h2>
         <div className="activity-row">
@@ -45,7 +50,8 @@ export default function ActivityOverview({ d, day }: ActivityOverviewProps) {
         </div>
         <h2>
           <CZLoadText loading={!d}>
-            {d?.overview.deploy?.count ?? 0} Deploys - {d?.overview.deploy?.points ?? 0} Deploys
+            {t("user_activity:overview_deploys", { count: d?.overview.deploy?.count ?? 0 })} -{" "}
+            {t("user_activity:overview_points", { count: d?.overview.deploy?.points ?? 0 })}
           </CZLoadText>
         </h2>
         <div className="activity-row">
@@ -55,8 +61,11 @@ export default function ActivityOverview({ d, day }: ActivityOverviewProps) {
         </div>
         <h2>
           <CZLoadText loading={!d}>
-            {d?.overview.passive_deploy?.count ?? 0} Passive Deploys -{" "}
-            {d?.overview.passive_deploy?.points ?? 0} Points
+            {t("user_activity:overview_passive_deploys", {
+              count: d?.overview.passive_deploy?.count ?? 0,
+            })}{" "}
+            -{" "}
+            {t("user_activity:overview_points", { count: d?.overview.passive_deploy?.points ?? 0 })}
           </CZLoadText>
         </h2>
         <div className="activity-row">
@@ -66,7 +75,8 @@ export default function ActivityOverview({ d, day }: ActivityOverviewProps) {
         </div>
         <h2>
           <CZLoadText loading={!d}>
-            {d?.overview.capon?.count ?? 0} Capons - {d?.overview.capon?.points ?? 0} Points
+            {t("user_activity:overview_capons", { count: d?.overview.capon?.count ?? 0 })} -{" "}
+            {t("user_activity:overview_points", { count: d?.overview.capon?.points ?? 0 })}
           </CZLoadText>
         </h2>
         <div className="activity-row">

@@ -1,0 +1,12 @@
+.user-captures-image {
+  height: 36px;
+  width: 36px;
+  margin-left: -4px;
+  margin-right: 16px;
+}
+
+.md .user-captures-image {
+  height: 40px;
+  width: 40px;
+  margin-right: 16px;
+}

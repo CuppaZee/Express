@@ -23,7 +23,8 @@ export default function CaptureImg({ type, count }: CaptureImgProps) {
         onClick={show}
         className={`capture-img-wrapper ${count ? "" : "capture-img-wrapper-none"}`}>
         <CZTypeImg className="capture-img" img={type.icon} />
-        {count}
+        <div>{type.name}</div>
+        <div>{count}</div>
       </div>
     </>
   );

@@ -34,11 +34,17 @@ const getToken = async (teaken: string, user_id: number): Promise<{ data: Access
 
 export default function useToken(user_id?: number | null): useTokenResponse {
   const [accounts] = useStorage(AccountsStorage);
+  const primaryAccount = Object.values(accounts).find(i => i.primary);
   const account =
-    user_id === null ? undefined : (accounts[user_id ?? Object.keys(accounts)[0]] ?? accounts["*"]);
+    user_id === null
+      ? undefined
+      : accounts[user_id ?? primaryAccount?.user_id ?? 0] ?? accounts["*"];
   const data = useQuery(
-    ["token", account?.teaken, Number(user_id ?? Object.keys(accounts)[0])],
-    () => (account?.teaken ? getToken(account?.teaken, Number(user_id ?? Object.keys(accounts)[0])) : null),
+    ["token", account?.teaken, Number(user_id ?? primaryAccount?.user_id)],
+    () =>
+      account?.teaken
+        ? getToken(account?.teaken, Number(user_id ?? primaryAccount?.user_id))
+        : null,
     {
       enabled: account?.teaken !== undefined,
     }

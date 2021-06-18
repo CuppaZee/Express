@@ -16,16 +16,18 @@ import React, { useMemo } from "react";
 import useUserID from "../../utils/useUserID";
 import CZRefresher from "../../components/CZRefresher";
 import Tabs from "../../components/Tabs";
-import useCZParams from "../../utils/useCZParams";
 import useDB from "../../utils/useDB";
 import useMunzeeData from "../../utils/useMunzeeData";
 import { Type } from "@cuppazee/db/lib";
 import CaptureImg from "../../components/Captures/CaptureImg";
 import dayjs from "dayjs";
 import { CZTypeImg } from "../../components/CZImg";
+import { RouteChildrenProps } from "react-router";
 
-const UserCapturesPage: React.FC = () => {
-  const params = useCZParams<{ username: string; type: string }>("/user/:username/captures/:type");
+const UserCapturesPage: React.FC<RouteChildrenProps<{ username: string; type: string }>> = ({
+  match,
+}) => {
+  const params = match?.params;
   const userID = useUserID(params?.username);
   const data = useMunzeeData({
     endpoint: "user/specials",
@@ -33,17 +35,14 @@ const UserCapturesPage: React.FC = () => {
     options: { enabled: !!userID },
   });
   const db = useDB();
-  const d = useMemo(
-    () => {
-      const map = new Map<Type, number>();
-        for (const munzee of data.data?.data ?? []) {
-          const type = db.getType(munzee.logo) ?? db.getType(munzee.name);
-          if (type) map.set(type, munzee.count);
-        }
-      return map;
-    },
-    [db, data.dataUpdatedAt]
-  );
+  const d = useMemo(() => {
+    const map = new Map<Type, number>();
+    for (const munzee of data.data?.data ?? []) {
+      const type = db.getType(munzee.logo) ?? db.getType(munzee.name);
+      if (type) map.set(type, munzee.count);
+    }
+    return map;
+  }, [db, data.dataUpdatedAt]);
   const category = db.getCategory(params?.type ?? "");
 
   if (!category) {
@@ -62,7 +61,7 @@ const UserCapturesPage: React.FC = () => {
               <IonCardTitle>{category.name}</IonCardTitle>
             </IonCardHeader>
             {category.children.map(i => (
-              <IonItem detail routerLink={`/user/${params?.username}/captures/${i.id}`}>
+              <IonItem detail routerLink={`/player/${params?.username}/captures/${i.id}`}>
                 <CZTypeImg img={i.icon} slot="start" className="captures-category-image" />
                 <IonLabel>{i.name}</IonLabel>
               </IonItem>

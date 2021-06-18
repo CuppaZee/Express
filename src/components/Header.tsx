@@ -25,7 +25,7 @@ export default function Header({
       </IonToolbar>
       {React.Children.map(children, (i, n) => {
         return (
-          <IonToolbar>
+          <IonToolbar key={n}>
             {i}
             {React.Children.count(children) - 1 === n && isFetching ? (
               <IonProgressBar type="indeterminate" />

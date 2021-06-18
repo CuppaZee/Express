@@ -14,9 +14,19 @@
   margin-left: 16px;
 }
 
+.inventory-overview-card-wrapper {
+  display: flex;
+  flex-direction: column
+}
+
 .inventory-overview-card {
   margin-top: 8px;
   margin-bottom: 8px;
+  flex-grow: 1;
+}
+
+.inventory-history-card {
+  flex-grow: 1;
 }
 
 .inventory-history-card ion-note {

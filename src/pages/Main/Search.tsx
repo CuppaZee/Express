@@ -22,9 +22,11 @@ import Fuse from "fuse.js";
 import Tabs from "../../components/Tabs";
 import { addUserIDs } from "../../utils/useUserID";
 import useDB from "../../utils/useDB";
+import { useTranslation } from "react-i18next";
 
 function Search() {
-  const pageTitle = "Search";
+  const { t } = useTranslation();
+  const pageTitle = t("pages:tools_search");
   const [value, search, onValue] = useLazySearch(200);
   const [filter, setFilter] = useState("all");
 
@@ -72,19 +74,20 @@ function Search() {
     <IonPage>
       <Header title={pageTitle}>
         <IonSearchbar
+          placeholder={t("search:title")}
           defaultValue={value.current}
           onIonChange={ev => onValue(ev.detail.value ?? "")}
           ref={searchbarRef}
         />
         <IonSegment value={filter} onIonChange={e => setFilter(e.detail.value ?? "")}>
           <IonSegmentButton value="all">
-            <IonLabel>All</IonLabel>
+            <IonLabel>{t("search:all")}</IonLabel>
           </IonSegmentButton>
           <IonSegmentButton value="players">
-            <IonLabel>Players</IonLabel>
+            <IonLabel>{t("search:player")}</IonLabel>
           </IonSegmentButton>
           <IonSegmentButton value="clans">
-            <IonLabel>Clans</IonLabel>
+            <IonLabel>{t("search:clan")}</IonLabel>
           </IonSegmentButton>
           {/* <IonSegmentButton value="types">
             <IonLabel>Types</IonLabel>
@@ -104,7 +107,7 @@ function Search() {
             {results.slice(0, 50).map(i => {
               if ("user_id" in i) {
                 return (
-                  <IonItem key={`user_${i.user_id}`} routerLink={`/user/${i.username}`}>
+                  <IonItem key={`user_${i.user_id}`} routerLink={`/player/${i.username}`}>
                     <IonAvatar slot="start">
                       <IonImg
                         src={`https://munzee.global.ssl.fastly.net/images/avatars/ua${Number(

@@ -1,9 +1,6 @@
 import {
   IonAvatar,
   IonCard,
-  IonCardContent,
-  IonCardSubtitle,
-  IonCardTitle,
   IonContent,
   IonHeader,
   IonIcon,
@@ -15,7 +12,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import "./Main.css";
-import { bagHandleOutline, calendarOutline, shieldOutline } from "ionicons/icons";
+import { bagHandleOutline, calendarOutline, cubeOutline, shieldOutline } from "ionicons/icons";
 import Header from "../../components/Header";
 
 import { generateUserActivityData } from "@cuppazee/utils";
@@ -27,10 +24,11 @@ import useMunzeeData from "../../utils/useMunzeeData";
 import CZRefresher from "../../components/CZRefresher";
 import ActivityOverview from "../../components/Activity/ActivityOverview";
 import Tabs from "../../components/Tabs";
-import useCZParams from "../../utils/useCZParams";
 import useDB from "../../utils/useDB";
 import { CZTypeImg } from "../../components/CZImg";
 import useCuppaZeeData from "../../utils/useCuppaZeeData";
+import { RouteChildrenProps } from "react-router";
+import { useTranslation } from "react-i18next";
 
 interface UserCuppaZeeData {
   shadowClan: {
@@ -41,10 +39,12 @@ interface UserCuppaZeeData {
   };
 }
 
-const UserMainPage: React.FC = () => {
-  // alert('render');
-  const params = useCZParams<{ username: string }>("/user/:username");
+const UserMainPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
+  match,
+}) => {
+  const params = match?.params;
   const userID = useUserID(params?.username);
+  const { t } = useTranslation();
   const day = dayjs.mhqNow();
   const db = useDB();
   const data = useActivity(userID || undefined, day.format("YYYY-MM-DD"));
@@ -89,23 +89,23 @@ const UserMainPage: React.FC = () => {
           <ActivityOverview d={d} day={day} />
         </IonCard>
         <IonCard>
-          {/* <IonCardContent>
-            <IonCardSubtitle>
-              Level {user.data?.data?.level} - {user.data?.data?.points.toLocaleString()} Points
-            </IonCardSubtitle>
-            <IonCardTitle>{user.data?.data?.username ?? params?.username}</IonCardTitle>
-          </IonCardContent> */}
           <IonItem
             detail
-            routerLink={`/user/${user.data?.data?.username ?? params?.username}/activity`}>
+            routerLink={`/player/${user.data?.data?.username ?? params?.username}/activity`}>
             <IonIcon slot="start" icon={calendarOutline} />
-            <IonLabel>Activity</IonLabel>
+            <IonLabel>{t("pages:user_activity")}</IonLabel>
           </IonItem>
           <IonItem
             detail
-            routerLink={`/user/${user.data?.data?.username ?? params?.username}/inventory`}>
+            routerLink={`/player/${user.data?.data?.username ?? params?.username}/inventory`}>
             <IonIcon slot="start" icon={bagHandleOutline} />
-            <IonLabel>Inventory</IonLabel>
+            <IonLabel>{t("pages:user_inventory")}</IonLabel>
+          </IonItem>
+          <IonItem
+            detail
+            routerLink={`/player/${user.data?.data?.username ?? params?.username}/qrates`}>
+            <IonIcon slot="start" icon={cubeOutline} />
+            <IonLabel>{t("pages:user_qrates")}</IonLabel>
           </IonItem>
           {(user.data?.data?.clan || userCuppaZee.data?.data.shadowClan) && (
             <IonItem
@@ -116,20 +116,21 @@ const UserMainPage: React.FC = () => {
               }`}>
               <IonAvatar className="item-avatar" slot="start">
                 <IonImg
-                  src={`https://munzee.global.ssl.fastly.net/images/clan_logos/${
-                    Number(user.data?.data?.clan?.id ?? userCuppaZee.data?.data.shadowClan?.clan_id).toString(36)
-                  }.png`}
+                  src={`https://munzee.global.ssl.fastly.net/images/clan_logos/${Number(
+                    user.data?.data?.clan?.id ?? userCuppaZee.data?.data.shadowClan?.clan_id
+                  ).toString(36)}.png`}
                 />
               </IonAvatar>
               <IonLabel>
-                {(user.data?.data?.clan ?? userCuppaZee.data?.data.shadowClan)?.name ?? "??? Shadow Clan ???"}
+                {(user.data?.data?.clan ?? userCuppaZee.data?.data.shadowClan)?.name ??
+                  "??? Shadow Clan ???"}
               </IonLabel>
             </IonItem>
           )}
           {!user.data?.data?.clan && (
             <IonItem disabled lines="none" detail>
               <IonIcon slot="start" icon={shieldOutline} />
-              <IonLabel>Clan Progress</IonLabel>
+              <IonLabel>{t("pages:user_clan_progress")}</IonLabel>
             </IonItem>
           )}
         </IonCard>
@@ -138,8 +139,9 @@ const UserMainPage: React.FC = () => {
             .filter(i => i.parents.some(i => i?.id === "root"))
             .map(i => (
               <IonItem
+                key={i.id}
                 detail
-                routerLink={`/user/${user.data?.data?.username ?? params?.username}/captures/${
+                routerLink={`/player/${user.data?.data?.username ?? params?.username}/captures/${
                   i.id
                 }`}>
                 <CZTypeImg img={i.icon} slot="start" className="user-captures-image" />

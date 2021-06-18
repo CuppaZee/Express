@@ -2,7 +2,7 @@
 	"appId": "app.cuppazee.express",
 	"appName": "Express",
 	"bundledWebRuntime": false,
-	"npmClient": "npm",
+	"npmClient": "yarn",
 	"webDir": "build",
 	"plugins": {
 		"SplashScreen": {

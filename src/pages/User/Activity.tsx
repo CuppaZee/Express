@@ -23,18 +23,20 @@ import { CZTypeImg } from "../../components/CZImg";
 import { calendarOutline } from "ionicons/icons";
 import ActivityOverview from "../../components/Activity/ActivityOverview";
 import Tabs from "../../components/Tabs";
-import useCZParams from "../../utils/useCZParams";
 import blankAnimation from "../../utils/blankAnimation";
 import { VariableSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 import useDB from "../../utils/useDB";
 import { Browser } from "@capacitor/browser";
+import { RouteChildrenProps } from "react-router";
+import { useTranslation } from "react-i18next";
+import datetimeLocale from "../../utils/datetimeLocale";
 
-const UserActivityPage: React.FC = () => {
-  const params = useCZParams<{ username: string; date: string }>(
-    "/user/:username/activity/:date",
-    "/user/:username/activity"
-  );
+const UserActivityPage: React.FC<RouteChildrenProps<{ username: string; date: string }>> = ({
+  match,
+}) => {
+  const params = match?.params;
+  const { t } = useTranslation();
   const userID = useUserID(params?.username);
   const [overviewSize, setOverviewSize] = useState(333.34375);
   const today = dayjs.mhqNow();
@@ -67,31 +69,35 @@ const UserActivityPage: React.FC = () => {
     document.getElementsByTagName("html")[0].attributes as any
   ).mode.value;
 
-const ListWrapper = forwardRef(function({ children, ...props }: any, ref) {
-  return (
-    <div ref={ref as any} {...props}>
-      {children}
-    </div>
-  );
-})
+  const ListWrapper = forwardRef(function ({ children, ...props }: any, ref) {
+    return (
+      <div ref={ref as any} {...props}>
+        {children}
+      </div>
+    );
+  });
 
   function Row(i: any) {
     if (i.index === 0) {
       return (
-        <div ref={r => {
-          const res = new ResizeObserver(e => {
-            const h = e[0].contentRect.height + 16;
-            if (h > 200 && overviewSize !== h && Math.abs(h - overviewSize) > 4) {
-              setOverviewSize(h);
-            }
-          });
-          if (r?.children[0]) res.observe(r.children[0]);
-        }} style={i.style} key="overview">
+        <div
+          ref={r => {
+            const res = new ResizeObserver(e => {
+              const h = e[0].contentRect.height + 16;
+              if (h > 200 && overviewSize !== h && Math.abs(h - overviewSize) > 4) {
+                setOverviewSize(h);
+              }
+            });
+            if (r?.children[0]) res.observe(r.children[0]);
+          }}
+          style={i.style}
+          key="overview">
           <IonCard>
             <IonItem>
               <IonIcon slot="start" icon={calendarOutline} />
-              <IonLabel>Date</IonLabel>
+              <IonLabel>{t("user_activity:date")}</IonLabel>
               <IonDatetime
+                {...datetimeLocale()}
                 min={user.data?.data?.join_time}
                 max={today.format("YYYY-MM-DD")}
                 value={day.format("YYYY-MM-DD")}
@@ -100,7 +106,7 @@ const ListWrapper = forwardRef(function({ children, ...props }: any, ref) {
                     dayjs(ev.detail.value ?? "").format("YYYY-MM-DD") !== day.format("YYYY-MM-DD")
                   ) {
                     history.push(
-                      `/user/${params?.username}/activity/${dayjs(ev.detail.value ?? "").format(
+                      `/player/${params?.username}/activity/${dayjs(ev.detail.value ?? "").format(
                         "YYYY-MM-DD"
                       )}`,
                       undefined,
@@ -130,14 +136,14 @@ const ListWrapper = forwardRef(function({ children, ...props }: any, ref) {
               href={`https://www.munzee.com/m/${i.creator}/${i.code}`}
               onClick={e => {
                 e.preventDefault();
-                Browser.open({ url: e.currentTarget.href ?? "" })
+                Browser.open({ url: e.currentTarget.href ?? "" });
               }}
               lines={n !== a.length - 1 ? "full" : "none"}
               className={`activity-list-item activity-list-item-${i.type}`}>
               <div slot="start" className="activity-list-left">
                 <IonNote className="activity-list-points-label">
                   {i.points > 0 ? "+" : ""}
-                  {i.points || "None"}
+                  {i.points || t("user_activity:none")}
                 </IonNote>
                 <CZTypeImg
                   className={`activity-list-img ${i.sub ? "activity-list-img-sub" : ""}`}
@@ -148,18 +154,16 @@ const ListWrapper = forwardRef(function({ children, ...props }: any, ref) {
               <div className="activity-list-main-labels">
                 {(!i.sub || i.type !== l.type) && (
                   <IonNote>
-                    {
-                      {
-                        capon: `${i.capper} Captured`,
-                        capture: "You Captured",
-                        deploy: "You Deployed",
-                        passive_deploy: "You Passively Deployed",
-                      }[i.type]
-                    }
+                    {{
+                      capon: () => t("user_activity:activity_capon", { user: i.capper }),
+                      capture: () => t("user_activity:activity_capture"),
+                      deploy: () => t("user_activity:activity_deploy"),
+                      passive_deploy: () => t("user_activity:activity_passive_deploy"),
+                    }[i.type]()}
                   </IonNote>
                 )}
                 <IonLabel style={{ lineHeight: 1 }}>{i.name}</IonLabel>
-                {i.type === "capture" && <IonNote>By {i.creator}</IonNote>}
+                {i.type === "capture" && <IonNote>{t("user_activity:owned_by_user", {user: i.creator})}</IonNote>}
               </div>
               <div slot="end" className="activity-list-time-label">
                 <IonLabel>{dayjs(i.time).format("HH:mm")}</IonLabel>
@@ -177,67 +181,6 @@ const ListWrapper = forwardRef(function({ children, ...props }: any, ref) {
       <Header title={`${params?.username} - ${day.format("L")}`} />
       <IonContent fullscreen style={{ overflow: "hidden" }}>
         <CZRefresher queries={[user, data]} />
-        {/* <div
-          style={{
-            height: `${rowVirtualizer.totalSize}px`,
-            width: "100%",
-            position: "relative"
-          }}>
-          {rowVirtualizer.virtualItems.map(virtualRow => {
-            const l = d?.list[virtualRow.index];
-            if (!l) return null;
-            return (
-              <IonCard
-                ref={virtualRow.measureRef} key={`card_${l.key}`} className="activity-list-card" style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  transform: `translateY(${virtualRow.start}px)`
-                }}>
-                {[l, ...(l.sub_captures ?? [])].map((i, n, a) => (
-                  <IonItem
-                    key={i.key}
-                    lines={n !== a.length - 1 ? "full" : "none"}
-                    className={`activity-list-item activity-list-item-${i.type}`}>
-                    <div slot="start" className="activity-list-left">
-                      <IonNote className="activity-list-points-label">
-                        {i.points > 0 ? "+" : ""}
-                        {i.points || "None"}
-                      </IonNote>
-                      <CZTypeImg
-                        className={`activity-list-img ${i.sub ? "activity-list-img-sub" : ""}`}
-                        slot="start"
-                        img={i.icon}
-                      />
-                    </div>
-                    <div className="activity-list-main-labels">
-                      {(!i.sub || i.type !== l.type) && (
-                        <IonNote>
-                          {
-                            {
-                              capon: `${i.capper} Captured`,
-                              capture: "You Captured",
-                              deploy: "You Deployed",
-                              passive_deploy: "You Passively Deployed",
-                            }[i.type]
-                          }
-                        </IonNote>
-                      )}
-                      <IonLabel>{i.name}</IonLabel>
-                      {i.type === "capture" && <IonNote>By {i.creator}</IonNote>}
-                    </div>
-                    <div slot="end" className="activity-list-time-label">
-                      <IonLabel>{dayjs(i.time).format("HH:mm")}</IonLabel>
-                      <IonNote>{dayjs(i.time).mhq().format("HH:mm")} MHQ</IonNote>
-                    </div>
-                  </IonItem>
-                ))}
-              </IonCard>
-            )
-          })}
-          </div> */}
-
         <AutoSizer>
           {({ height, width }) => (
             <List
@@ -262,91 +205,6 @@ const ListWrapper = forwardRef(function({ children, ...props }: any, ref) {
             </List>
           )}
         </AutoSizer>
-
-        {/* {!!window && <DynamicList cache={cacheRef.current} data={[...d?.list.map(i => ({ id: i.key })) ?? []]} height={100} width={100}>
-          {virtualRow => {
-            // return null;
-            if (virtualRow.index === 0) {
-              return (
-                <div key="overview">
-                  <IonCard>
-                    <IonItem>
-                      <IonIcon slot="start" icon={calendarOutline} />
-                      <IonLabel>Date</IonLabel>
-                      <IonDatetime
-                        min={user.data?.data?.join_time}
-                        max={today.format("YYYY-MM-DD")}
-                        value={day.format("YYYY-MM-DD")}
-                        onIonChange={ev => {
-                          if (
-                            dayjs(ev.detail.value ?? "").format("YYYY-MM-DD") !==
-                            day.format("YYYY-MM-DD")
-                          ) {
-                            history.push(
-                              `/user/${params?.username}/activity/${dayjs(
-                                ev.detail.value ?? ""
-                              ).format("YYYY-MM-DD")}`,
-                              undefined,
-                              "replace",
-                              undefined,
-                              blankAnimation
-                            );
-                          }
-                        }}
-                      />
-                    </IonItem>
-                    <ActivityOverview d={d} day={day} />
-                  </IonCard></div>
-              );
-            }
-            return null;
-            // const l = d?.list[virtualRow.index - 1];
-            // if (!l) return null;
-            // return (
-            //   <div key={l.key}>
-            //     <IonCard className="activity-list-card">
-            //       {[l, ...(l.sub_captures ?? [])].map((i, n, a) => (
-            //         <IonItem
-            //           key={i.key}
-            //           lines={n !== a.length - 1 ? "full" : "none"}
-            //           className={`activity-list-item activity-list-item-${i.type}`}>
-            //           <div slot="start" className="activity-list-left">
-            //             <IonNote className="activity-list-points-label">
-            //               {i.points > 0 ? "+" : ""}
-            //               {i.points || "None"}
-            //             </IonNote>
-            //             <CZTypeImg
-            //               className={`activity-list-img ${i.sub ? "activity-list-img-sub" : ""}`}
-            //               slot="start"
-            //               img={i.icon}
-            //             />
-            //           </div>
-            //           <div className="activity-list-main-labels">
-            //             {(!i.sub || i.type !== l.type) && (
-            //               <IonNote>
-            //                 {
-            //                   {
-            //                     capon: `${i.capper} Captured`,
-            //                     capture: "You Captured",
-            //                     deploy: "You Deployed",
-            //                     passive_deploy: "You Passively Deployed",
-            //                   }[i.type]
-            //                 }
-            //               </IonNote>
-            //             )}
-            //             <IonLabel>{i.name}</IonLabel>
-            //             {i.type === "capture" && <IonNote>By {i.creator}</IonNote>}
-            //           </div>
-            //           <div slot="end" className="activity-list-time-label">
-            //             <IonLabel>{dayjs(i.time).format("HH:mm")}</IonLabel>
-            //             <IonNote>{dayjs(i.time).mhq().format("HH:mm")} MHQ</IonNote>
-            //           </div>
-            //         </IonItem>
-            //       ))}
-            //     </IonCard>
-            //   </div>
-            // );
-          }}</DynamicList>} */}
       </IonContent>
       <Tabs />
     </IonPage>

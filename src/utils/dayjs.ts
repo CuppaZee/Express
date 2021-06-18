@@ -8,6 +8,7 @@ import localeData from "dayjs/plugin/localeData";
 
 import "dayjs/locale/en";
 import "dayjs/locale/en-gb";
+import "dayjs/locale/nl";
 import "dayjs/locale/x-pseudo";
 dayjs.extend(utc);
 dayjs.extend(dayjsMHQPlugin);

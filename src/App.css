@@ -11,6 +11,16 @@
   margin-bottom: 2px;
 }
 
+
+/* .tab-icon-avatar {
+  height: 28px;
+  width: 28px;
+}
+ion-tab-button.tab-selected .tab-icon-avatar {
+  height: 36px;
+  width: 36px;
+} */
+
 ion-card {
   margin-top: 8px;
   margin-bottom: 8px;
@@ -32,4 +42,15 @@ ion-card ion-item {
 
 .ios ion-card-title {
   font-size: 22px;
+}
+
+.fancy-grid-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.item-card-header {
+  padding-top: 11px;
+  padding-bottom: 7px;
 }

@@ -1,7 +1,8 @@
-import { Route } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 import {
   IonApp,
   IonRouterOutlet,
+  isPlatform,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import UserMainPage from "./pages/User/Main";
@@ -26,27 +27,53 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 
 import "./App.css";
-import { useEffect } from "react";
+import { Component, useEffect } from "react";
 
 import Login from "./pages/Main/Login";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Provider as JotaiProvider } from "jotai";
-import useStorage from "./utils/useStorage";
+import useStorage, { store } from "./utils/useStorage";
 import { ThemeStorage } from "./storage/Theme";
 import { ReadyStorage } from "./storage/Ready";
 import { AccountsStorage } from "./storage/Account";
 
 import "./utils/dayjs";
-import Search from "./pages/Main/Search";
-import UserActivityPage from "./pages/User/Activity";
-import UserInventoryPage from "./pages/User/Inventory";
-import ClanStatsPage from "./pages/Clan/Stats";
 
 
 import { useIonRouter } from '@ionic/react';
 import { App as CapApp } from '@capacitor/app';
+
+import { FirebaseCrashlytics } from "@capacitor-community/firebase-crashlytics";
+import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics";
+
+import "./lang/i18n";
+import { Capacitor } from "@capacitor/core";
+
+import { persistQueryClient } from "react-query/persistQueryClient-experimental";
+
+import Search from "./pages/Main/Search";
+import UserActivityPage from "./pages/User/Activity";
+import UserInventoryPage from "./pages/User/Inventory";
+import UserQRatesPage from "./pages/User/QRates";
 import UserCapturesPage from "./pages/User/Captures";
+import UsersPage from "./pages/User/All";
+import ClanAllPage from "./pages/Clan/All";
+import ClanStatsPage from "./pages/Clan/Stats";
+import Settings from "./pages/Main/Settings";
+
+if (!Capacitor.isNativePlatform()) {
+  FirebaseAnalytics.initializeFirebase({
+    apiKey: "AIzaSyA6J5hg1-l3WmUIlIHG7MyRInCEOq8PILQ",
+    authDomain: "cuppazee-app.firebaseapp.com",
+    databaseURL: "https://cuppazee-app.firebaseio.com",
+    projectId: "cuppazee-app",
+    storageBucket: "cuppazee-app.appspot.com",
+    messagingSenderId: "540446857818",
+    appId: "1:540446857818:web:af2e055d760aeed4885663",
+    measurementId: "G-NW7WX4Z8Z1",
+  });
+}
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -55,6 +82,69 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+persistQueryClient({
+  queryClient,
+  persistor: {
+    async persistClient(client) {
+      return await (await store).set("@czexpress/querycache", JSON.stringify(client));
+    },
+    async restoreClient() {
+      return JSON.parse(await (await store).get("@czexpress/querycache") ?? "null");
+    },
+    async removeClient() {
+      return await (await store).remove("@czexpress/querycache");
+    }
+  },
+});
+
+class GlobalErrorBoundary extends Component<{}, { hasError: boolean; error?: string; }> {
+  constructor(props: {}) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    // Update state so the next render will show the fallback UI.
+    return {
+      hasError: true,
+      error: `${error.name}\n${error.message}\n${error.stack}\nInfo:\nN/A`,
+    };
+  }
+
+  componentDidCatch(error: Error, errorInfo: any) {
+    // You can also log the error to an error reporting service
+    this.setState({
+      ...this.state,
+      error: `${error.name}\n${error.message}\n${error.stack}\nInfo:\n${JSON.stringify(errorInfo)}`,
+    });
+    if (Capacitor.isNativePlatform()) {
+      FirebaseCrashlytics.recordException({
+        message: `${error.name}\n${error.message}\n${error.stack}\nInfo:\n${JSON.stringify(
+          errorInfo
+        )}`,
+      });
+    }
+  }
+
+  render() {
+    if (this.state.hasError) {
+      // You can render any custom fallback UI
+      return (
+        <div>
+          <h1>Something went wrong. {Capacitor.isNativePlatform() ? "This error has been reported:" : "Please report the following error:"}</h1>
+          <pre>
+            <code>
+              {this.state.error}
+            </code>
+          </pre>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
 
 const BackHandler: React.FC = () => {
   const ionRouter = useIonRouter();
@@ -99,38 +189,45 @@ const ThemeHandler: React.FC = () => {
 const App: React.FC = () => {
   const [ready, _1, readyLoaded] = useStorage(ReadyStorage);
   const [accounts, _2, accountsLoaded] = useStorage(AccountsStorage);
-  useEffect(() => { 
-    if (accountsLoaded && window.location.pathname === "/") {
-      window.location.pathname = `/user/${Object.values(accounts)[0]?.username}`;
-    }
-  }, [accountsLoaded]);
   return (
-    <IonApp>
-      <IonReactRouter>
-        <ThemeHandler />
-        <BackHandler />
-        {!readyLoaded || !accountsLoaded ? null : ready.date === "2021-05-18" &&
-          Object.keys(accounts).length > 0 ? (
-          <IonRouterOutlet>
-            <Route exact path="/search" component={Search} />
-            <Route exact path="/more" component={Login} />
-            <Route exact path="/clan/:id" component={ClanStatsPage} />
-            <Route exact path="/user/:username" component={UserMainPage} />
-            <Route exact path="/user/:username/activity" component={UserActivityPage} />
-            <Route exact path="/user/:username/activity/:date" component={UserActivityPage} />
-            <Route exact path="/user/:username/inventory" component={UserInventoryPage} />
-            <Route exact path="/user/:username/captures/:type" component={UserCapturesPage} />
-            <Route
-              render={() => {
-                return null;
-              }}
-            />
-          </IonRouterOutlet>
-        ) : (
-          <Login />
-        )}
-      </IonReactRouter>
-    </IonApp>
+    <GlobalErrorBoundary>
+      <IonApp>
+        <IonReactRouter>
+          <ThemeHandler />
+          <BackHandler />
+          {!readyLoaded || !accountsLoaded ? null : ready.date === "2021-06-18" &&
+            Object.values(accounts).some(i => i.primary) ? (
+            <IonRouterOutlet>
+              <Route exact path="/search" component={Search} />
+              <Route exact path="/more" component={Settings} />
+              <Route exact path="/clans" component={ClanAllPage} />
+              <Route exact path="/clans/:month/:year" component={ClanAllPage} />
+              <Route exact path="/clan/:id" component={ClanStatsPage} />
+              <Route exact path="/clan/:id/:month/:year" component={ClanStatsPage} />
+              <Route exact path="/players" component={UsersPage} />
+              <Route exact path="/player/:username" component={UserMainPage} />
+              <Route exact path="/player/:username/qrates" component={UserQRatesPage} />
+              <Route exact path="/player/:username/activity" component={UserActivityPage} />
+              <Route exact path="/player/:username/activity/:date" component={UserActivityPage} />
+              <Route exact path="/player/:username/inventory" component={UserInventoryPage} />
+              <Route exact path="/player/:username/captures/:type" component={UserCapturesPage} />
+              <Redirect
+                exact
+                path="/"
+                to={`/player/${Object.values(accounts).find(i => i.primary)?.username}`}
+              />
+              <Route
+                render={() => {
+                  return null;
+                }}
+              />
+            </IonRouterOutlet>
+          ) : (
+            <Login />
+          )}
+        </IonReactRouter>
+      </IonApp>
+    </GlobalErrorBoundary>
   );
 };
 

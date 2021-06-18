@@ -3,10 +3,13 @@ import { useEffect, useState } from "react";
 
 type IonImgProps = NonNullable<typeof IonImg["defaultProps"]>;
 
-const supportedWebP: {value: boolean | null, onUpdate: Set<(v: boolean) => void>} = {
+const formatSupport: {
+  value: [webp: boolean, avif: boolean] | null;
+  onUpdate: Set<(v: [webp: boolean, avif: boolean]) => void>;
+} = {
   value: null,
   onUpdate: new Set(),
-}
+};
 
 async function supportsWebp() {
   if (!(window || globalThis).createImageBitmap) return false;
@@ -18,9 +21,20 @@ async function supportsWebp() {
     () => false
   );
 }
-supportsWebp().then(i => {
-  supportedWebP.value = i;
-  supportedWebP.onUpdate.forEach(f => f(i));
+async function supportsAvif() {
+  if (!(window || globalThis).createImageBitmap) return false;
+
+  const avifData =
+    "data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUEAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAF0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgS0AAAAAABNjb2xybmNseAACAAIAAIAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAAGVtZGF0EgAKBzgAPtAgIAkyUBAAAPWc41TP///4gHBX9H8XVK7gGeDllq8TYARA+8Tfsv7L+zPE24eIoIzE0WhHbrqcrTK9VEgEG/hwgB5rdCbvP8g3KYPdV88CvPJnptgQ";
+  const blob = await fetch(avifData).then(r => r.blob());
+  return createImageBitmap(blob).then(
+    () => true,
+    () => false
+  );
+}
+Promise.all([supportsWebp(), supportsAvif()] as const).then(i => {
+  formatSupport.value = i;
+  formatSupport.onUpdate.forEach(f => f(i));
 });
 
 export interface CZImgProps extends Omit<IonImgProps, "src"> {
@@ -39,17 +53,27 @@ export function CZTypeImg({ img, ...props }: CZTypeImgProps) {
 }
 
 export function CZImg({ img, type, size, ...props }: CZImgProps) {
-  const [webP, setWebP] = useState(supportedWebP.value);
+  const [formats, setFormats] = useState(formatSupport.value);
   useEffect(() => {
-    if (webP === null) {
-      const f = (i: boolean) => {
-        setWebP(i);
+    if (formats === null) {
+      const f = (i: [boolean, boolean]) => {
+        setFormats(i);
       };
-      supportedWebP.onUpdate.add(f);
+      formatSupport.onUpdate.add(f);
       return () => {
-        supportedWebP.onUpdate.delete(f);
+        formatSupport.onUpdate.delete(f);
       };
     }
-  }, [webP])
-  return <IonImg {...props} src={`https://images.cuppazee.app/${type}/${size ?? 64}/${encodeURIComponent(img)}.${webP ? "webp" : (webP === false ? "png" : null)}`} />;
+  }, [formats])
+  let f: string | null = null;
+  if (formats) {
+    if (formats[1]) {
+      f = "avif";
+    } else if (formats[0]) {
+      f = "webp"
+    } else {
+      f = "png"
+    }
+  }
+  return <IonImg {...props} src={f ? `https://images.cuppazee.app/${type}/${size ?? 64}/${encodeURIComponent(img)}.${f}` : undefined} />;
 }
