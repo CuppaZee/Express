@@ -41,7 +41,7 @@
 }
 
 .clan-table-cell {
-  background-color: var(--ion-card-background);
+  background-color: var(--ion-card-background, var(--ion-item-background, var(--ion-background-color, #fff)));
   display: flex;
   flex-direction: row;
   align-items: center;
