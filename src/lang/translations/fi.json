@@ -1,7 +1,7 @@
 [
     {
         "term": "clan_requirements",
-        "definition": "Clan Requirements",
+        "definition": "Klaanivaatimukset",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -9,7 +9,7 @@
     },
     {
         "term": "tools_munzee_types",
-        "definition": "Munzee Types",
+        "definition": "Munzee tyypit",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -17,7 +17,7 @@
     },
     {
         "term": "tools_calendar",
-        "definition": "Calendar",
+        "definition": "Kalenteri",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -25,7 +25,7 @@
     },
     {
         "term": "tools_evoplanner",
-        "definition": "Evo Planner",
+        "definition": "Evojen kehitys",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -33,7 +33,7 @@
     },
     {
         "term": "settings",
-        "definition": "Settings",
+        "definition": "Asetukset",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -41,7 +41,7 @@
     },
     {
         "term": "settings_personalisation",
-        "definition": "Personalisation",
+        "definition": "Personoi",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -49,7 +49,7 @@
     },
     {
         "term": "settings_notifications",
-        "definition": "Notifications",
+        "definition": "Ilmoitukset",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -57,7 +57,7 @@
     },
     {
         "term": "settings_accounts",
-        "definition": "Accounts",
+        "definition": "Tilit",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -65,7 +65,7 @@
     },
     {
         "term": "settings_bookmarks",
-        "definition": "Bookmarks",
+        "definition": "Kirjanmerkit",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -73,7 +73,7 @@
     },
     {
         "term": "tools_testscan",
-        "definition": "Test Scan",
+        "definition": "Testiskannaus",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -81,7 +81,7 @@
     },
     {
         "term": "tools_universal",
-        "definition": "Universal Capper",
+        "definition": "Sosiaaliker\u00e4in",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -89,7 +89,7 @@
     },
     {
         "term": "tools",
-        "definition": "Tools",
+        "definition": "Ty\u00f6kalut",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -97,7 +97,7 @@
     },
     {
         "term": "title",
-        "definition": "Search",
+        "definition": "Etsi",
         "context": "\"search\"",
         "term_plural": "",
         "reference": "",
@@ -105,7 +105,7 @@
     },
     {
         "term": "all",
-        "definition": "All",
+        "definition": "Kaikki",
         "context": "\"search\"",
         "term_plural": "",
         "reference": "",
@@ -113,7 +113,7 @@
     },
     {
         "term": "player",
-        "definition": "Player",
+        "definition": "Pelaaja",
         "context": "\"search\"",
         "term_plural": "",
         "reference": "",
@@ -121,7 +121,7 @@
     },
     {
         "term": "clan",
-        "definition": "Clan",
+        "definition": "Klaani",
         "context": "\"search\"",
         "term_plural": "",
         "reference": "",
@@ -130,8 +130,8 @@
     {
         "term": "overview_points",
         "definition": {
-            "one": "{count} Point",
-            "other": "{count} Points"
+            "one": "{count} piste",
+            "other": "{count} pistett\u00e4"
         },
         "context": "\"user_activity\"",
         "term_plural": "overview_points",
@@ -141,8 +141,8 @@
     {
         "term": "overview_captures",
         "definition": {
-            "one": "{count} Capture",
-            "other": "{count} Captures"
+            "one": "{count} nappaus",
+            "other": "{count} nappausta"
         },
         "context": "\"user_activity\"",
         "term_plural": "overview_captures",
@@ -152,8 +152,8 @@
     {
         "term": "overview_deploys",
         "definition": {
-            "one": "{count} Deploy",
-            "other": "{count} Deploys"
+            "one": "{count} julkaisu",
+            "other": "{count} julkaisua"
         },
         "context": "\"user_activity\"",
         "term_plural": "overview_deploys",
@@ -163,8 +163,8 @@
     {
         "term": "overview_passive_deploys",
         "definition": {
-            "one": "{count} Passive Deploy",
-            "other": "{count} Passive Deploys"
+            "one": "{count} passiivinen julkaisu",
+            "other": "{count} passiivista julkaisua"
         },
         "context": "\"user_activity\"",
         "term_plural": "overview_passive_deploys",
@@ -174,8 +174,8 @@
     {
         "term": "overview_capons",
         "definition": {
-            "one": "{count} Capon",
-            "other": "{count} Capons"
+            "one": "{count} napattu",
+            "other": "{count} napattua"
         },
         "context": "\"user_activity\"",
         "term_plural": "overview_capons",
@@ -184,7 +184,7 @@
     },
     {
         "term": "filter_edit",
-        "definition": "Edit Filters",
+        "definition": "Muokkaa suodattimia",
         "context": "\"user_activity\"",
         "term_plural": "",
         "reference": "",
@@ -192,7 +192,7 @@
     },
     {
         "term": "filter_save",
-        "definition": "Save Filters",
+        "definition": "Tallenna filtterit",
         "context": "\"user_activity\"",
         "term_plural": "",
         "reference": "",
@@ -200,7 +200,7 @@
     },
     {
         "term": "filter_types",
-        "definition": "Types",
+        "definition": "Tyypit",
         "context": "\"user_activity\"",
         "term_plural": "",
         "reference": "",
@@ -208,7 +208,7 @@
     },
     {
         "term": "filter_state",
-        "definition": "State",
+        "definition": "Tyyppi",
         "context": "\"user_activity\"",
         "term_plural": "",
         "reference": "",
@@ -216,7 +216,7 @@
     },
     {
         "term": "filter_category",
-        "definition": "Category",
+        "definition": "Luokka",
         "context": "\"user_activity\"",
         "term_plural": "",
         "reference": "",
@@ -224,7 +224,7 @@
     },
     {
         "term": "activity_capture",
-        "definition": "You captured",
+        "definition": "Nappasit",
         "context": "\"user_activity\"",
         "term_plural": "",
         "reference": "",
@@ -232,7 +232,7 @@
     },
     {
         "term": "activity_deploy",
-        "definition": "You deployed",
+        "definition": "Julkaisit",
         "context": "\"user_activity\"",
         "term_plural": "",
         "reference": "",
@@ -240,7 +240,7 @@
     },
     {
         "term": "activity_passive_deploy",
-        "definition": "You passively deployed",
+        "definition": "Julkaisut passiivisesti",
         "context": "\"user_activity\"",
         "term_plural": "",
         "reference": "",
@@ -248,7 +248,7 @@
     },
     {
         "term": "activity_capon",
-        "definition": "{user} captured",
+        "definition": "{user} nappasi",
         "context": "\"user_activity\"",
         "term_plural": "",
         "reference": "",
@@ -256,7 +256,7 @@
     },
     {
         "term": "owned_by_user",
-        "definition": "by {user}",
+        "definition": "{user}'n",
         "context": "\"user_activity\"",
         "term_plural": "",
         "reference": "",
@@ -264,7 +264,7 @@
     },
     {
         "term": "owned_by_self",
-        "definition": "by you",
+        "definition": "sinun",
         "context": "\"user_activity\"",
         "term_plural": "",
         "reference": "",
@@ -272,7 +272,7 @@
     },
     {
         "term": "none",
-        "definition": "None",
+        "definition": "Nolla",
         "context": "\"user_activity\"",
         "term_plural": "",
         "reference": "",
@@ -280,7 +280,7 @@
     },
     {
         "term": "type_info",
-        "definition": "Type Info",
+        "definition": "Tyypin tiedot",
         "context": "\"user_activity\"",
         "term_plural": "",
         "reference": "",
@@ -288,7 +288,7 @@
     },
     {
         "term": "level",
-        "definition": "Level {level}",
+        "definition": "Taso {level}",
         "context": "\"user_profile\"",
         "term_plural": "",
         "reference": "",
@@ -296,7 +296,7 @@
     },
     {
         "term": "rank",
-        "definition": "Rank #{rank}",
+        "definition": "Sijoitus #{rank}",
         "context": "\"user_profile\"",
         "term_plural": "",
         "reference": "",
@@ -305,8 +305,8 @@
     {
         "term": "points",
         "definition": {
-            "one": "{n} Point",
-            "other": "{n} Points"
+            "one": "{n} piste",
+            "other": "{n} pistett\u00e4"
         },
         "context": "\"user_profile\"",
         "term_plural": "points",
@@ -315,7 +315,7 @@
     },
     {
         "term": "settings_zero",
-        "definition": "Include Zeros",
+        "definition": "N\u00e4yt\u00e4 nollat",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -323,7 +323,7 @@
     },
     {
         "term": "settings_group",
-        "definition": "Group by Category",
+        "definition": "Luokittele",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -332,8 +332,8 @@
     {
         "term": "amount_undeployed",
         "definition": {
-            "one": "{count} Undeployed",
-            "other": "{count} Undeployed"
+            "one": "{count} julkaisematon",
+            "other": "{count} julkaisematonta"
         },
         "context": "\"user_inventory\"",
         "term_plural": "amount_undeployed",
@@ -343,8 +343,8 @@
     {
         "term": "amount_credits",
         "definition": {
-            "one": "{count} Credit",
-            "other": "{count} Credits"
+            "one": "{count} crediitti",
+            "other": "{count} crediitti\u00e4"
         },
         "context": "\"user_inventory\"",
         "term_plural": "amount_credits",
@@ -353,7 +353,7 @@
     },
     {
         "term": "history",
-        "definition": "History",
+        "definition": "Historia",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -361,7 +361,7 @@
     },
     {
         "term": "history_space_coast_geo_store",
-        "definition": "Space Coast Geo Store",
+        "definition": "Space Coast Geo kauppa",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -369,7 +369,7 @@
     },
     {
         "term": "history_freeze_tag_store",
-        "definition": "Freeze Tag Store",
+        "definition": "Freeze Tag kauppa",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -377,7 +377,7 @@
     },
     {
         "term": "history_in_app_store",
-        "definition": "Munzee In-App Store",
+        "definition": "Munzee kauppa",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -385,7 +385,7 @@
     },
     {
         "term": "history_pimedus",
-        "definition": "Pimedus Rewards",
+        "definition": "Pimedus palkinto",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -393,7 +393,7 @@
     },
     {
         "term": "history_magnetus",
-        "definition": "Magnetus Rewards",
+        "definition": "Magnetus palkinto",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -401,7 +401,7 @@
     },
     {
         "term": "history_prize_wheel",
-        "definition": "Prize Wheel Rewards",
+        "definition": "Prize Wheel palkinto",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -409,7 +409,7 @@
     },
     {
         "term": "history_premium",
-        "definition": "Premium Rewards",
+        "definition": "Premium palkinto",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -417,7 +417,7 @@
     },
     {
         "term": "history_clan",
-        "definition": "Level {level} - {month} {year}",
+        "definition": "Taso {level} - {month} {year}",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -425,7 +425,7 @@
     },
     {
         "term": "history_zeeops",
-        "definition": "ZeeOps Rewards",
+        "definition": "ZeeOps palkinto",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -441,7 +441,7 @@
     },
     {
         "term": "history_test",
-        "definition": "Test",
+        "definition": "Testi",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -449,7 +449,7 @@
     },
     {
         "term": "history_rover",
-        "definition": "Found by a Rover",
+        "definition": "Rooveri l\u00f6ysi",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -457,7 +457,7 @@
     },
     {
         "term": "history_qrate",
-        "definition": "QRate Rewards",
+        "definition": "QRate-pallkinto",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -465,7 +465,7 @@
     },
     {
         "term": "collected",
-        "definition": "Collected!",
+        "definition": "Saatu!",
         "context": "\"user_zeeops\"",
         "term_plural": "",
         "reference": "",
@@ -473,7 +473,7 @@
     },
     {
         "term": "facebook_title",
-        "definition": "CuppaZee Express isn't supported in the Facebook Browser",
+        "definition": "CuppaZee Express ei toimi Facebook-selaimessa",
         "context": "\"welcome\"",
         "term_plural": "",
         "reference": "",
@@ -481,7 +481,7 @@
     },
     {
         "term": "facebook_description",
-        "definition": "You can press the <1 \/> Menu icon in the top right corner and press \"Open in Browser\" button to view CuppaZee Express in a supported browser.",
+        "definition": "Voit painaa <1 \/> nappia oikeassa yl\u00e4kulmassa ja sitten \"Open in Browser\" avataksesi CuppaZee Express'in selaimessa.",
         "context": "\"welcome\"",
         "term_plural": "",
         "reference": "",
@@ -489,7 +489,7 @@
     },
     {
         "term": "messenger_title",
-        "definition": "CuppaZee Express isn't supported in the Messenger Browser",
+        "definition": "CuppaZee Express ei toimi Messenge-selaimessa",
         "context": "\"welcome\"",
         "term_plural": "",
         "reference": "",
@@ -497,15 +497,15 @@
     },
     {
         "term": "messenger_ios_description",
-        "definition": "You can press the <1 \/> Menu icon in the bottom right corner and press \"Open in Safari\" button to view CuppaZee Express in a supported browser.",
+        "definition": "Voit painaa <1 \/> nappia oikeassa alakulmassa ja sitten \"Open in Safari\" avataksesi CuppaZee Express'in selaimessa.",
         "context": "\"welcome\"",
         "term_plural": "",
         "reference": "",
-        "comment": ""
+        "comment": "Safari is supported in any case, so \"supported\" is not needed in the English text? Does not affect the Finnish translation,"
     },
     {
         "term": "title",
-        "definition": "Welcome",
+        "definition": "Tervetuloa",
         "context": "\"welcome\"",
         "term_plural": "",
         "reference": "",
@@ -513,7 +513,7 @@
     },
     {
         "term": "accounts",
-        "definition": "Accounts",
+        "definition": "Tilit",
         "context": "\"welcome\"",
         "term_plural": "",
         "reference": "",
@@ -521,7 +521,7 @@
     },
     {
         "term": "login",
-        "definition": "Login with Munzee",
+        "definition": "Loggaudu Munzee'en",
         "context": "\"welcome\"",
         "term_plural": "",
         "reference": "",
@@ -529,7 +529,7 @@
     },
     {
         "term": "continue",
-        "definition": "Continue",
+        "definition": "Jatka",
         "context": "\"welcome\"",
         "term_plural": "",
         "reference": "",
@@ -537,7 +537,7 @@
     },
     {
         "term": "continuing_policy",
-        "definition": "By continuing to use CuppaZee Express, you agree to CuppaZee's Terms of Service and Privacy Policy.",
+        "definition": "Jatkamalla CuppaZee Express'in k\u00e4ytt\u00f6\u00e4 hyv\u00e4ksyt alla linkatut k\u00e4ytt\u00f6ehdot ja yksityisyysk\u00e4yt\u00e4nn\u00f6t.",
         "context": "\"welcome\"",
         "term_plural": "",
         "reference": "",
@@ -545,7 +545,7 @@
     },
     {
         "term": "terms",
-        "definition": "Terms of Service",
+        "definition": "K\u00e4ytt\u00f6ehdot",
         "context": "\"welcome\"",
         "term_plural": "",
         "reference": "",
@@ -553,7 +553,7 @@
     },
     {
         "term": "privacy",
-        "definition": "Privacy Policy",
+        "definition": "Yksityisyysk\u00e4yt\u00e4nn\u00f6t",
         "context": "\"welcome\"",
         "term_plural": "",
         "reference": "",
@@ -561,7 +561,7 @@
     },
     {
         "term": "date",
-        "definition": "Date",
+        "definition": "Pvm",
         "context": "\"user_activity\"",
         "term_plural": "",
         "reference": "",
@@ -569,7 +569,7 @@
     },
     {
         "term": "state_physical",
-        "definition": "Physical",
+        "definition": "Fyysinen",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -577,7 +577,7 @@
     },
     {
         "term": "state_virtual",
-        "definition": "Virtual",
+        "definition": "Virtuaali",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -585,7 +585,7 @@
     },
     {
         "term": "state_credit",
-        "definition": "Credit",
+        "definition": "Crediitti",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -593,7 +593,7 @@
     },
     {
         "term": "theme_title",
-        "definition": "Theme",
+        "definition": "Teema",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -601,7 +601,7 @@
     },
     {
         "term": "language_title",
-        "definition": "Language",
+        "definition": "Kieli",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -609,7 +609,7 @@
     },
     {
         "term": "app_icon_title",
-        "definition": "App Icon",
+        "definition": "Sovellusikoni",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -625,7 +625,7 @@
     },
     {
         "term": "app_icon_teal",
-        "definition": "Blue",
+        "definition": "Sininen",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -633,7 +633,7 @@
     },
     {
         "term": "app_icon_green",
-        "definition": "Green",
+        "definition": "Vihre\u00e4",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -641,7 +641,7 @@
     },
     {
         "term": "app_icon_black",
-        "definition": "Black",
+        "definition": "Musta",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -649,7 +649,7 @@
     },
     {
         "term": "app_icon_darkblue",
-        "definition": "Dark Blue",
+        "definition": "Tummansininen",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -657,7 +657,7 @@
     },
     {
         "term": "app_icon_orange",
-        "definition": "Orange",
+        "definition": "Oranssi",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -665,7 +665,7 @@
     },
     {
         "term": "app_icon_pink",
-        "definition": "Pink",
+        "definition": "Pinkki",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -673,7 +673,7 @@
     },
     {
         "term": "app_icon_purple",
-        "definition": "Purple",
+        "definition": "Lila",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -681,7 +681,7 @@
     },
     {
         "term": "app_icon_red",
-        "definition": "Red",
+        "definition": "Punainen",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -689,7 +689,7 @@
     },
     {
         "term": "theme_system",
-        "definition": "System Preference",
+        "definition": "Oletusarvo",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -697,7 +697,7 @@
     },
     {
         "term": "theme_light",
-        "definition": "Light",
+        "definition": "Vaalea",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -705,7 +705,7 @@
     },
     {
         "term": "theme_dark",
-        "definition": "Dark",
+        "definition": "Tumma",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -713,7 +713,7 @@
     },
     {
         "term": "none",
-        "definition": "You don't have any QRates! Head out and cap some Greenies to find them!",
+        "definition": "Sinulla ei ole QRateja! Nappaa pari vihre\u00e4\u00e4 munzeeta p\u00e4\u00e4st\u00e4ksesi alkuun!",
         "context": "\"user_qrates\"",
         "term_plural": "",
         "reference": "",
@@ -721,7 +721,7 @@
     },
     {
         "term": "found",
-        "definition": "Found: {date}",
+        "definition": "L\u00f6ytyi: {date}",
         "context": "\"user_qrates\"",
         "term_plural": "",
         "reference": "",
@@ -730,8 +730,8 @@
     {
         "term": "qrowbars",
         "definition": {
-            "one": "{count} QRowbar Used",
-            "other": "{count} QRowbars Used"
+            "one": "{count} QRowbar k\u00e4ytetty",
+            "other": "{count} QRowbaria k\u00e4ytetty"
         },
         "context": "\"user_qrates\"",
         "term_plural": "qrowbars",
@@ -740,7 +740,7 @@
     },
     {
         "term": "players",
-        "definition": "Players",
+        "definition": "Pelaajat",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -748,7 +748,7 @@
     },
     {
         "term": "player_profile",
-        "definition": "Profile",
+        "definition": "Profiili",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -756,7 +756,7 @@
     },
     {
         "term": "player_activity",
-        "definition": "Activity",
+        "definition": "Aktiviteetit",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -764,7 +764,7 @@
     },
     {
         "term": "player_inventory",
-        "definition": "Inventory",
+        "definition": "Omistuksesi",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -780,7 +780,7 @@
     },
     {
         "term": "player_clan_progress",
-        "definition": "Clan Progress",
+        "definition": "Edistymisesi klaanissa",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -788,7 +788,7 @@
     },
     {
         "term": "player_bouncers",
-        "definition": "Bouncers",
+        "definition": "Pomppijat",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -796,7 +796,7 @@
     },
     {
         "term": "player_qrew_checker",
-        "definition": "QRew Checker",
+        "definition": "QRew-tarkastin",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -804,7 +804,7 @@
     },
     {
         "term": "player_qrates",
-        "definition": "QRates",
+        "definition": "QRatet",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -812,7 +812,7 @@
     },
     {
         "term": "player_cubimals",
-        "definition": "Cubimals",
+        "definition": "Cubimalit",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -820,7 +820,7 @@
     },
     {
         "term": "player_captures",
-        "definition": "Captures",
+        "definition": "Nappaukset",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -828,7 +828,7 @@
     },
     {
         "term": "player_challenges",
-        "definition": "Challenges",
+        "definition": "Haasteet",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -836,7 +836,7 @@
     },
     {
         "term": "clans",
-        "definition": "Clans",
+        "definition": "Klaanit",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -844,7 +844,7 @@
     },
     {
         "term": "search",
-        "definition": "Search",
+        "definition": "Etsi",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -852,7 +852,7 @@
     },
     {
         "term": "more",
-        "definition": "More",
+        "definition": "Lis\u00e4\u00e4",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -860,7 +860,7 @@
     },
     {
         "term": "planner_poi",
-        "definition": "POI Planner",
+        "definition": "POI ty\u00f6kalu",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -868,7 +868,7 @@
     },
     {
         "term": "planner_destination",
-        "definition": "Destination Planner",
+        "definition": "Destinaatioiden sijoittelu",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -876,7 +876,7 @@
     },
     {
         "term": "planner_blast",
-        "definition": "Blast Planner",
+        "definition": "Pommisuunnittelu",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -884,7 +884,7 @@
     },
     {
         "term": "bouncers",
-        "definition": "Bouncers",
+        "definition": "Pomppijat",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -892,7 +892,7 @@
     },
     {
         "term": "bouncers_nearby",
-        "definition": "Nearby Bouncers",
+        "definition": "L\u00e4hipomppijat",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -900,7 +900,7 @@
     },
     {
         "term": "bouncers_overview",
-        "definition": "Bouncers Overview",
+        "definition": "Pomppijaluettelo",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -908,7 +908,7 @@
     },
     {
         "term": "bouncers_expiring",
-        "definition": "Bouncing Soon",
+        "definition": "Kohta pomppaavat",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -916,7 +916,7 @@
     },
     {
         "term": "more_credits",
-        "definition": "Credits",
+        "definition": "Crediitit",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -924,7 +924,7 @@
     },
     {
         "term": "more_open_source",
-        "definition": "Open Source",
+        "definition": "L\u00e4hdekoodit",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -932,7 +932,7 @@
     },
     {
         "term": "more_donate",
-        "definition": "Donate",
+        "definition": "Lahjoita",
         "context": "\"pages\"",
         "term_plural": "",
         "reference": "",
@@ -940,7 +940,7 @@
     },
     {
         "term": "players",
-        "definition": "Players",
+        "definition": "Pelaajat",
         "context": "\"search\"",
         "term_plural": "",
         "reference": "",
@@ -948,7 +948,7 @@
     },
     {
         "term": "clans",
-        "definition": "Clans",
+        "definition": "Klaanit",
         "context": "\"search\"",
         "term_plural": "",
         "reference": "",
@@ -956,7 +956,7 @@
     },
     {
         "term": "overview",
-        "definition": "Overview",
+        "definition": "Omistus",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -964,7 +964,7 @@
     },
     {
         "term": "state_physicals",
-        "definition": "Physicals",
+        "definition": "Fyysiset",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -972,7 +972,7 @@
     },
     {
         "term": "state_virtuals",
-        "definition": "Virtuals",
+        "definition": "Virtuaaliset",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -980,7 +980,7 @@
     },
     {
         "term": "state_credits",
-        "definition": "Credits",
+        "definition": "Crediitit",
         "context": "\"user_inventory\"",
         "term_plural": "",
         "reference": "",
@@ -988,7 +988,7 @@
     },
     {
         "term": "login_required",
-        "definition": "You must log into an account to continue",
+        "definition": "Kirjaude tilille voidaksesi jatkaa",
         "context": "\"welcome\"",
         "term_plural": "",
         "reference": "",
@@ -996,7 +996,7 @@
     },
     {
         "term": "accounts_title",
-        "definition": "Accounts",
+        "definition": "Tilit",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -1004,7 +1004,7 @@
     },
     {
         "term": "accounts_success",
-        "definition": "Successfully logged in as {player}",
+        "definition": "Logguduit pelaajana {player}",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -1012,7 +1012,7 @@
     },
     {
         "term": "accounts_signout",
-        "definition": "Sign Out",
+        "definition": "Kirjaudu ulos",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -1020,7 +1020,7 @@
     },
     {
         "term": "accounts_add",
-        "definition": "Add Another Account",
+        "definition": "Lis\u00e4\u00e4 toinen tili",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -1028,7 +1028,7 @@
     },
     {
         "term": "players_title",
-        "definition": "Players",
+        "definition": "Pelaajat",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -1036,7 +1036,7 @@
     },
     {
         "term": "players_empty",
-        "definition": "It's looking a bit empty here. Press the button below to add your first player!",
+        "definition": "T\u00e4\u00e4ll\u00e4 n\u00e4ytt\u00e4\u00e4 tyhj\u00e4lt\u00e4. Paina allaolevaa nappulaa lis\u00e4t\u00e4ksesi pelaajan!",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -1044,7 +1044,7 @@
     },
     {
         "term": "players_add",
-        "definition": "Add Player",
+        "definition": "Lis\u00e4\u00e4 pelaaja",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -1052,7 +1052,7 @@
     },
     {
         "term": "sync_enable",
-        "definition": "Enable Cloud Syncing",
+        "definition": "Salli pilvisynkronointi",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -1060,7 +1060,7 @@
     },
     {
         "term": "sync_enable_title",
-        "definition": "Enable Cloud Syncing for {section}?",
+        "definition": "Salli pilvisynkronointi {section}'lle?",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -1068,7 +1068,7 @@
     },
     {
         "term": "sync_enable_desc",
-        "definition": "Your {section} will be synchronised with your other devices.",
+        "definition": "Sinun {section} synkronoidaan muitten laitteidesi kanssa.",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -1076,7 +1076,7 @@
     },
     {
         "term": "sync_disable",
-        "definition": "Disable Cloud Syncing",
+        "definition": "Lopeta pilvisynkronointi",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -1084,7 +1084,7 @@
     },
     {
         "term": "sync_cancel",
-        "definition": "Cancel",
+        "definition": "Peru",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -1092,7 +1092,7 @@
     },
     {
         "term": "clans_title",
-        "definition": "Clans",
+        "definition": "Klaanit",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -1100,7 +1100,7 @@
     },
     {
         "term": "clans_empty",
-        "definition": "It's looking a bit empty here. Press the button below to add your first clan!",
+        "definition": "T\u00e4\u00e4ll\u00e4 n\u00e4ytt\u00e4\u00e4 tyhj\u00e4lt\u00e4. Paina allaolevaa nappulaa lis\u00e4t\u00e4ksesi klaanin!",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -1108,7 +1108,7 @@
     },
     {
         "term": "clans_add",
-        "definition": "Add Clan",
+        "definition": "Lis\u00e4\u00e4 klaani",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -1116,7 +1116,7 @@
     },
     {
         "term": "requirements",
-        "definition": "Requirements",
+        "definition": "Vaatimukset",
         "context": "\"clan\"",
         "term_plural": "",
         "reference": "",
@@ -1124,7 +1124,7 @@
     },
     {
         "term": "clan_requirements",
-        "definition": "Clan Requirements",
+        "definition": "Klaanin vaatimukset",
         "context": "\"clan\"",
         "term_plural": "",
         "reference": "",
@@ -1132,7 +1132,7 @@
     },
     {
         "term": "levels",
-        "definition": "Levels",
+        "definition": "Tasot",
         "context": "\"clan\"",
         "term_plural": "",
         "reference": "",
@@ -1140,7 +1140,7 @@
     },
     {
         "term": "level_text",
-        "definition": "Level",
+        "definition": "Taso",
         "context": "\"clan\"",
         "term_plural": "",
         "reference": "",
@@ -1148,7 +1148,7 @@
     },
     {
         "term": "level",
-        "definition": "Level {level}",
+        "definition": "Taso {level}",
         "context": "\"clan\"",
         "term_plural": "",
         "reference": "",
@@ -1156,7 +1156,7 @@
     },
     {
         "term": "indiv_level",
-        "definition": "Level {level} Indiv",
+        "definition": "Taso {level} pelaaja",
         "context": "\"clan\"",
         "term_plural": "",
         "reference": "",
@@ -1164,7 +1164,7 @@
     },
     {
         "term": "group_level",
-        "definition": "Level {level} Group",
+        "definition": "Taso {level} klaani",
         "context": "\"clan\"",
         "term_plural": "",
         "reference": "",
@@ -1172,7 +1172,7 @@
     },
     {
         "term": "share_level",
-        "definition": "Level {level} Share",
+        "definition": "Taso {level} jaettu",
         "context": "\"clan\"",
         "term_plural": "",
         "reference": "",
@@ -1180,7 +1180,7 @@
     },
     {
         "term": "individual",
-        "definition": "Individual",
+        "definition": "Pelaaja",
         "context": "\"clan\"",
         "term_plural": "",
         "reference": "",
@@ -1188,7 +1188,7 @@
     },
     {
         "term": "group",
-        "definition": "Group",
+        "definition": "Klaani",
         "context": "\"clan\"",
         "term_plural": "",
         "reference": "",
@@ -1196,7 +1196,7 @@
     },
     {
         "term": "rewards",
-        "definition": "Rewards",
+        "definition": "Palkinnot",
         "context": "\"clan\"",
         "term_plural": "",
         "reference": "",
@@ -1204,7 +1204,7 @@
     },
     {
         "term": "clan_rewards",
-        "definition": "Clan Rewards",
+        "definition": "Klaanipalkinnot",
         "context": "\"clan\"",
         "term_plural": "",
         "reference": "",
@@ -1212,7 +1212,7 @@
     },
     {
         "term": "mode_achieved",
-        "definition": "Achieved",
+        "definition": "Saavutettu",
         "context": "\"clan\"",
         "term_plural": "",
         "reference": "",
@@ -1220,7 +1220,7 @@
     },
     {
         "term": "mode_remaining",
-        "definition": "Remaining",
+        "definition": "J\u00e4ljell\u00e4",
         "context": "\"clan\"",
         "term_plural": "",
         "reference": "",
@@ -1228,7 +1228,7 @@
     },
     {
         "term": "rank",
-        "definition": "Rank #{rank}",
+        "definition": "Sijoitus #{rank}",
         "context": "\"clan\"",
         "term_plural": "",
         "reference": "",
@@ -1236,7 +1236,7 @@
     },
     {
         "term": "group_total",
-        "definition": "Group Total",
+        "definition": "Klaani yht.",
         "context": "\"clan\"",
         "term_plural": "",
         "reference": "",
@@ -1244,7 +1244,7 @@
     },
     {
         "term": "weekly_reward",
-        "definition": "Weekly Reward ({item}) Collected!",
+        "definition": "Viikko pulkassa, {item} saatu!",
         "context": "\"user_zeeops\"",
         "term_plural": "",
         "reference": "",
@@ -1252,7 +1252,7 @@
     },
     {
         "term": "sync_disable_desc",
-        "definition": "Your {section} will no longer be synchronised with other devices.",
+        "definition": "Sinun {section} ei en\u00e4\u00e4 synkronoida muitten laitteidesi kanssa.",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",
@@ -1260,7 +1260,7 @@
     },
     {
         "term": "sync_disable_title",
-        "definition": "Disable Cloud Syncing for {section}?",
+        "definition": "Poista {section}'n pilvisynkronointi?",
         "context": "\"settings\"",
         "term_plural": "",
         "reference": "",

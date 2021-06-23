@@ -18,5 +18,9 @@
 	{
 		"pkg": "@capacitor/text-zoom",
 		"classpath": "com.capacitorjs.plugins.textzoom.TextZoomPlugin"
+	},
+	{
+		"pkg": "capacitor-plugin-siri-shorts",
+		"classpath": "com.timozacherl.plugins.capacitorpluginsirishortcuts.SiriShortcuts"
 	}
 ]

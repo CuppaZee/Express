@@ -1,53 +1,102 @@
-import { IonAvatar, IonIcon, IonLabel, IonTabBar, IonTabButton, useIonRouter } from "@ionic/react";
-import { grid, people, search, shield } from "ionicons/icons";
+import {
+  IonCard,
+  IonMenu,
+  useIonRouter,
+  IonItem,
+  IonAvatar,
+  IonImg,
+  IonLabel,
+  IonIcon,
+  IonContent,
+  IonHeader,
+  IonToolbar,IonTitle, IonButtons, IonPage, IonButton
+} from "@ionic/react";
+import { gridOutline, peopleOutline, reload, searchOutline, shieldOutline } from "ionicons/icons";
 import { useTranslation } from "react-i18next";
-import { AccountsStorage } from "../storage/Account";
-import useStorage from "../utils/useStorage";
+import { useQueryClient } from "react-query";
+import useUserSettings from "../utils/useUserSettings";
+import "./Sidebar.css"
 
 export default function Sidebar() {
-  const [accounts] = useStorage(AccountsStorage);
   const history = useIonRouter();
   const { t } = useTranslation();
+  const page = (page: string) => ({
+    routerDirection: "root" as const,
+    routerLink: page,
+    color: history.routeInfo?.pathname.startsWith(page) ? "primary" : undefined,
+  });
+  const { users, clans } = useUserSettings() ?? {};
+  const queryClient = useQueryClient();
   return (
-    <IonTabBar
-      slot="bottom"
-      onIonTabsDidChange={e => {
-        history.push(e.detail.tab, "root");
-      }}>
-      <IonTabButton selected={history.routeInfo.pathname.startsWith("/search")} tab="/search">
-        <IonIcon icon={search} />
-        <IonLabel>{t("pages:tools_search")}</IonLabel>
-      </IonTabButton>
-      {Object.values(accounts)
-        .filter(i => i.primary)
-        .map(acc => (
-          <IonTabButton
-            key={acc.username}
-            selected={history.routeInfo.pathname.startsWith(`/player/${acc.username}`)}
-            tab={`/player/${acc.username}`}>
-            <IonIcon style={{ display: "none" }} />
-            <IonAvatar className="tab-icon-avatar">
-              <img
-                src={`https://munzee.global.ssl.fastly.net/images/avatars/ua${Number(
-                  acc.user_id
-                ).toString(36)}.png`}
-              />
-            </IonAvatar>
-            <IonLabel>{acc.username}</IonLabel>
-          </IonTabButton>
-        ))}
-      {Object.values(accounts).length > 1 && <IonTabButton selected={history.routeInfo.pathname.startsWith("/players")} tab="/players">
-        <IonIcon icon={people} />
-        <IonLabel>Players</IonLabel>
-      </IonTabButton>}
-      <IonTabButton selected={history.routeInfo.pathname.startsWith("/clans")} tab="/clans">
-        <IonIcon icon={shield} />
-        <IonLabel>Clans</IonLabel>
-      </IonTabButton>
-      <IonTabButton selected={history.routeInfo.pathname.startsWith("/more")} tab="/more">
-        <IonIcon icon={grid} />
-        <IonLabel>More</IonLabel>
-      </IonTabButton>
-    </IonTabBar>
+    <IonMenu
+      style={{ maxWidth: "min(350px, 27%)" }}
+      draggable={false}
+      contentId="ion-router-outlet">
+      <IonPage>
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Express</IonTitle>
+            <IonButtons>
+              <IonButton
+                onClick={() => {
+                  queryClient.refetchQueries({ active: true });
+                }}>
+                <IonIcon icon={reload} />
+              </IonButton>
+            </IonButtons>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <IonCard>
+            <IonItem detail={false} lines="none" {...page("/search")}>
+              <IonIcon slot="start" icon={searchOutline} />
+              <IonLabel>{t("pages:search")}</IonLabel>
+            </IonItem>
+          </IonCard>
+          <IonCard>
+            <IonItem detail={false} {...page("/players")}>
+              <IonIcon slot="start" icon={peopleOutline} />
+              <IonLabel>{t("pages:players")}</IonLabel>
+            </IonItem>
+            {users?.map(user => (
+              <IonItem lines="none" detail={false} {...page(`/player/${user.username}`)}>
+                <IonAvatar className="item-avatar" slot="start">
+                  <IonImg
+                    src={`https://munzee.global.ssl.fastly.net/images/avatars/ua${Number(
+                      user.user_id
+                    ).toString(36)}.png`}
+                  />
+                </IonAvatar>
+                <IonLabel>{user.username}</IonLabel>
+              </IonItem>
+            ))}
+          </IonCard>
+          <IonCard>
+            <IonItem detail={false} {...page("/clans")}>
+              <IonIcon slot="start" icon={shieldOutline} />
+              <IonLabel>{t("pages:clans")}</IonLabel>
+            </IonItem>
+            {clans?.map(clan => (
+              <IonItem lines="none" detail={false} {...page(`/clan/${clan.clan_id}`)}>
+                <IonAvatar className="item-avatar" slot="start">
+                  <IonImg
+                    src={`https://munzee.global.ssl.fastly.net/images/clan_logos/${Number(
+                      clan.clan_id
+                    ).toString(36)}.png`}
+                  />
+                </IonAvatar>
+                <IonLabel>{clan.name}</IonLabel>
+              </IonItem>
+            ))}
+          </IonCard>
+          <IonCard>
+            <IonItem detail={false} lines="none" {...page("/more")}>
+              <IonIcon slot="start" icon={gridOutline} />
+              <IonLabel>{t("pages:more")}</IonLabel>
+            </IonItem>
+          </IonCard>
+        </IonContent>
+      </IonPage>
+    </IonMenu>
   );
 }

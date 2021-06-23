@@ -56,19 +56,19 @@ const UserInventoryPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
 
   const [gridRef, elements] = useFancyGrid(
     (history ? d?.history.length : d?.groups.length) || 0,
-    400,
+    350,
   );
 
   return (
     <IonPage>
-      <Header title={`${params?.username} - ${t("pages:user_inventory")}`}>
+      <Header title={`${params?.username} - ${t("pages:player_inventory")}`}>
         <IonSegment
           value={history ? "history" : "overview"}
           onIonChange={e => {
             setHistory(e.detail.value === "history");
           }}>
           <IonSegmentButton value="overview">
-            <IonLabel>Overview</IonLabel>
+            <IonLabel>{t("user_inventory:overview")}</IonLabel>
           </IonSegmentButton>
 
           <IonSegmentButton value="history">

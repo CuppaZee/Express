@@ -92,7 +92,7 @@ function Settings() {
   const [theme, setTheme] = useStorage(ThemeStorage);
   const [_, setReady] = useStorage(ReadyStorage);
   const [searchModal, setSearchModal] = useState<"players" | "clans" | null>(null);
-  const config = configs.main;
+  const config = configs.universal;
   const redirectUri = !isPlatform("capacitor")
     ? [window.location.origin, window.location.pathname.slice(1)].filter(Boolean).join("/")
     : `app.cuppazee.express://more`;
@@ -119,7 +119,7 @@ function Settings() {
       present({
         duration: 2000,
         color: "success",
-        message: `Successfully logged in as ${username}`,
+        message: t("settings:accounts_success", { player: username }),
       });
     }
   }, [params.get("access_token")]);
@@ -145,7 +145,7 @@ function Settings() {
         present({
           duration: 2000,
           color: "success",
-          message: `Successfully logged in as ${username}`,
+          message: t("settings:accounts_success", { player: username }),
         });
       }
     });
@@ -192,10 +192,9 @@ function Settings() {
               <IonCardHeader>
                 <IonCardTitle>{t("pages:settings_personalisation")}</IonCardTitle>
               </IonCardHeader>
-              <IonItem disabled>
+              <IonItem>
                 <IonLabel>{t("settings:language_title")}</IonLabel>
                 <IonSelect
-                  disabled
                   value={i18n.language}
                   onIonChange={ev => {
                     i18n.changeLanguage(ev.detail.value);
@@ -259,7 +258,7 @@ function Settings() {
                     }}
                     color="danger"
                     slot="end">
-                    Sign Out
+                    {t("settings:accounts_signout")}
                   </IonButton>
                 )}
               </IonItem>
@@ -332,23 +331,27 @@ function Settings() {
                       presentationStyle: "popover",
                     });
                   }}>
-                  <IonIcon icon={lockOpenOutline} /> {t("welcome:add_another")}
+                  <IonIcon icon={lockOpenOutline} /> {t("settings:accounts_add")}
                 </IonButton>
               </IonCardContent>
             </IonCard>
             <IonCard>
               <IonItem lines="none" className="item-card-header">
-                <IonCardTitle>Players</IonCardTitle>
+                <IonCardTitle>{t("settings:players_title")}</IonCardTitle>
                 {localSettings.users ? (
                   <IonButton
                     onClick={() => {
                       presentAlert({
-                        header: "Enable Cloud Syncing for Players?",
-                        message: "Your Players will be synchronised with your other devices.",
+                        header: t("settings:sync_enable_title", {
+                          section: t("settings:players_title"),
+                        }),
+                        message: t("settings:sync_enable_desc", {
+                          section: t("settings:players_title"),
+                        }),
                         buttons: [
-                          "Cancel",
+                          t("settings:sync_cancel"),
                           {
-                            text: "Enable Cloud Syncing",
+                            text: t("settings:sync_enable"),
                             handler: () => {
                               const cloud = cloudUserSettings?.users ?? [];
                               const local = localSettings.users ?? [];
@@ -370,18 +373,23 @@ function Settings() {
                     color="success"
                     slot="end">
                     <IonIcon icon={cloud} />
-                    &nbsp;Enable Cloud Syncing
+                    &nbsp;
+                    {t("settings:sync_enable")}
                   </IonButton>
                 ) : (
                   <IonButton
                     onClick={() => {
                       presentAlert({
-                        header: "Disable Cloud Syncing for Players?",
-                        message: "Your Players will no longer be synchronised with other devices.",
+                        header: t("settings:sync_disable_title", {
+                          section: t("settings:players_title"),
+                        }),
+                        message: t("settings:sync_disable_desc", {
+                          section: t("settings:players_title"),
+                        }),
                         buttons: [
-                          "Cancel",
+                          t("settings:sync_cancel"),
                           {
-                            text: "Disable Cloud Syncing",
+                            text: t("settings:sync_disable"),
                             handler: () => {
                               setLocalSettings({ ...localSettings, users: userSettings?.users });
                             },
@@ -392,7 +400,7 @@ function Settings() {
                     color="danger"
                     slot="end">
                     <IonIcon icon={cloudOffline} />
-                    &nbsp;Disable Cloud Syncing
+                    &nbsp;{t("settings:sync_disable")}
                   </IonButton>
                 )}
               </IonItem>
@@ -433,29 +441,31 @@ function Settings() {
                 ))}
               </IonReorderGroup>
               {!userSettings?.users.length && (
-                <IonCardContent>
-                  It's looking a bit empty here. Press the button below to add your first player!
-                </IonCardContent>
+                <IonCardContent>{t("settings:players_empty")}</IonCardContent>
               )}
               <IonCardContent className="login-login-buttons">
                 <IonButton color="success" onClick={() => setSearchModal("players")}>
-                  <IonIcon icon={personOutline} /> Add Player
+                  <IonIcon icon={personOutline} /> {t("settings:players_add")}
                 </IonButton>
               </IonCardContent>
             </IonCard>
             <IonCard>
               <IonItem lines="none" className="item-card-header">
-                <IonCardTitle>Clans</IonCardTitle>
+                <IonCardTitle>{t("settings:clans_title")}</IonCardTitle>
                 {localSettings.clans ? (
                   <IonButton
                     onClick={() => {
                       presentAlert({
-                        header: "Enable Cloud Syncing for Clans?",
-                        message: "Your Clans will be synchronised with your other devices.",
+                        header: t("settings:sync_enable_title", {
+                          section: t("settings:clans_title"),
+                        }),
+                        message: t("settings:sync_enable_desc", {
+                          section: t("settings:clans_title"),
+                        }),
                         buttons: [
-                          "Cancel",
+                          t("settings:sync_cancel"),
                           {
-                            text: "Enable Cloud Syncing",
+                            text: t("settings:sync_enable"),
                             handler: () => {
                               const cloud = cloudUserSettings?.clans ?? [];
                               const local = localSettings.clans ?? [];
@@ -483,13 +493,16 @@ function Settings() {
                   <IonButton
                     onClick={() => {
                       presentAlert({
-                        header: "Disable Cloud Syncing for Clans?",
-                        message:
-                          "Your Clans will no longer be synchronised with your other devices.",
+                        header: t("settings:sync_disable_title", {
+                          section: t("settings:clans_title"),
+                        }),
+                        message: t("settings:sync_disable_desc", {
+                          section: t("settings:clans_title"),
+                        }),
                         buttons: [
-                          "Cancel",
+                          t("settings:sync_cancel"),
                           {
-                            text: "Disable Cloud Syncing",
+                            text: t("settings:sync_disable"),
                             handler: () => {
                               setLocalSettings({ ...localSettings, clans: userSettings?.clans });
                             },
@@ -500,7 +513,7 @@ function Settings() {
                     color="danger"
                     slot="end">
                     <IonIcon icon={cloudOffline} />
-                    &nbsp;Disable Cloud Syncing
+                    &nbsp;{t("settings:sync_disable")}
                   </IonButton>
                 )}
               </IonItem>
@@ -541,13 +554,11 @@ function Settings() {
                 ))}
               </IonReorderGroup>
               {!userSettings?.clans.length && (
-                <IonCardContent>
-                  It's looking a bit empty here. Press the button below to add your first clan!
-                </IonCardContent>
+                <IonCardContent>{t("settings:clans_empty")}</IonCardContent>
               )}
               <IonCardContent className="login-login-buttons">
                 <IonButton color="success" onClick={() => setSearchModal("clans")}>
-                  <IonIcon icon={shieldOutline} /> Add Clan
+                  <IonIcon icon={shieldOutline} /> {t("settings:clans_add")}
                 </IonButton>
               </IonCardContent>
             </IonCard>

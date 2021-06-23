@@ -7,18 +7,23 @@ import {
   IonNote,
 } from "@ionic/react";
 
-import React, { useMemo } from "react";
+import React, { MutableRefObject, useEffect, useMemo } from "react";
 import useMunzeeData from "../../utils/useMunzeeData";
 import { GameID, generateClanRequirements, requirementMeta } from "@cuppazee/utils";
 import "./Clan.css";
 import dayjs from "dayjs";
+import { UseQueryResult } from "react-query";
+import { useTranslation } from "react-i18next";
 
 export interface ClanRequirementProps {
   clan_id?: number;
   game_id: GameID;
+  hasLink?: boolean;
+  queriesRef?: MutableRefObject<Set<UseQueryResult>>;
 }
 
-const ClanRequirementsCard: React.FC<ClanRequirementProps> = ({ clan_id, game_id }) => {
+const ClanRequirementsCard: React.FC<ClanRequirementProps> = ({ clan_id, game_id, queriesRef, hasLink }) => {
+  const { t } = useTranslation();
   const requirements = useMunzeeData({
     endpoint: "clan/v2/requirements",
     params: { clan_id: clan_id ?? 1349, game_id: game_id.game_id },
@@ -28,19 +33,31 @@ const ClanRequirementsCard: React.FC<ClanRequirementProps> = ({ clan_id, game_id
     () => (requirements.data ? generateClanRequirements(requirements.data?.data) : null),
     [requirements.dataUpdatedAt]
   );
+  
+
+  useEffect(() => {
+    queriesRef?.current.add(requirements);
+    return () => {
+      queriesRef?.current.delete(requirements);
+    };
+  }, [requirements]);
 
   return (
     <IonCard>
-      <IonItem className="clan-table-header" lines="none">
+      <IonItem
+        routerLink={hasLink ? "/clans/requirements" : undefined}
+        detail={hasLink}
+        className="clan-table-header"
+        lines="none">
         <IonAvatar slot="start">
           <IonImg
-            src={`https://munzee.global.ssl.fastly.net/images/clan_logos/${Number(
-              clan_id
-            ).toString(36)}.png`}
+            src={`https://munzee.global.ssl.fastly.net/images/clan_logos/${Number(clan_id).toString(
+              36
+            )}.png`}
           />
         </IonAvatar>
         <div>
-          <IonLabel>Clan Requirements</IonLabel>
+          <IonLabel>{t("clan:clan_requirements")}</IonLabel>
           <IonNote>{dayjs(game_id.date).format("MMM YYYY")}</IonNote>
         </div>
       </IonItem>
@@ -48,16 +65,16 @@ const ClanRequirementsCard: React.FC<ClanRequirementProps> = ({ clan_id, game_id
         <div role="table" className="clan-table clan-table-requirements clan-table-edg">
           <div role="row" className="clan-table-column">
             <div role="cell" className="clan-table-cell clan-table-cell-header">
-              <div>Levels</div>
+              <div>{t("clan:levels")}</div>
             </div>
             {[1, 2, 3, 4, 5].map(level => (
               <div role="cell" className={`clan-table-cell clan-level-${level}`} key={level}>
-                <div>Level {level} Indiv</div>
+                <div>{t("clan:indiv_level", { level })}</div>
               </div>
             ))}
             {[1, 2, 3, 4, 5].map(level => (
               <div role="cell" className={`clan-table-cell clan-level-${level}`} key={level}>
-                <div>Level {level} Group</div>
+                <div>{t("clan:group_level", { level })}</div>
               </div>
             ))}
           </div>

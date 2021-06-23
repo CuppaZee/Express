@@ -1,9 +1,5 @@
 import { Redirect, Route } from "react-router-dom";
-import {
-  IonApp,
-  IonRouterOutlet,
-  isPlatform,
-} from "@ionic/react";
+import { IonApp, IonRouterOutlet, IonSplitPane, isPlatform } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import UserMainPage from "./pages/User/Main";
 
@@ -40,9 +36,8 @@ import { AccountsStorage } from "./storage/Account";
 
 import "./utils/dayjs";
 
-
-import { useIonRouter } from '@ionic/react';
-import { App as CapApp } from '@capacitor/app';
+import { useIonRouter } from "@ionic/react";
+import { App as CapApp } from "@capacitor/app";
 
 import { FirebaseCrashlytics } from "@capacitor-community/firebase-crashlytics";
 import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics";
@@ -61,6 +56,14 @@ import UsersPage from "./pages/User/All";
 import ClanAllPage from "./pages/Clan/All";
 import ClanStatsPage from "./pages/Clan/Stats";
 import Settings from "./pages/Main/Settings";
+import Sidebar from "./components/Sidebar";
+import { setupConfig } from "@ionic/core";
+import platform from "platform";
+import useWindowSize from "./utils/useWindowSize";
+import UserClanProgressPage from "./pages/User/Clan";
+import ClanRequirementsPage from "./pages/Clan/Requirements";
+import { SiriShortcuts } from "capacitor-plugin-siri-shorts";
+import blankAnimation from "./utils/blankAnimation";
 
 if (!Capacitor.isNativePlatform()) {
   FirebaseAnalytics.initializeFirebase({
@@ -72,6 +75,18 @@ if (!Capacitor.isNativePlatform()) {
     messagingSenderId: "540446857818",
     appId: "1:540446857818:web:af2e055d760aeed4885663",
     measurementId: "G-NW7WX4Z8Z1",
+  });
+}
+
+if (platform.os?.family === "OS X" || platform.os?.family === "iOS") {
+  setupConfig({
+    rippleEffect: false,
+    mode: "ios",
+  });
+} else {
+  setupConfig({
+    rippleEffect: true,
+    mode: "md",
   });
 }
 
@@ -90,15 +105,15 @@ persistQueryClient({
       return await (await store).set("@czexpress/querycache", JSON.stringify(client));
     },
     async restoreClient() {
-      return JSON.parse(await (await store).get("@czexpress/querycache") ?? "null");
+      return JSON.parse((await (await store).get("@czexpress/querycache")) ?? "null");
     },
     async removeClient() {
       return await (await store).remove("@czexpress/querycache");
-    }
+    },
   },
 });
 
-class GlobalErrorBoundary extends Component<{}, { hasError: boolean; error?: string; }> {
+class GlobalErrorBoundary extends Component<{}, { hasError: boolean; error?: string }> {
   constructor(props: {}) {
     super(props);
     this.state = { hasError: false };
@@ -132,11 +147,14 @@ class GlobalErrorBoundary extends Component<{}, { hasError: boolean; error?: str
       // You can render any custom fallback UI
       return (
         <div>
-          <h1>Something went wrong. {Capacitor.isNativePlatform() ? "This error has been reported:" : "Please report the following error:"}</h1>
+          <h1>
+            Something went wrong.{" "}
+            {Capacitor.isNativePlatform()
+              ? "This error has been reported:"
+              : "Please report the following error:"}
+          </h1>
           <pre>
-            <code>
-              {this.state.error}
-            </code>
+            <code>{this.state.error}</code>
           </pre>
         </div>
       );
@@ -149,14 +167,40 @@ class GlobalErrorBoundary extends Component<{}, { hasError: boolean; error?: str
 const BackHandler: React.FC = () => {
   const ionRouter = useIonRouter();
   useEffect(() => {
-    CapApp.addListener("backButton", (ev) => {
+    CapApp.addListener("backButton", ev => {
       if (!ionRouter.canGoBack()) {
         CapApp.exitApp();
       }
     });
-  }, [])
+  }, []);
   return null;
-}
+};
+
+const SiriHandler: React.FC = () => {
+  const ionRouter = useIonRouter();
+  useEffect(() => {
+    if (isPlatform("ios") && Capacitor.isNativePlatform()) {
+      SiriShortcuts.donate({
+        persistentIdentifier: "clanStats",
+        title: "Open Clan Stats",
+        suggestedInvocationPhrase: "Open Clan Stats"
+      });
+      SiriShortcuts.addListener("appLaunchBySiriShortcuts", res => {
+        let page: string | null = null;
+        switch (res.persistentIdentifier) {
+          case "clanStats":
+            page = "/clans";
+            break;
+        }
+        if (page) {
+          ionRouter.push(page, undefined, "replace", undefined, blankAnimation);
+        }
+      });
+      return () => { SiriShortcuts.removeAllListeners() }
+    }
+  }, []);
+  return null;
+};
 
 const ThemeHandler: React.FC = () => {
   const [theme] = useStorage(ThemeStorage);
@@ -189,39 +233,61 @@ const ThemeHandler: React.FC = () => {
 const App: React.FC = () => {
   const [ready, _1, readyLoaded] = useStorage(ReadyStorage);
   const [accounts, _2, accountsLoaded] = useStorage(AccountsStorage);
+  const screen = useWindowSize();
   return (
     <GlobalErrorBoundary>
       <IonApp>
         <IonReactRouter>
           <ThemeHandler />
           <BackHandler />
+          <SiriHandler />
           {!readyLoaded || !accountsLoaded ? null : ready.date === "2021-06-18" &&
             Object.values(accounts).some(i => i.primary) ? (
-            <IonRouterOutlet>
-              <Route exact path="/search" component={Search} />
-              <Route exact path="/more" component={Settings} />
-              <Route exact path="/clans" component={ClanAllPage} />
-              <Route exact path="/clans/:month/:year" component={ClanAllPage} />
-              <Route exact path="/clan/:id" component={ClanStatsPage} />
-              <Route exact path="/clan/:id/:month/:year" component={ClanStatsPage} />
-              <Route exact path="/players" component={UsersPage} />
-              <Route exact path="/player/:username" component={UserMainPage} />
-              <Route exact path="/player/:username/qrates" component={UserQRatesPage} />
-              <Route exact path="/player/:username/activity" component={UserActivityPage} />
-              <Route exact path="/player/:username/activity/:date" component={UserActivityPage} />
-              <Route exact path="/player/:username/inventory" component={UserInventoryPage} />
-              <Route exact path="/player/:username/captures/:type" component={UserCapturesPage} />
-              <Redirect
-                exact
-                path="/"
-                to={`/player/${Object.values(accounts).find(i => i.primary)?.username}`}
-              />
-              <Route
-                render={() => {
-                  return null;
-                }}
-              />
-            </IonRouterOutlet>
+            <IonSplitPane when={(screen?.width ?? 0) > 900} contentId="ion-router-outlet">
+              <Sidebar />
+              <div id="ion-router-outlet">
+                <IonRouterOutlet>
+                  <Route exact path="/search" component={Search} />
+                  <Route exact path="/more" component={Settings} />
+                  <Route exact path="/clans" component={ClanAllPage} />
+                  <Route exact path="/clans/:month/:year" component={ClanAllPage} />
+                  <Route exact path="/clans/requirements" component={ClanRequirementsPage} />
+                  <Route
+                    exact
+                    path="/clans/requirements/:month/:year"
+                    component={ClanRequirementsPage}
+                  />
+                  <Route exact path="/clan/:id" component={ClanStatsPage} />
+                  <Route exact path="/clan/:id/:month/:year" component={ClanStatsPage} />
+                  <Route exact path="/players" component={UsersPage} />
+                  <Route exact path="/player/:username" component={UserMainPage} />
+                  <Route exact path="/player/:username/qrates" component={UserQRatesPage} />
+                  <Route exact path="/player/:username/activity" component={UserActivityPage} />
+                  <Route exact path="/player/:username/clan" component={UserClanProgressPage} />
+                  <Route
+                    exact
+                    path="/player/:username/activity/:date"
+                    component={UserActivityPage}
+                  />
+                  <Route exact path="/player/:username/inventory" component={UserInventoryPage} />
+                  <Route
+                    exact
+                    path="/player/:username/captures/:type"
+                    component={UserCapturesPage}
+                  />
+                  <Redirect
+                    exact
+                    path="/"
+                    to={`/player/${Object.values(accounts).find(i => i.primary)?.username}`}
+                  />
+                  <Route
+                    render={() => {
+                      return null;
+                    }}
+                  />
+                </IonRouterOutlet>
+              </div>
+            </IonSplitPane>
           ) : (
             <Login />
           )}

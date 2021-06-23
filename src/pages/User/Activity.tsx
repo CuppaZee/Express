@@ -12,7 +12,7 @@ import {
 import "./Activity.css";
 import Header from "../../components/Header";
 
-import { generateUserActivityData } from "@cuppazee/utils";
+import { generateUserActivityData, UserActivityItem } from "@cuppazee/utils";
 import React, { forwardRef, useMemo, useState } from "react";
 import useUserID from "../../utils/useUserID";
 import useActivity from "../../utils/useActivity";
@@ -31,6 +31,108 @@ import { Browser } from "@capacitor/browser";
 import { RouteChildrenProps } from "react-router";
 import { useTranslation } from "react-i18next";
 import datetimeLocale from "../../utils/datetimeLocale";
+
+const Heights = {
+  ios: {
+    minimum: 44,
+    left: 51,
+    leftSub: 43,
+    time: 32,
+    note: 16,
+    label: 17,
+    labelSpacing: 4.5,
+    margin: 8,
+  },
+  android: {
+    minimum: 48,
+    left: 47,
+    leftSub: 39,
+    time: 30,
+    note: 15,
+    label: 16,
+    labelSpacing: 3,
+    margin: 8,
+  },
+};
+
+function calculateHeight(l: UserActivityItem, platformName: "ios" | "android") {
+  let total = 0;
+  const platform = Heights[platformName];
+  const a = [l, ...l.sub_captures ?? []];
+  for (let n = 0; n < a.length; n++) {
+    let i = a[n];
+    let itemTotal = 0;
+
+    if (!i.sub || i.type !== l.type) {
+      itemTotal += platform.note;
+      itemTotal += platform.labelSpacing;
+    }
+    itemTotal += platform.label;
+    if (i.type === "capture") {
+      itemTotal += platform.note;
+      itemTotal += platform.labelSpacing;
+    }
+
+    itemTotal = Math.max(
+      platform.minimum,
+      i.sub ? platform.leftSub : platform.left,
+      platform.time,
+      itemTotal
+    );
+    
+    if (i.sub) {
+      itemTotal += 1;
+      // Bottom line of previous item
+    }
+
+    total += itemTotal;
+  }
+
+  total += platform.margin;
+            // <IonItem
+            //   detail={false}
+            //   key={i.key}
+            //   href={`https://www.munzee.com/m/${i.creator}/${i.code}`}
+            //   onClick={e => {
+            //     e.preventDefault();
+            //     Browser.open({ url: e.currentTarget.href ?? "" });
+            //   }}
+            //   lines={n !== a.length - 1 ? "full" : "none"}
+            //   className={`activity-list-item activity-list-item-${i.type}`}>
+            //   <div slot="start" className="activity-list-left">
+            //     <IonNote className="activity-list-points-label">
+            //       {i.points > 0 ? "+" : ""}
+            //       {i.points || t("user_activity:none")}
+            //     </IonNote>
+            //     <CZTypeImg
+            //       className={`activity-list-img ${i.sub ? "activity-list-img-sub" : ""}`}
+            //       slot="start"
+            //       img={i.icon}
+            //     />
+            //   </div>
+            //   <div className="activity-list-main-labels">
+            //     {(!i.sub || i.type !== l.type) && (
+            //       <IonNote>
+            //         {{
+            //           capon: () => t("user_activity:activity_capon", { user: i.capper }),
+            //           capture: () => t("user_activity:activity_capture"),
+            //           deploy: () => t("user_activity:activity_deploy"),
+            //           passive_deploy: () => t("user_activity:activity_passive_deploy"),
+            //         }[i.type]()}
+            //       </IonNote>
+            //     )}
+            //     <IonLabel style={{ lineHeight: 1 }}>{i.name}</IonLabel>
+            //     {i.type === "capture" && (
+            //       <IonNote>{t("user_activity:owned_by_user", { user: i.creator })}</IonNote>
+            //     )}
+            //   </div>
+            //   <div slot="end" className="activity-list-time-label">
+            //     <IonLabel>{dayjs(i.time).format("HH:mm")}</IonLabel>
+            //     <IonNote>{dayjs(i.time).mhq().format("HH:mm")} MHQ</IonNote>
+            //   </div>
+            // </IonItem>;
+  return total;
+}
 
 const UserActivityPage: React.FC<RouteChildrenProps<{ username: string; date: string }>> = ({
   match,
@@ -195,10 +297,11 @@ const UserActivityPage: React.FC<RouteChildrenProps<{ username: string; date: st
                 }
                 const l = d?.list[i - 1];
                 if (!l) return 0;
-                const main =
-                  l.type === "capture" ? (mode === "ios" ? 73 : 70) : mode === "ios" ? 67 : 64;
-                const subs = (mode === "ios" ? 45 : 40) * (l.sub_captures?.length ?? 0);
-                return main + ((subs || 1) - 1) - 8;
+                return calculateHeight(l, mode === 'ios' ? "ios" : "android")
+                // const main =
+                //   l.type === "capture" ? (mode === "ios" ? 73 : 70) : mode === "ios" ? 67 : 64;
+                // const subs = (mode === "ios" ? 45 : 40) * (l.sub_captures?.length ?? 0);
+                // return main + ((subs || 1) - 1) - 8;
               }}
               width={width}>
               {Row}

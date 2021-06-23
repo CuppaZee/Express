@@ -29,6 +29,7 @@ import { CZTypeImg } from "../../components/CZImg";
 import useCuppaZeeData from "../../utils/useCuppaZeeData";
 import { RouteChildrenProps } from "react-router";
 import { useTranslation } from "react-i18next";
+import ZeeOpsOverview from "../../components/ZeeOps/Overview"
 
 interface UserCuppaZeeData {
   shadowClan: {
@@ -87,29 +88,30 @@ const UserMainPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
         </IonHeader>
         <IonCard>
           <ActivityOverview d={d} day={day} />
+          {!!userID && <ZeeOpsOverview user_id={userID} />}
         </IonCard>
         <IonCard>
           <IonItem
             detail
             routerLink={`/player/${user.data?.data?.username ?? params?.username}/activity`}>
             <IonIcon slot="start" icon={calendarOutline} />
-            <IonLabel>{t("pages:user_activity")}</IonLabel>
+            <IonLabel>{t("pages:player_activity")}</IonLabel>
           </IonItem>
           <IonItem
             detail
             routerLink={`/player/${user.data?.data?.username ?? params?.username}/inventory`}>
             <IonIcon slot="start" icon={bagHandleOutline} />
-            <IonLabel>{t("pages:user_inventory")}</IonLabel>
+            <IonLabel>{t("pages:player_inventory")}</IonLabel>
           </IonItem>
           <IonItem
             detail
             routerLink={`/player/${user.data?.data?.username ?? params?.username}/qrates`}>
             <IonIcon slot="start" icon={cubeOutline} />
-            <IonLabel>{t("pages:user_qrates")}</IonLabel>
+            <IonLabel>{t("pages:player_qrates")}</IonLabel>
           </IonItem>
           {(user.data?.data?.clan || userCuppaZee.data?.data.shadowClan) && (
             <IonItem
-              lines="none"
+              lines={!user.data?.data?.clan ? "inset" : "none"}
               detail
               routerLink={`/clan/${
                 user.data?.data?.clan?.id ?? userCuppaZee.data?.data.shadowClan?.clan_id
@@ -128,19 +130,23 @@ const UserMainPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
             </IonItem>
           )}
           {!user.data?.data?.clan && (
-            <IonItem disabled lines="none" detail>
+            <IonItem
+              lines="none"
+              detail
+              routerLink={`/player/${user.data?.data?.username ?? params?.username}/clan`}>
               <IonIcon slot="start" icon={shieldOutline} />
-              <IonLabel>{t("pages:user_clan_progress")}</IonLabel>
+              <IonLabel>{t("pages:player_clan_progress")}</IonLabel>
             </IonItem>
           )}
         </IonCard>
         <IonCard>
           {db.categories
             .filter(i => i.parents.some(i => i?.id === "root"))
-            .map(i => (
+            .map((i, n, a) => (
               <IonItem
                 key={i.id}
                 detail
+                lines={n === a.length - 1 ? "none" : "inset"}
                 routerLink={`/player/${user.data?.data?.username ?? params?.username}/captures/${
                   i.id
                 }`}>

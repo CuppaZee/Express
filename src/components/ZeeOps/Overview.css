@@ -1,0 +1,63 @@
+.zeeops-item-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.zeeops-item-reward {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-right: 4px;
+}
+
+.zeeops-item-reward ion-img {
+  height: 36px;
+  width: 36px;
+}
+
+.zeeops-item-reward ion-label {
+  font-size: 0.8em;
+}
+
+.zeeops-item {
+  width: 450px;
+  max-width: 100%;
+}
+
+.zeeops-item-label {
+  flex-grow: 1;
+  max-width: 100%;
+  text-align: center;
+}
+
+.zeeops-item-label ion-label {
+  white-space: normal !important;
+  max-width: 100%;
+}
+
+.zeeops-progress-wrapper {
+  padding: 4px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+}
+
+.zeeops-progress-wrapper h6 {
+  margin: 0;
+  line-height: 0;
+  z-index: 2;
+  color: var(--ion-text-color, #000);
+}
+
+.zeeops-progress-wrapper ion-progress-bar {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc(100% - 8px);
+  height: 28px;
+  border-radius: 8px;
+}

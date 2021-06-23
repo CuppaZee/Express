@@ -75,7 +75,7 @@ function Login() {
   const [present] = useIonToast();
   const [accounts, setAccounts] = useStorage(AccountsStorage);
   const [theme, setTheme] = useStorage(ThemeStorage);
-  const [ready, setReady] = useStorage(ReadyStorage);
+  const [_ready, setReady] = useStorage(ReadyStorage);
   const config = configs.main;
   const redirectUri = !isPlatform("capacitor")
     ? [window.location.origin, window.location.pathname.slice(1)].filter(Boolean).join("/")
@@ -101,7 +101,7 @@ function Login() {
       present({
         duration: 2000,
         color: "success",
-        message: `Successfully logged in as ${username}`,
+        message: t("settings:accounts_success", {player: username}),
       });
     }
   }, [params.get("access_token")]);
@@ -127,7 +127,7 @@ function Login() {
         present({
           duration: 2000,
           color: "success",
-          message: `Successfully logged in as ${username}`,
+          message: t("settings:accounts_success", { player: username }),
         });
       }
     });
@@ -161,10 +161,9 @@ function Login() {
               <IonCardHeader>
                 <IonCardTitle>{t("pages:settings_personalisation")}</IonCardTitle>
               </IonCardHeader>
-              <IonItem disabled>
+              <IonItem>
                 <IonLabel>{t("settings:language_title")}</IonLabel>
                 <IonSelect
-                  disabled
                   value={i18n.language}
                   onIonChange={ev => {
                     i18n.changeLanguage(ev.detail.value);
@@ -303,14 +302,13 @@ function Login() {
                   }}>
                   {Object.keys(accounts).length === 0
                     ? t("welcome:login")
-                    : t("welcome:add_another")}
+                    : t("settings:accounts_add")}
                 </IonButton>
               </IonCardContent>
             </IonCard>
             {!Object.values(accounts).some(i => i.primary) && (
               <IonText className="login-continue-message">
-                {/* TODO: Translate */}
-                You must log into an account to continue
+                {t("welcome:login_required")}
               </IonText>
             )}
             {Object.values(accounts).some(i => i.primary) && (

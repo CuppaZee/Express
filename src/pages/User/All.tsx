@@ -3,7 +3,6 @@ import {
   IonCard,
   IonContent,
   IonHeader,
-  IonIcon,
   IonImg,
   IonItem,
   IonLabel,
@@ -12,12 +11,10 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import "./All.css";
-import { bagHandleOutline, calendarOutline, cubeOutline, shieldOutline } from "ionicons/icons";
 import Header from "../../components/Header";
 
 import { generateUserActivityData } from "@cuppazee/utils";
 import { MutableRefObject, useEffect, useMemo, useRef } from "react";
-import useUserID from "../../utils/useUserID";
 import useActivity from "../../utils/useActivity";
 import dayjs from "dayjs";
 import useMunzeeData from "../../utils/useMunzeeData";
@@ -25,11 +22,10 @@ import CZRefresher from "../../components/CZRefresher";
 import ActivityOverview from "../../components/Activity/ActivityOverview";
 import Tabs from "../../components/Tabs";
 import useDB from "../../utils/useDB";
-import { RouteChildrenProps } from "react-router";
 import { UseQueryResult } from "react-query";
-import useStorage from "../../utils/useStorage";
-import { AccountsStorage } from "../../storage/Account";
 import useUserSettings from "../../utils/useUserSettings";
+import FancyGrid from "../../components/FancyGrid";
+import { useTranslation } from "react-i18next";
 
 const UserCard: React.FC<{ id: number; queries: MutableRefObject<Set<UseQueryResult>> }> = ({ id, queries }) => {
   const day = dayjs.mhqNow();
@@ -81,6 +77,7 @@ const UserCard: React.FC<{ id: number; queries: MutableRefObject<Set<UseQueryRes
 const UsersPage: React.FC = () => {
   const queriesRef = useRef<Set<UseQueryResult>>(new Set());
   const { users } = useUserSettings() ?? {};
+  const { t } = useTranslation();
   return (
     <IonPage>
       <Header title="Players" />
@@ -88,12 +85,14 @@ const UsersPage: React.FC = () => {
         <CZRefresher queries={queriesRef} />
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Players</IonTitle>
+            <IonTitle size="large">{t("pages:players")}</IonTitle>
           </IonToolbar>
         </IonHeader>
-        {users?.map(i => (
-          <UserCard queries={queriesRef} id={i.user_id} />
-        ))}
+        <FancyGrid width={500}>
+          {users?.map(i => (
+            <UserCard queries={queriesRef} id={i.user_id} />
+          ))}
+        </FancyGrid>
       </IonContent>
       <Tabs />
     </IonPage>

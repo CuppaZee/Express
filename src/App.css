@@ -33,6 +33,8 @@ ion-card ion-item {
 .item-avatar {
   margin-right: 24px;
   margin-left: -8px;
+  width: 36px;
+  height: 36px;
 }
 
 .ios .item-avatar {
@@ -50,7 +52,33 @@ ion-card ion-item {
   flex-wrap: wrap;
 }
 
+.fancy-grid-element {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+}
+
 .item-card-header {
   padding-top: 11px;
   padding-bottom: 7px;
+}
+
+#ion-router-outlet {
+  flex-grow: 1;
+}
+
+
+:root {
+  --clan-level-5: #55f40b;
+  --clan-level-5-fg: #000000;
+  --clan-level-4: #bfe913;
+  --clan-level-4-fg: black;
+  --clan-level-3: #fcd302;
+  --clan-level-3-fg: black;
+  --clan-level-2: #fa9102;
+  --clan-level-2-fg: black;
+  --clan-level-1: #ef6500;
+  --clan-level-1-fg: black;
+  --clan-level-0: #eb0000;
+  --clan-level-0-fg: white;
 }

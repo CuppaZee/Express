@@ -18,7 +18,7 @@ export interface SearchModalProps {
 
 export default function SearchModal({ open, onClose, onSelect, filter = "all" }: SearchModalProps) {
   const { t } = useTranslation();
-  const pageTitle = t("pages:tools_search");
+  const pageTitle = t("pages:search");
   const [value, search, onValue] = useLazySearch(200);
 
   const users = useMunzeeData({

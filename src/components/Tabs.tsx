@@ -12,7 +12,7 @@ export default function Tabs() {
   const { t } = useTranslation();
   const screen = useWindowSize();
   const { users, clans } = useUserSettings() ?? {};
-  if ((screen?.width ?? 0) > 720) return null;
+  if ((screen?.width ?? 0) > 900) return null;
   return (
     <IonTabBar
       slot="bottom"
@@ -21,7 +21,7 @@ export default function Tabs() {
       }}>
       <IonTabButton selected={history.routeInfo.pathname.startsWith("/search")} tab="/search">
         <IonIcon icon={search} />
-        <IonLabel>{t("pages:tools_search")}</IonLabel>
+        <IonLabel>{t("pages:search")}</IonLabel>
       </IonTabButton>
       {Object.values(accounts)
         .filter(i => i.primary)
@@ -45,7 +45,7 @@ export default function Tabs() {
       {(users?.length ?? 1) > 1 && (
         <IonTabButton selected={history.routeInfo.pathname.startsWith("/players")} tab="/players">
           <IonIcon icon={people} />
-          <IonLabel>Players</IonLabel>
+          <IonLabel>{t("pages:players")}</IonLabel>
         </IonTabButton>
       )}
       {(clans?.length ?? 0) === 1 ? (
@@ -66,12 +66,12 @@ export default function Tabs() {
       ) : ((clans?.length ?? 0) > 0 ? (
         <IonTabButton selected={history.routeInfo.pathname.startsWith("/clans")} tab="/clans">
           <IonIcon icon={shield} />
-          <IonLabel>Clans</IonLabel>
+          <IonLabel>{t("pages:clans")}</IonLabel>
         </IonTabButton>
       ) : null)}
       <IonTabButton selected={history.routeInfo.pathname.startsWith("/more")} tab="/more">
         <IonIcon icon={grid} />
-        <IonLabel>More</IonLabel>
+        <IonLabel>{t("pages:more")}</IonLabel>
       </IonTabButton>
     </IonTabBar>
   );

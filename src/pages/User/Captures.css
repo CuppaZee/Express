@@ -17,6 +17,7 @@
 .capture-overview-card {
   margin-top: 8px;
   margin-bottom: 8px;
+  flex-grow: 1;
 }
 
 .capture-history-card ion-note {
@@ -39,4 +40,9 @@
   height: 40px;
   width: 40px;
   margin-right: 16px;
+}
+
+.captures-overview-card-wrapper {
+  display: flex;
+  flex-direction: column
 }

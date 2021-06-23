@@ -10,14 +10,16 @@ import {
   IonLabel,
   IonNote,
   IonPage,
+  IonPopover,
   IonSegment,
   IonSegmentButton,
   IonSelect,
   IonSelectOption,
+  IonSelectPopover,
 } from "@ionic/react";
 import Header from "../../components/Header";
 
-import React, { useMemo, useState } from "react";
+import React, { MutableRefObject, useEffect, useMemo, useState } from "react";
 import Tabs from "../../components/Tabs";
 import useMunzeeData from "../../utils/useMunzeeData";
 import {
@@ -35,15 +37,21 @@ import useStorage from "../../utils/useStorage";
 import { ClanSettings, ClansSettingsStorage } from "../../storage/ClansSettings";
 import { cafe, chevronDown, chevronUp, hammer } from "ionicons/icons";
 import { Link } from "react-router-dom";
+import { UseQueryResult } from "react-query";
+import useWindowSize from "../../utils/useWindowSize";
+import usePopover from "../../utils/usePopover";
+import { useTranslation } from "react-i18next";
 
 export interface ClanStatsProps {
   clan_id: number;
   game_id: GameID;
   sort: number;
   setSort(sort: number): void;
+  queriesRef?: MutableRefObject<Set<UseQueryResult>>;
 }
 
-const ClanStatsCard: React.FC<ClanStatsProps> = ({ clan_id, game_id, sort, setSort }) => {
+const ClanStatsCard: React.FC<ClanStatsProps> = ({ clan_id, game_id, sort, setSort, queriesRef }) => {
+  const { t } = useTranslation();
   const [clansSettings, setClansSettings] = useStorage(ClansSettingsStorage);
   const clanSettings: ClanSettings = (clansSettings[clan_id] = {
     goal: 5,
@@ -82,6 +90,21 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({ clan_id, game_id, sort, setSo
         : null,
     [clan.dataUpdatedAt, requirements.dataUpdatedAt, reqs, shadow.dataUpdatedAt]
   );
+
+  const windowSize = useWindowSize();
+
+  const [popoverState, show] = usePopover();
+
+  useEffect(() => {
+    queriesRef?.current.add(clan);
+    queriesRef?.current.add(requirements);
+    queriesRef?.current.add(shadow);
+    return () => {
+      queriesRef?.current.delete(clan);
+      queriesRef?.current.delete(requirements);
+      queriesRef?.current.delete(shadow);
+    };
+  }, [clan, requirements, shadow]);
 
   function levelClass(u: ClanStatsUser | ClanStatsData, r: number) {
     if (typeof u.requirements[r]?.value !== "number" || Number.isNaN(u.requirements[r]?.value)) {
@@ -125,7 +148,7 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({ clan_id, game_id, sort, setSo
 
   return (
     <IonCard>
-      <IonItem className="clan-table-header" lines="none">
+      <IonItem button={false} className="clan-table-header" lines="none">
         <IonAvatar slot="start">
           <IonImg
             src={`https://munzee.global.ssl.fastly.net/images/clan_logos/${Number(clan_id).toString(
@@ -137,17 +160,52 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({ clan_id, game_id, sort, setSo
           <IonLabel>{clan.data?.data?.details.name}</IonLabel>
           <IonNote>{clan.data?.data?.details.tagline}</IonNote>
         </div>
-        {shadow.data && (
-          <IonButtons slot="end">
-            {/* <IonButton
-                onClick={() => {
-                  setClansSettings({
-                    ...clansSettings,
-                    [clan_id ?? "0"]: { ...clanSettings, subtract: !clanSettings.subtract },
-                  });
-                }}>
-                <IonIcon icon={clanSettings.subtract ? removeCircle : addCircle} />
-              </IonButton> */}
+        <div className="clan-control-row" slot="end">
+          {windowSize.width >= 800 && (
+            <>
+              <div>
+                <IonSegment
+                  value={clanSettings.subtract ? "1" : "0"}
+                  onIonChange={ev => {
+                    setClansSettings({
+                      ...clansSettings,
+                      [clan_id ?? "0"]: { ...clanSettings, subtract: ev.detail.value === "1" },
+                    });
+                  }}>
+                  <IonSegmentButton value="0">{t("clan:mode_achieved")}</IonSegmentButton>
+                  <IonSegmentButton value="1">{t("clan:mode_remaining")}</IonSegmentButton>
+                </IonSegment>
+              </div>
+              <div>
+                <IonPopover {...popoverState}>
+                  {[1, 2, 3, 4, 5].map(i => (
+                    <IonItem
+                      style={{
+                        borderLeft: `4px solid var(--clan-level-${i})`,
+                        color: `var(--clan-level-${i})`,
+                      }}
+                      onClick={() => {
+                        setClansSettings({
+                          ...clansSettings,
+                          [clan_id ?? "0"]: {
+                            ...clanSettings,
+                            goal: Math.min(5, Math.max(0, i)),
+                          },
+                        });
+                        popoverState.onDidDismiss();
+                      }}>
+                      <IonLabel>{t("clan:level", { level: i })}</IonLabel>
+                    </IonItem>
+                  ))}
+                </IonPopover>
+                <IonButton onClick={show}>
+                  {t("clan:level", { level: clanSettings.goal })}{" "}
+                  <IonIcon style={{ fontSize: "1em" }} icon={chevronDown} />
+                </IonButton>
+              </div>
+            </>
+          )}
+          {shadow.data && (
             <IonButton
               onClick={() => {
                 setClansSettings({
@@ -160,52 +218,59 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({ clan_id, game_id, sort, setSo
               }}>
               <IonIcon icon={cafe} />
             </IonButton>
-            {/* <IonButton>
-                <IonIcon icon={settings} />
-              </IonButton> */}
-          </IonButtons>
-        )}
+          )}
+        </div>
       </IonItem>
-      <div className="clan-control-row">
-        <div>
-          <IonSegment
-            value={clanSettings.subtract ? "1" : "0"}
-            onIonChange={ev => {
-              setClansSettings({
-                ...clansSettings,
-                [clan_id ?? "0"]: { ...clanSettings, subtract: ev.detail.value === "1" },
-              });
-            }}>
-            <IonSegmentButton value="0">Achieved</IonSegmentButton>
-            <IonSegmentButton value="1">Remaining</IonSegmentButton>
-          </IonSegment>
+      {windowSize.width < 800 && (
+        <div className="clan-control-row">
+          <div>
+            <IonSegment
+              value={clanSettings.subtract ? "1" : "0"}
+              onIonChange={ev => {
+                setClansSettings({
+                  ...clansSettings,
+                  [clan_id ?? "0"]: { ...clanSettings, subtract: ev.detail.value === "1" },
+                });
+              }}>
+              <IonSegmentButton value="0">{t("clan:mode_achieved")}</IonSegmentButton>
+              <IonSegmentButton value="1">{t("clan:mode_remaining")}</IonSegmentButton>
+            </IonSegment>
+          </div>
+          <div>
+            <IonPopover {...popoverState}>
+              {[1, 2, 3, 4, 5].map(i => (
+                <IonItem
+                  style={{
+                    borderLeft: `4px solid var(--clan-level-${i})`,
+                    color: `var(--clan-level-${i})`,
+                  }}
+                  onClick={() => {
+                    setClansSettings({
+                      ...clansSettings,
+                      [clan_id ?? "0"]: {
+                        ...clanSettings,
+                        goal: Math.min(5, Math.max(0, i)),
+                      },
+                    });
+                    popoverState.onDidDismiss();
+                  }}>
+                  <IonLabel>{t("clan:level", { level: i })}</IonLabel>
+                </IonItem>
+              ))}
+            </IonPopover>
+            <IonButton size="small" onClick={show}>
+              {t("clan:level", { level: clanSettings.goal })}{" "}
+              <IonIcon style={{ fontSize: "1em" }} icon={chevronDown} />
+            </IonButton>
+          </div>
         </div>
-        <div>
-          <IonSelect
-            onIonChange={ev => {
-              setClansSettings({
-                ...clansSettings,
-                [clan_id ?? "0"]: {
-                  ...clanSettings,
-                  goal: Math.min(5, Math.max(0, Number(ev.detail.value))),
-                },
-              });
-            }}
-            value={clanSettings.goal}>
-            <IonSelectOption value={1}>Level 1</IonSelectOption>
-            <IonSelectOption value={2}>Level 2</IonSelectOption>
-            <IonSelectOption value={3}>Level 3</IonSelectOption>
-            <IonSelectOption value={4}>Level 4</IonSelectOption>
-            <IonSelectOption value={5}>Level 5</IonSelectOption>
-          </IonSelect>
-        </div>
-      </div>
+      )}
       {stats && reqs && (
         <div role="table" className="clan-table clan-table-stats clan-table-edg">
           <div role="row" className="clan-table-column">
             <div role="cell" className="clan-table-cell clan-table-cell-header">
-              <div>{Object.values(stats.users).length} Players</div>
-              <div>Rank #{clan.data?.data?.result?.rank}</div>
+              <div>{Object.values(stats.users).length} {t("pages:players")}</div>
+              <div>{t("clan:rank", { rank: clan.data?.data?.result?.rank })}</div>
             </div>
             <div role="cell" className={`clan-table-cell clan-level-${clanSettings.goal}`}>
               <IonSelect
@@ -219,11 +284,11 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({ clan_id, game_id, sort, setSo
                   });
                 }}
                 value={clanSettings.goal}>
-                <IonSelectOption value={1}>Level 1 Indiv</IonSelectOption>
-                <IonSelectOption value={2}>Level 2 Indiv</IonSelectOption>
-                <IonSelectOption value={3}>Level 3 Indiv</IonSelectOption>
-                <IonSelectOption value={4}>Level 4 Indiv</IonSelectOption>
-                <IonSelectOption value={5}>Level 5 Indiv</IonSelectOption>
+                <IonSelectOption value={1}>{t("clan:indiv_level", { level: 1 })}</IonSelectOption>
+                <IonSelectOption value={2}>{t("clan:indiv_level", { level: 2 })}</IonSelectOption>
+                <IonSelectOption value={3}>{t("clan:indiv_level", { level: 3 })}</IonSelectOption>
+                <IonSelectOption value={4}>{t("clan:indiv_level", { level: 4 })}</IonSelectOption>
+                <IonSelectOption value={5}>{t("clan:indiv_level", { level: 5 })}</IonSelectOption>
               </IonSelect>
             </div>
             {users.map(user => (
@@ -247,7 +312,7 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({ clan_id, game_id, sort, setSo
               </Link>
             ))}
             <div className={`clan-table-cell clan-level-${stats.level}`}>
-              <div>Group Total</div>
+              <div>{t("clan:group_total")}</div>
             </div>
             <div className={`clan-table-cell clan-level-${clanSettings.goal}`}>
               <IonSelect
@@ -261,11 +326,11 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({ clan_id, game_id, sort, setSo
                   });
                 }}
                 value={clanSettings.goal}>
-                <IonSelectOption value={1}>Level 1 Group</IonSelectOption>
-                <IonSelectOption value={2}>Level 2 Group</IonSelectOption>
-                <IonSelectOption value={3}>Level 3 Group</IonSelectOption>
-                <IonSelectOption value={4}>Level 4 Group</IonSelectOption>
-                <IonSelectOption value={5}>Level 5 Group</IonSelectOption>
+                <IonSelectOption value={1}>{t("clan:group_level", { level: 1 })}</IonSelectOption>
+                <IonSelectOption value={2}>{t("clan:group_level", { level: 2 })}</IonSelectOption>
+                <IonSelectOption value={3}>{t("clan:group_level", { level: 3 })}</IonSelectOption>
+                <IonSelectOption value={4}>{t("clan:group_level", { level: 4 })}</IonSelectOption>
+                <IonSelectOption value={5}>{t("clan:group_level", { level: 5 })}</IonSelectOption>
               </IonSelect>
             </div>
           </div>

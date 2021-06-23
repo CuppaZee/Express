@@ -33,7 +33,7 @@ const UserQRatesPage: React.FC<RouteChildrenProps<{ username: string; type: stri
 
   return (
     <IonPage>
-      <Header title={`${params?.username} - ${t("pages:user_qrates")}`}></Header>
+      <Header title={`${params?.username} - ${t("pages:player_qrates")}`}></Header>
 
       <IonContent fullscreen>
         <CZRefresher queries={[data]} />

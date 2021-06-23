@@ -23,6 +23,7 @@ import CaptureImg from "../../components/Captures/CaptureImg";
 import dayjs from "dayjs";
 import { CZTypeImg } from "../../components/CZImg";
 import { RouteChildrenProps } from "react-router";
+import FancyGrid from "../../components/FancyGrid";
 
 const UserCapturesPage: React.FC<RouteChildrenProps<{ username: string; type: string }>> = ({
   match,
@@ -68,26 +69,30 @@ const UserCapturesPage: React.FC<RouteChildrenProps<{ username: string; type: st
             ))}
           </IonCard>
         )}
-        {category.children
-          .filter(i => i.types.length > 0)
-          .map(c => (
-            <IonCard key={`card_${c.id}`} className="capture-overview-card">
-              <IonCardHeader>
-                {c.seasonal && (
-                  <IonCardSubtitle>
-                    {dayjs(c.seasonal.start).format("L LT")} -{" "}
-                    {dayjs(c.seasonal.end).format("L LT")}
-                  </IonCardSubtitle>
-                )}
-                <IonCardTitle>{c.name}</IonCardTitle>
-              </IonCardHeader>
-              <IonCardContent className="capture-row">
-                {c.types?.map(i => (
-                  <CaptureImg key={i.icon} type={i} count={d.get(i) ?? 0} />
-                ))}
-              </IonCardContent>
-            </IonCard>
-          ))}
+        <FancyGrid width={400}>
+          {category.children
+            .filter(i => i.types.length > 0)
+            .map((c, n) => (
+              <IonCard key={`card_${c.id}`} className="capture-overview-card">
+                <IonCardHeader>
+                  {c.seasonal && (
+                    <IonCardSubtitle>
+                      {dayjs(c.seasonal.start).format("L LT")} -{" "}
+                      {dayjs(c.seasonal.end).format("L LT")}
+                    </IonCardSubtitle>
+                  )}
+                  <IonCardTitle>{c.name}</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent className="capture-row">
+                  <FancyGrid width={80}>
+                    {c.types?.map(i => (
+                      <CaptureImg key={i.icon} type={i} count={d.get(i) ?? 0} />
+                    ))}
+                  </FancyGrid>
+                </IonCardContent>
+              </IonCard>
+            ))}
+        </FancyGrid>
       </IonContent>
       <Tabs />
     </IonPage>

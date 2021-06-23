@@ -26,7 +26,7 @@ import { useTranslation } from "react-i18next";
 
 function Search() {
   const { t } = useTranslation();
-  const pageTitle = t("pages:tools_search");
+  const pageTitle = t("pages:search");
   const [value, search, onValue] = useLazySearch(200);
   const [filter, setFilter] = useState("all");
 
@@ -84,10 +84,10 @@ function Search() {
             <IonLabel>{t("search:all")}</IonLabel>
           </IonSegmentButton>
           <IonSegmentButton value="players">
-            <IonLabel>{t("search:player")}</IonLabel>
+            <IonLabel>{t("search:players")}</IonLabel>
           </IonSegmentButton>
           <IonSegmentButton value="clans">
-            <IonLabel>{t("search:clan")}</IonLabel>
+            <IonLabel>{t("search:clans")}</IonLabel>
           </IonSegmentButton>
           {/* <IonSegmentButton value="types">
             <IonLabel>Types</IonLabel>

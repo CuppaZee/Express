@@ -182,6 +182,13 @@
   flex-grow: 1;
   flex-shrink: 1;
   flex-basis: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.clan-control-row ion-select {
+  max-width: 100%
 }
 
 .md .clan-control-row ion-segment-button {
@@ -199,4 +206,40 @@
 .clan-table-header ion-item > div  {
   flex-grow: 1;
   flex-shrink: 1;
+}
+
+.clan-requirements-list-item {
+  --min-height: 0;
+  padding: 0;
+  --padding-start: 0;
+}
+
+.clan-requirements-list-item .item-avatar {
+  margin-left: 0;
+  height: 24px;
+  width: 24px;
+}
+.clan-requirements-list-item ion-label {
+  margin: 0;
+}
+
+.clan-requirements-list-content {
+  padding-top: 0;
+}
+
+.clan-requirements-list-content h3 {
+  font-size: 22px;
+  margin-top: 20px;
+}
+
+.clan-requirements-list-content > div:first-of-type > h3 {
+  margin-top: 0px;
+}
+
+.clan-requirements-list-content > div > h4 {
+  font-size: 18px;
+}
+
+.clan-requirements-list-content h4:not(:first-of-type) {
+  margin-top: 16px;
 }

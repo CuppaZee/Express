@@ -59,6 +59,10 @@ export function CZImg({ img, type, size, ...props }: CZImgProps) {
       const f = (i: [boolean, boolean]) => {
         setFormats(i);
       };
+      if (formatSupport.value) {
+        f(formatSupport.value);
+        return () => {}
+      }
       formatSupport.onUpdate.add(f);
       return () => {
         formatSupport.onUpdate.delete(f);

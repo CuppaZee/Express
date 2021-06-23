@@ -1,6 +1,6 @@
 // Source: https://usehooks-typescript.com/react-hook/use-element-size
 
-import { RefObject, useCallback, useEffect, useState } from "react";
+import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 
 import useEventListener from "./useEventListener";
 
@@ -18,13 +18,29 @@ function useElementSize<T extends HTMLElement = HTMLDivElement>(elementRef: RefO
   // Prevent too many rendering using useCallback
   const updateSize = useCallback(() => {
     const node = elementRef?.current;
-    if (node) {
+    if (node && node.offsetWidth > 5 && (node.offsetWidth !== size.width && node.offsetHeight !== size.height)) {
       setSize({
         width: node.offsetWidth || 0,
         height: node.offsetHeight || 0,
       });
+      return {
+        width: node.offsetWidth || 0,
+        height: node.offsetHeight || 0,
+      };
     }
   }, [elementRef]);
+
+  useEffect(() => {
+    if (size.width === 0) {
+      const interval = setInterval(() => {
+        const d = updateSize()
+        if ((d?.width ?? 0) > 5) {
+          clearInterval(interval)
+        }
+      }, 200);
+      return () => clearInterval(interval);
+    }
+  }, [])
 
   // Initial size on mount
   useEffect(() => {

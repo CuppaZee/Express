@@ -1,7 +1,7 @@
 const langs = {
   "en-GB": require("./translations/en-gb.json"),
-  nl: require("./translations/nl.json"),
-  // fi: require("./translations/fi.json"),
+  // nl: require("./translations/nl.json"),
+  fi: require("./translations/fi.json"),
   // de: require("./translations/de.json"),
   // cs: require("./translations/cs.json"),
   // da: require("./translations/da.json"),
@@ -21,6 +21,7 @@ for (let item of langs["en-GB"]) {
 }
 
 for (let lang in langs) {
+  console.log(lang);
   for (let item of langs[lang]) {
     if (!item.definition) {
       console.error(

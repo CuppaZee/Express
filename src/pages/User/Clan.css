@@ -1,0 +1,54 @@
+
+.user-clan-level-5 {
+  border-left: 4px solid #55f40b;
+  /* background: #55f40b11; */
+}
+
+.user-clan-level--1 {
+  border-left: 4px solid #55f40b;
+  /* background: #55f40b11;*/
+}
+
+.user-clan-level-4 {
+  border-left: 4px solid #bfe913;
+  /* background: #bfe91311;*/
+}
+
+.user-clan-level-3 {
+  border-left: 4px solid #fcd302;
+  /* background: #fcd30211;*/
+}
+
+.user-clan-level-2 {
+  border-left: 4px solid #fa9102;
+  /* background: #fa910211;*/
+}
+
+.user-clan-level-1 {
+  border-left: 4px solid #ef6500;
+  /* background: #ef650011;*/
+}
+
+.user-clan-level-0 {
+  border-left: 4px solid #eb0000;
+  /* background: #eb000011;*/
+}
+
+.clanprogress-card ion-label:last-of-type {
+  font-size: 0.8em;
+  opacity: 0.7;
+}
+
+.clanprogress-level {
+  text-align: center;
+}
+
+.clanprogress-level ion-label:last-of-type {
+  font-size: 1em;
+  opacity: 1;
+}
+
+.clanprogress-level ion-label:first-of-type {
+  font-size: 0.8em;
+  opacity: 0.7;
+}
