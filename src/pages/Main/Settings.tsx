@@ -92,7 +92,7 @@ function Settings() {
   const [theme, setTheme] = useStorage(ThemeStorage);
   const [_, setReady] = useStorage(ReadyStorage);
   const [searchModal, setSearchModal] = useState<"players" | "clans" | null>(null);
-  const config = configs.universal;
+  const config = configs.main;
   const redirectUri = !isPlatform("capacitor")
     ? [window.location.origin, window.location.pathname.slice(1)].filter(Boolean).join("/")
     : `app.cuppazee.express://more`;
