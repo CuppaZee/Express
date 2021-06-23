@@ -1,6 +1,7 @@
 import { IonBackButton, IonButtons, IonHeader, IonProgressBar, IonTitle, IonToolbar } from "@ionic/react";
 import React, { PropsWithChildren } from "react";
 import { useIsFetching } from "react-query";
+import { Helmet } from "react-helmet";
 
 export default function Header({
   title,
@@ -14,6 +15,11 @@ export default function Header({
   const isFetching = useIsFetching();
   return (
     <IonHeader>
+      <Helmet>
+        <title>
+          ☕️ {title}
+        </title>
+      </Helmet>
       <IonToolbar>
         {React.Children.count(children) === 0 && isFetching ? (
           <IonProgressBar type="indeterminate" />

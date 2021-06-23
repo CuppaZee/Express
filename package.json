@@ -43,6 +43,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-grapnel-use-element-size": "^1.0.3",
+    "react-helmet": "^6.1.0",
     "react-i18next": "^11.11.0",
     "react-map-gl": "^6.1.15",
     "react-query": "^3.16.0",
@@ -97,6 +98,7 @@
     "@capacitor/cli": "^3.0.0",
     "@cuppazee/api": "^0.0.12",
     "@ionic/lab": "3.2.10",
+    "@types/react-helmet": "^6.1.1",
     "@types/react-virtualized-auto-sizer": "^1.0.0"
   },
   "description": "CuppaZee Express"
