@@ -14,15 +14,17 @@ import "./Clan.css";
 import dayjs from "dayjs";
 import { UseQueryResult } from "react-query";
 import { useTranslation } from "react-i18next";
+import { ScrollSyncController, useScrollSync } from "../../utils/useScrollSync";
 
 export interface ClanRequirementProps {
+  scrollSyncController?: MutableRefObject<ScrollSyncController>;
   clan_id?: number;
   game_id: GameID;
   hasLink?: boolean;
   queriesRef?: MutableRefObject<Set<UseQueryResult>>;
 }
 
-const ClanRequirementsCard: React.FC<ClanRequirementProps> = ({ clan_id, game_id, queriesRef, hasLink }) => {
+const ClanRequirementsCard: React.FC<ClanRequirementProps> = ({ clan_id, game_id, queriesRef, hasLink, scrollSyncController }) => {
   const { t } = useTranslation();
   const requirements = useMunzeeData({
     endpoint: "clan/v2/requirements",
@@ -34,6 +36,7 @@ const ClanRequirementsCard: React.FC<ClanRequirementProps> = ({ clan_id, game_id
     [requirements.dataUpdatedAt]
   );
   
+  const [ref, onScroll] = useScrollSync<HTMLTableElement>(scrollSyncController);
 
   useEffect(() => {
     queriesRef?.current.add(requirements);
@@ -62,7 +65,7 @@ const ClanRequirementsCard: React.FC<ClanRequirementProps> = ({ clan_id, game_id
         </div>
       </IonItem>
       {reqs && (
-        <div role="table" className="clan-table clan-table-requirements clan-table-edg">
+        <div ref={ref} onScroll={onScroll} role="table" className="clan-table clan-table-requirements clan-table-edg">
           <div role="row" className="clan-table-column">
             <div role="cell" className="clan-table-cell clan-table-cell-header">
               <div>{t("clan:levels")}</div>

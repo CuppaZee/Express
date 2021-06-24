@@ -13,6 +13,7 @@ import {
 import { RouteChildrenProps } from "react-router-dom";
 import ClanStatsCard from "../../components/Clan/Stats";
 import ClanRequirementsCard from "../../components/Clan/Requirements";
+import { useScrollSyncController } from "../../utils/useScrollSync";
 
 const ClanStatsPage: React.FC<RouteChildrenProps<{ id: string }>> = ({
   match,
@@ -24,6 +25,7 @@ const ClanStatsPage: React.FC<RouteChildrenProps<{ id: string }>> = ({
     params: { clan_id: Number(params?.id) },
   });
 
+  const scrollSyncController = useScrollSyncController();
 
   return (
     <IonPage>
@@ -31,6 +33,7 @@ const ClanStatsPage: React.FC<RouteChildrenProps<{ id: string }>> = ({
       <IonContent fullscreen>
         {params && (
           <ClanStatsCard
+            scrollSyncController={scrollSyncController}
             clan_id={Number(params?.id)}
             game_id={new GameID()}
             sort={sort}
@@ -38,7 +41,12 @@ const ClanStatsPage: React.FC<RouteChildrenProps<{ id: string }>> = ({
           />
         )}
         {params && (
-          <ClanRequirementsCard hasLink clan_id={Number(params?.id)} game_id={new GameID()} />
+          <ClanRequirementsCard
+            scrollSyncController={scrollSyncController}
+            hasLink
+            clan_id={Number(params?.id)}
+            game_id={new GameID()}
+          />
         )}
       </IonContent>
       <Tabs />

@@ -41,8 +41,10 @@ import { UseQueryResult } from "react-query";
 import useWindowSize from "../../utils/useWindowSize";
 import usePopover from "../../utils/usePopover";
 import { useTranslation } from "react-i18next";
+import { ScrollSyncController, useScrollSync, useScrollSyncController } from "../../utils/useScrollSync";
 
 export interface ClanStatsProps {
+  scrollSyncController?: MutableRefObject<ScrollSyncController>;
   clan_id: number;
   game_id: GameID;
   sort: number;
@@ -50,7 +52,7 @@ export interface ClanStatsProps {
   queriesRef?: MutableRefObject<Set<UseQueryResult>>;
 }
 
-const ClanStatsCard: React.FC<ClanStatsProps> = ({ clan_id, game_id, sort, setSort, queriesRef }) => {
+const ClanStatsCard: React.FC<ClanStatsProps> = ({ clan_id, game_id, sort, setSort, queriesRef, scrollSyncController }) => {
   const { t } = useTranslation();
   const [clansSettings, setClansSettings] = useStorage(ClansSettingsStorage);
   const clanSettings: ClanSettings = (clansSettings[clan_id] = {
@@ -85,15 +87,17 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({ clan_id, game_id, sort, setSo
             requirements.data?.data,
             reqs,
             clan_id,
-            shadow.data?.data
+            (clanSettings.hideShadow || (shadow.data?.data.members.length ?? 0) === 0) ? undefined : shadow.data?.data
           )
         : null,
-    [clan.dataUpdatedAt, requirements.dataUpdatedAt, reqs, shadow.dataUpdatedAt]
+    [clan.dataUpdatedAt, requirements.dataUpdatedAt, reqs, shadow.dataUpdatedAt, clanSettings.hideShadow]
   );
 
   const windowSize = useWindowSize();
 
   const [popoverState, show] = usePopover();
+
+  const [ref, onScroll] = useScrollSync<HTMLTableElement>(scrollSyncController);
 
   useEffect(() => {
     queriesRef?.current.add(clan);
@@ -143,8 +147,7 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({ clan_id, game_id, sort, setSo
         ((sort > 0 ? b : a)[1].requirements[Math.abs(sort)]?.value ?? 0) -
         ((sort > 0 ? a : b)[1].requirements[Math.abs(sort)]?.value ?? 0)
     )
-    .map(i => i[1])
-    .filter(i => !(clanSettings.hideShadow && i.shadow));
+    .map(i => i[1]);
 
   return (
     <IonCard>
@@ -205,7 +208,7 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({ clan_id, game_id, sort, setSo
               </div>
             </>
           )}
-          {shadow.data && (
+          {(shadow.data?.data.members.length ?? 0) > 0 && (
             <IonButton
               onClick={() => {
                 setClansSettings({
@@ -266,10 +269,16 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({ clan_id, game_id, sort, setSo
         </div>
       )}
       {stats && reqs && (
-        <div role="table" className="clan-table clan-table-stats clan-table-edg">
+        <div
+          ref={ref}
+          onScroll={onScroll}
+          role="table"
+          className="clan-table clan-table-stats clan-table-edg">
           <div role="row" className="clan-table-column">
             <div role="cell" className="clan-table-cell clan-table-cell-header">
-              <div>{Object.values(stats.users).length} {t("pages:players")}</div>
+              <div>
+                {Object.values(stats.users).length} {t("pages:players")}
+              </div>
               <div>{t("clan:rank", { rank: clan.data?.data?.result?.rank })}</div>
             </div>
             <div role="cell" className={`clan-table-cell clan-level-${clanSettings.goal}`}>

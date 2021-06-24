@@ -53,7 +53,7 @@ export default function useMunzeeData<Path extends keyof Endpoints>(params: useM
     return responseData;
   }, {
     ...params.options,
-    enabled: !!token && params.options?.enabled,
+    enabled: !!token && params.options?.enabled !== false,
   })
   return {
     ...data,

@@ -49,7 +49,12 @@ export interface CZTypeImgProps extends Omit<IonImgProps, "src"> {
 }
 
 export function CZTypeImg({ img, ...props }: CZTypeImgProps) {
-  return <CZImg {...props} img={img} type="types" />
+  const [loaded, setLoaded] = useState("");
+  return <CZImg onIonImgDidLoad={() => {
+    if (loaded !== img) {
+      setLoaded(img);
+    }
+  }} {...props} img={img} type="types" className={props.className + (loaded !== img ? " cztypeimgloading" : "")} />
 }
 
 export function CZImg({ img, type, size, ...props }: CZImgProps) {

@@ -59,7 +59,11 @@ export default function Sidebar() {
               <IonLabel>{t("pages:players")}</IonLabel>
             </IonItem>
             {users?.map(user => (
-              <IonItem lines="none" detail={false} {...page(`/player/${user.username}`)}>
+              <IonItem
+                key={user.user_id}
+                lines="none"
+                detail={false}
+                {...page(`/player/${user.username}`)}>
                 <IonAvatar className="item-avatar" slot="start">
                   <IonImg
                     src={`https://munzee.global.ssl.fastly.net/images/avatars/ua${Number(
@@ -77,7 +81,11 @@ export default function Sidebar() {
               <IonLabel>{t("pages:clans")}</IonLabel>
             </IonItem>
             {clans?.map(clan => (
-              <IonItem lines="none" detail={false} {...page(`/clan/${clan.clan_id}`)}>
+              <IonItem
+                key={clan.clan_id}
+                lines="none"
+                detail={false}
+                {...page(`/clan/${clan.clan_id}`)}>
                 <IonAvatar className="item-avatar" slot="start">
                   <IonImg
                     src={`https://munzee.global.ssl.fastly.net/images/clan_logos/${Number(

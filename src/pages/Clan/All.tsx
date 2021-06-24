@@ -10,12 +10,15 @@ import useUserSettings from "../../utils/useUserSettings";
 import { UseQueryResult } from "react-query";
 import CZRefresher from "../../components/CZRefresher";
 import { useTranslation } from "react-i18next";
+import { useScrollSyncController } from "../../utils/useScrollSync";
 
 const ClanAllPage: React.FC = () => {
   const [sort, setSort] = useState(3);
   const { clans } = useUserSettings() ?? {};
   const queriesRef = useRef<Set<UseQueryResult>>(new Set());
   const { t } = useTranslation();
+
+  const scrollSyncController = useScrollSyncController();
 
   return (
     <IonPage>
@@ -24,6 +27,7 @@ const ClanAllPage: React.FC = () => {
         <CZRefresher queries={queriesRef} />
         {clans && (
           <ClanRequirementsCard
+            scrollSyncController={scrollSyncController}
             hasLink
             queriesRef={queriesRef}
             clan_id={clans[0]?.clan_id}
@@ -32,6 +36,7 @@ const ClanAllPage: React.FC = () => {
         )}
         {clans?.map(i => (
           <ClanStatsCard
+            scrollSyncController={scrollSyncController}
             queriesRef={queriesRef}
             clan_id={i.clan_id}
             game_id={new GameID()}

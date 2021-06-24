@@ -82,3 +82,11 @@ ion-card ion-item {
   --clan-level-0: #eb0000;
   --clan-level-0-fg: white;
 }
+
+.cztypeimgloading {
+  background-image: url("./cztypeimgloading.png");
+  background-size: 100% 100%;
+}
+.cztypeimgloading::part(image) {
+  display: none;
+}
