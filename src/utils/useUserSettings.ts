@@ -1,6 +1,8 @@
+import { useMemo } from "react";
 import { useMutation, UseMutationResult, useQuery, useQueryClient, UseQueryResult } from "react-query";
 import { AccountsStorage } from "../storage/Account";
 import { LocalSettingsStorage } from "../storage/LocalSettings";
+import useDB from "./useDB";
 import useStorage from "./useStorage";
 
 
@@ -17,6 +19,7 @@ export interface UserSettingsClan {
 export interface UserSettings {
   users: UserSettingsUser[];
   clans: UserSettingsClan[];
+  rootCategories: string[];
 }
 
 const baseURL = "https://server.cuppazee.app";
@@ -116,4 +119,22 @@ export function useUserSettingsMutation() {
       mutation.mutate(update);
     }
   };
+}
+
+export function useRootCategories() {
+  const settings = useUserSettings();
+  const db = useDB();
+  return useMemo(() => {
+    if (settings?.rootCategories && db.categories.length > 0) {
+      const allCategories = db.categories
+        .filter(i => i.parents.find(i => i?.id === "root"))
+        .map(i => i.id);
+      const list = settings.rootCategories.filter(i => allCategories.includes(i));
+      for (const category of allCategories) {
+        if(!list.includes(category)) settings.rootCategories.push(category)
+      }
+      return list;
+    }
+    return db.categories.filter(i => i.parents.find(i => i?.id === "root")).map(i => i.id);
+  }, [settings?.rootCategories]);
 }

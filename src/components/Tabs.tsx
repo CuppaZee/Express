@@ -42,7 +42,8 @@ export default function Tabs() {
             <IonLabel>{acc.username}</IonLabel>
           </IonTabButton>
         ))}
-      {(users?.length ?? 1) > 1 && (
+      {!!users?.find(i=>i.user_id !== Object.values(accounts)
+        .find(i => i.primary)?.user_id) && (
         <IonTabButton selected={history.routeInfo.pathname.startsWith("/players")} tab="/players">
           <IonIcon icon={people} />
           <IonLabel>{t("pages:players")}</IonLabel>

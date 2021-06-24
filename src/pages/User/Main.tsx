@@ -30,6 +30,7 @@ import useCuppaZeeData from "../../utils/useCuppaZeeData";
 import { RouteChildrenProps } from "react-router";
 import { useTranslation } from "react-i18next";
 import ZeeOpsOverview from "../../components/ZeeOps/Overview"
+import { useRootCategories } from "../../utils/useUserSettings";
 
 interface UserCuppaZeeData {
   shadowClan: {
@@ -76,6 +77,7 @@ const UserMainPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
         : undefined,
     [data.dataUpdatedAt, db]
   );
+  const rootCategories = useRootCategories();
   return (
     <IonPage>
       <Header title={params?.username} />
@@ -140,20 +142,18 @@ const UserMainPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
           )}
         </IonCard>
         <IonCard>
-          {db.categories
-            .filter(i => i.parents.some(i => i?.id === "root"))
-            .map((i, n, a) => (
-              <IonItem
-                key={i.id}
-                detail
-                lines={n === a.length - 1 ? "none" : "inset"}
-                routerLink={`/player/${user.data?.data?.username ?? params?.username}/captures/${
-                  i.id
-                }`}>
-                <CZTypeImg img={i.icon} slot="start" className="user-captures-image" />
-                <IonLabel>{i.name}</IonLabel>
-              </IonItem>
-            ))}
+          {rootCategories.map(i=>db.categories.filter(c=>c?.id === i)).flat().map((i, n, a) => (
+            <IonItem
+              key={i.id}
+              detail
+              lines={n === a.length - 1 ? "none" : "inset"}
+              routerLink={`/player/${user.data?.data?.username ?? params?.username}/captures/${
+                i.id
+              }`}>
+              <CZTypeImg img={i.icon} slot="start" className="user-captures-image" />
+              <IonLabel>{i.name}</IonLabel>
+            </IonItem>
+          ))}
         </IonCard>
       </IonContent>
       <Tabs />

@@ -11,7 +11,7 @@ import {
   IonHeader,
   IonToolbar,IonTitle, IonButtons, IonPage, IonButton
 } from "@ionic/react";
-import { gridOutline, peopleOutline, reload, searchOutline, shieldOutline } from "ionicons/icons";
+import { gridOutline, heartOutline, peopleOutline, reload, searchOutline, settingsOutline, shieldOutline } from "ionicons/icons";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import useUserSettings from "../utils/useUserSettings";
@@ -36,7 +36,7 @@ export default function Sidebar() {
         <IonHeader>
           <IonToolbar>
             <IonTitle>Express</IonTitle>
-            <IonButtons>
+            <IonButtons slot="end">
               <IonButton
                 onClick={() => {
                   queryClient.refetchQueries({ active: true });
@@ -98,9 +98,13 @@ export default function Sidebar() {
             ))}
           </IonCard>
           <IonCard>
-            <IonItem detail={false} lines="none" {...page("/more")}>
-              <IonIcon slot="start" icon={gridOutline} />
-              <IonLabel>{t("pages:more")}</IonLabel>
+            <IonItem detail={false} lines="none" {...page("/more/settings")}>
+              <IonIcon slot="start" icon={settingsOutline} />
+              <IonLabel>{t("pages:settings")}</IonLabel>
+            </IonItem>
+            <IonItem detail={false} lines="none" {...page("/more/credits")}>
+              <IonIcon slot="start" icon={heartOutline} />
+              <IonLabel>{t("pages:more_credits")}</IonLabel>
             </IonItem>
           </IonCard>
         </IonContent>

@@ -26,6 +26,7 @@ import { UseQueryResult } from "react-query";
 import useUserSettings from "../../utils/useUserSettings";
 import FancyGrid from "../../components/FancyGrid";
 import { useTranslation } from "react-i18next";
+import ZeeOpsOverview from "../../components/ZeeOps/Overview";
 
 const UserCard: React.FC<{ id: number; queries: MutableRefObject<Set<UseQueryResult>> }> = ({ id, queries }) => {
   const day = dayjs.mhqNow();
@@ -70,6 +71,7 @@ const UserCard: React.FC<{ id: number; queries: MutableRefObject<Set<UseQueryRes
         <IonLabel>{user.data?.data?.username}</IonLabel>
       </IonItem>
       <ActivityOverview d={d} day={day} />
+      {!!id && <ZeeOpsOverview user_id={id} />}
     </IonCard>
   );
 }

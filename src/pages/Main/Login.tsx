@@ -16,14 +16,10 @@ import {
   IonText,
   IonTitle,
   IonToolbar,
-  isPlatform,
   useIonRouter,
-  useIonToast,
 } from "@ionic/react";
 import "./Login.css";
 import { Browser } from "@capacitor/browser";
-import { App, URLOpenListener } from "@capacitor/app";
-import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AppIcon from "./AppIcon";
 import useStorage from "../../utils/useStorage";
@@ -37,24 +33,7 @@ import blankAnimation from "../../utils/blankAnimation";
 import { LANGS } from "../../lang/i18n";
 import { useTranslation } from "react-i18next";
 import useUserSettings, { useUserSettingsMutation } from "../../utils/useUserSettings";
-const configs = {
-  main: {
-    redirect_uri: "https://server.cuppazee.app/auth/auth/v1",
-    client_id: "91714935879f433364bff187bda66183",
-  },
-  dev: {
-    redirect_uri: "http://nextserver.cuppazee.app/auth/auth/v1",
-    client_id: "628ed7ab83b0a6f59674f1bf04e4afa2",
-  },
-  team: {
-    client_id: "c983d59354542f8d15e11924ed61bae6",
-    redirect_uri: "https://server.cuppazee.app/auth/auth/team/v1",
-  },
-  universal: {
-    client_id: "64f148f57d1d7c62e44a90e5f3661432",
-    redirect_uri: "https://server.cuppazee.app/auth/auth/universal/v1",
-  },
-};
+import useLogin from "../../utils/useLogin";
 
 function Login() {
   const pageTitle = "CuppaZee Express";
@@ -69,70 +48,12 @@ function Login() {
       });
     });
   }, []);
-  const location = useLocation();
   const history = useIonRouter();
-  const params = new URLSearchParams(location.search);
-  const [present] = useIonToast();
   const [accounts, setAccounts] = useStorage(AccountsStorage);
   const [theme, setTheme] = useStorage(ThemeStorage);
   const [_ready, setReady] = useStorage(ReadyStorage);
-  const config = configs.main;
-  const redirectUri = !isPlatform("capacitor")
-    ? [window.location.origin, window.location.pathname.slice(1)].filter(Boolean).join("/")
-    : `app.cuppazee.express://more`;
   const userSettings = useUserSettings();
-  const updateUserSettings = useUserSettingsMutation();
-  useEffect(() => {
-    if (params.get("access_token")) {
-      const [teaken, username, user_id] = decodeURIComponent(
-        params.get("access_token") || ""
-      ).split("/");
-      setAccounts({
-        ...accounts,
-        [user_id]: {
-          teaken,
-          username,
-          user_id: Number(user_id),
-          primary: !Object.values(accounts).some(i => i.primary && i.user_id !== Number(user_id)),
-        },
-      }).then(() => {
-        history.push(`/more`, undefined, "replace", undefined, blankAnimation);
-      });
-      present({
-        duration: 2000,
-        color: "success",
-        message: t("settings:accounts_success", {player: username}),
-      });
-    }
-  }, [params.get("access_token")]);
-  useEffect(() => {
-    const r = App.addListener("appUrlOpen", async o => {
-      try {
-        await Browser.close();
-      } catch (e) { }
-      const params = new URL(o.url).searchParams;
-      if (params.has("access_token")) {
-        const [teaken, username, user_id] = decodeURIComponent(
-          params.get("access_token") || ""
-        ).split("/");
-        setAccounts({
-          ...accounts,
-          [user_id]: {
-            teaken,
-            username,
-            user_id: Number(user_id),
-            primary: !Object.values(accounts).some(i => i.primary && i.user_id !== Number(user_id)),
-          },
-        });
-        present({
-          duration: 2000,
-          color: "success",
-          message: t("settings:accounts_success", { player: username }),
-        });
-      }
-    });
-    return () => {r.then(i => i.remove())}
-  }, [accounts]);
+  const login = useLogin();
   return (
     <IonPage>
       <Header title={pageTitle} />
@@ -222,8 +143,8 @@ function Login() {
                 {Object.entries(accounts).length > 0 && (
                   <IonButton
                     onClick={() => {
-                      setAccounts({});
                       setReady({ date: "" });
+                      setAccounts({});
                     }}
                     color="danger"
                     slot="end">
@@ -261,44 +182,8 @@ function Login() {
               <IonCardContent className="login-login-buttons">
                 <IonButton
                   color="success"
-                  onClick={async () => {
-                    const t = Math.floor(Math.random() * 10000) + 1;
-                    if (!isPlatform("capacitor")) {
-                      window.location.href = `https://api.munzee.com/oauth?client_id=${
-                        config.client_id
-                      }&redirect_uri=${encodeURIComponent(
-                        config.redirect_uri
-                      )}&scope=read&response_type=code&state=${encodeURIComponent(
-                        JSON.stringify({
-                          redirect: redirectUri,
-                          platform: isPlatform("android")
-                            ? "android"
-                            : isPlatform("ios")
-                            ? "ios"
-                            : "web",
-                          ionic: t.toString(),
-                        })
-                      )}`;
-                      return;
-                    }
-                    await Browser.open({
-                      url: `https://api.munzee.com/oauth?client_id=${
-                        config.client_id
-                      }&redirect_uri=${encodeURIComponent(
-                        config.redirect_uri
-                      )}&scope=read&response_type=code&state=${encodeURIComponent(
-                        JSON.stringify({
-                          redirect: redirectUri,
-                          platform: isPlatform("android")
-                            ? "android"
-                            : isPlatform("ios")
-                            ? "ios"
-                            : "web",
-                          ionic: t.toString(),
-                        })
-                      )}`,
-                      presentationStyle: "popover",
-                    });
+                  onClick={() => {
+                    login()
                   }}>
                   {Object.keys(accounts).length === 0
                     ? t("welcome:login")
@@ -318,15 +203,6 @@ function Login() {
                 color="primary"
                 onClick={() => {
                   if (userSettings) {
-                    const newSettings = { users: userSettings.users };
-                    for (const user in accounts) {
-                      if (!newSettings.users.some(i => i.user_id === accounts[user].user_id))
-                        newSettings.users = [
-                          ...newSettings.users,
-                          { user_id: accounts[user].user_id, username: accounts[user].username },
-                        ];
-                    }
-                    updateUserSettings(newSettings);
                     history.push(
                       `/player/${Object.values(accounts).find(i => i.primary)?.username}`,
                       undefined,

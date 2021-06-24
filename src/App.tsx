@@ -55,7 +55,8 @@ import UserCapturesPage from "./pages/User/Captures";
 import UsersPage from "./pages/User/All";
 import ClanAllPage from "./pages/Clan/All";
 import ClanStatsPage from "./pages/Clan/Stats";
-import Settings from "./pages/Main/Settings";
+import Settings from "./pages/More/Settings";
+import Credits from "./pages/More/Credits";
 import Sidebar from "./components/Sidebar";
 import { setupConfig } from "@ionic/core";
 import platform from "platform";
@@ -64,6 +65,7 @@ import UserClanProgressPage from "./pages/User/Clan";
 import ClanRequirementsPage from "./pages/Clan/Requirements";
 import { SiriShortcuts } from "capacitor-plugin-siri-shorts";
 import blankAnimation from "./utils/blankAnimation";
+import More from "./pages/More/More";
 
 if (!Capacitor.isNativePlatform()) {
   FirebaseAnalytics.initializeFirebase({
@@ -248,7 +250,9 @@ const App: React.FC = () => {
               <div id="ion-router-outlet">
                 <IonRouterOutlet>
                   <Route exact path="/search" component={Search} />
-                  <Route exact path="/more" component={Settings} />
+                  <Route exact path="/more/credits" component={Credits} />
+                  <Route exact path="/more/settings" component={Settings} />
+                  <Route exact path="/more" component={More} />
                   <Route exact path="/clans" component={ClanAllPage} />
                   <Route exact path="/clans/:month/:year" component={ClanAllPage} />
                   <Route exact path="/clans/requirements" component={ClanRequirementsPage} />

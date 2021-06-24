@@ -28,6 +28,7 @@
     "@types/react-dom": "^16.9.10",
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
+    "@visx/hierarchy": "^1.7.0",
     "capacitor-plugin-siri-shorts": "^2.0.1",
     "dayjs": "^1.10.4",
     "fast-json-stable-stringify": "^2.1.0",
