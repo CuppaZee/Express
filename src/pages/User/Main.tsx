@@ -88,73 +88,78 @@ const UserMainPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
             <IonTitle size="large">{params?.username}</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonCard>
-          <ActivityOverview d={d} day={day} />
-          {!!userID && <ZeeOpsOverview user_id={userID} />}
-        </IonCard>
-        <IonCard>
-          <IonItem
-            detail
-            routerLink={`/player/${user.data?.data?.username ?? params?.username}/activity`}>
-            <IonIcon slot="start" icon={calendarOutline} />
-            <IonLabel>{t("pages:player_activity")}</IonLabel>
-          </IonItem>
-          <IonItem
-            detail
-            routerLink={`/player/${user.data?.data?.username ?? params?.username}/inventory`}>
-            <IonIcon slot="start" icon={bagHandleOutline} />
-            <IonLabel>{t("pages:player_inventory")}</IonLabel>
-          </IonItem>
-          <IonItem
-            detail
-            routerLink={`/player/${user.data?.data?.username ?? params?.username}/qrates`}>
-            <IonIcon slot="start" icon={cubeOutline} />
-            <IonLabel>{t("pages:player_qrates")}</IonLabel>
-          </IonItem>
-          {(user.data?.data?.clan || userCuppaZee.data?.data.shadowClan) && (
+        <div className="player-main-page">
+          <IonCard className="player-main-card">
+            <ActivityOverview d={d} day={day} />
+            {!!userID && <ZeeOpsOverview user_id={userID} />}
+          </IonCard>
+          <IonCard className="player-main-card">
             <IonItem
-              lines={!user.data?.data?.clan ? "inset" : "none"}
               detail
-              routerLink={`/clan/${
-                user.data?.data?.clan?.id ?? userCuppaZee.data?.data.shadowClan?.clan_id
-              }`}>
-              <IonAvatar className="item-avatar" slot="start">
-                <IonImg
-                  src={`https://munzee.global.ssl.fastly.net/images/clan_logos/${Number(
-                    user.data?.data?.clan?.id ?? userCuppaZee.data?.data.shadowClan?.clan_id
-                  ).toString(36)}.png`}
-                />
-              </IonAvatar>
-              <IonLabel>
-                {(user.data?.data?.clan ?? userCuppaZee.data?.data.shadowClan)?.name ??
-                  "??? Shadow Clan ???"}
-              </IonLabel>
+              routerLink={`/player/${user.data?.data?.username ?? params?.username}/activity`}>
+              <IonIcon slot="start" icon={calendarOutline} />
+              <IonLabel>{t("pages:player_activity")}</IonLabel>
             </IonItem>
-          )}
-          {!user.data?.data?.clan && (
             <IonItem
-              lines="none"
               detail
-              routerLink={`/player/${user.data?.data?.username ?? params?.username}/clan`}>
-              <IonIcon slot="start" icon={shieldOutline} />
-              <IonLabel>{t("pages:player_clan_progress")}</IonLabel>
+              routerLink={`/player/${user.data?.data?.username ?? params?.username}/inventory`}>
+              <IonIcon slot="start" icon={bagHandleOutline} />
+              <IonLabel>{t("pages:player_inventory")}</IonLabel>
             </IonItem>
-          )}
-        </IonCard>
-        <IonCard>
-          {rootCategories.map(i=>db.categories.filter(c=>c?.id === i)).flat().map((i, n, a) => (
             <IonItem
-              key={i.id}
               detail
-              lines={n === a.length - 1 ? "none" : "inset"}
-              routerLink={`/player/${user.data?.data?.username ?? params?.username}/captures/${
-                i.id
-              }`}>
-              <CZTypeImg img={i.icon} slot="start" className="user-captures-image" />
-              <IonLabel>{i.name}</IonLabel>
+              routerLink={`/player/${user.data?.data?.username ?? params?.username}/qrates`}>
+              <IonIcon slot="start" icon={cubeOutline} />
+              <IonLabel>{t("pages:player_qrates")}</IonLabel>
             </IonItem>
-          ))}
-        </IonCard>
+            {(user.data?.data?.clan || userCuppaZee.data?.data.shadowClan) && (
+              <IonItem
+                lines={!user.data?.data?.clan ? "inset" : "none"}
+                detail
+                routerLink={`/clan/${
+                  user.data?.data?.clan?.id ?? userCuppaZee.data?.data.shadowClan?.clan_id
+                }`}>
+                <IonAvatar className="item-avatar" slot="start">
+                  <IonImg
+                    src={`https://munzee.global.ssl.fastly.net/images/clan_logos/${Number(
+                      user.data?.data?.clan?.id ?? userCuppaZee.data?.data.shadowClan?.clan_id
+                    ).toString(36)}.png`}
+                  />
+                </IonAvatar>
+                <IonLabel>
+                  {(user.data?.data?.clan ?? userCuppaZee.data?.data.shadowClan)?.name ??
+                    "??? Shadow Clan ???"}
+                </IonLabel>
+              </IonItem>
+            )}
+            {!user.data?.data?.clan && (
+              <IonItem
+                lines="none"
+                detail
+                routerLink={`/player/${user.data?.data?.username ?? params?.username}/clan`}>
+                <IonIcon slot="start" icon={shieldOutline} />
+                <IonLabel>{t("pages:player_clan_progress")}</IonLabel>
+              </IonItem>
+            )}
+          </IonCard>
+          <IonCard className="player-main-card">
+            {rootCategories
+              .map(i => db.categories.filter(c => c?.id === i))
+              .flat()
+              .map((i, n, a) => (
+                <IonItem
+                  key={i.id}
+                  detail
+                  lines={n === a.length - 1 ? "none" : "inset"}
+                  routerLink={`/player/${user.data?.data?.username ?? params?.username}/captures/${
+                    i.id
+                  }`}>
+                  <CZTypeImg img={i.icon} slot="start" className="user-captures-image" />
+                  <IonLabel>{i.name}</IonLabel>
+                </IonItem>
+              ))}
+          </IonCard>
+        </div>
       </IonContent>
       <Tabs />
     </IonPage>

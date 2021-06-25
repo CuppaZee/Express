@@ -161,7 +161,7 @@ function Settings() {
         />
         <div className="login-content-wrapper">
           <div className="login-content">
-            <IonCard>
+            <IonCard data-section="personalisation">
               <IonCardHeader>
                 <IonCardTitle>{t("pages:settings_personalisation")}</IonCardTitle>
               </IonCardHeader>
@@ -219,15 +219,27 @@ function Settings() {
                 </IonItem>
               )}
             </IonCard>
-            <IonCard>
+            <IonCard data-section="accounts">
               <IonItem lines="none" className="item-card-header">
                 <IonCardTitle>{t("welcome:accounts")}</IonCardTitle>
 
                 {Object.entries(accounts).length > 0 && (
                   <IonButton
                     onClick={() => {
-                      setReady({ date: "" });
-                      setAccounts({});
+                      presentAlert({
+                        header: `Remove CuppaZee?`,
+                        message: `Are you sure you want to remove CuppaZee from your Accounts?`,
+                        buttons: [
+                          "Cancel",
+                          {
+                            text: "Remove",
+                            handler: () => {
+                              setReady({ date: "" });
+                              setAccounts({});
+                            },
+                          },
+                        ],
+                      });
                     }}
                     color="danger"
                     slot="end">
@@ -253,7 +265,24 @@ function Settings() {
                     {!acc.primary && (
                       <IonButton
                         onClick={() => {
-                          setAccounts(omit(accounts, accKey));
+                          presentAlert({
+                            header: `Log out of ${acc.username}?`,
+                            message: `Are you sure you want to log out ${acc.username} and remove them from Players?`,
+                            buttons: [
+                              "Cancel",
+                              {
+                                text: "Log out",
+                                handler: () => {
+                                  updateUserSettings({
+                                    users: userSettings?.users.filter(
+                                      i => i.user_id !== acc.user_id
+                                    ),
+                                  });
+                                  setAccounts(omit(accounts, accKey));
+                                },
+                              },
+                            ],
+                          });
                         }}
                         color="danger"
                         slot="end">
@@ -272,7 +301,7 @@ function Settings() {
                 </IonButton>
               </IonCardContent>
             </IonCard>
-            <IonCard>
+            <IonCard data-section="players">
               <IonItem lines="none" className="item-card-header">
                 <IonCardTitle>{t("settings:players_title")}</IonCardTitle>
                 {localSettings.users ? (
@@ -360,7 +389,7 @@ function Settings() {
                 </IonButton>
               </IonCardContent>
             </IonCard>
-            <IonCard>
+            <IonCard data-section="clans">
               <IonItem lines="none" className="item-card-header">
                 <IonCardTitle>{t("settings:clans_title")}</IonCardTitle>
                 {localSettings.clans ? (
@@ -442,7 +471,7 @@ function Settings() {
                 </IonButton>
               </IonCardContent>
             </IonCard>
-            <IonCard>
+            <IonCard data-section="typecategories">
               <IonItem lines="none" className="item-card-header">
                 <IonCardTitle>Type Categories</IonCardTitle>
                 {localSettings.rootCategories ? (

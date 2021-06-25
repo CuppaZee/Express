@@ -235,7 +235,7 @@ const ThemeHandler: React.FC = () => {
 const App: React.FC = () => {
   const [ready, _1, readyLoaded] = useStorage(ReadyStorage);
   const [accounts, _2, accountsLoaded] = useStorage(AccountsStorage);
-  const screen = useWindowSize();
+  const {width} = useWindowSize();
   return (
     <GlobalErrorBoundary>
       <IonApp>
@@ -245,7 +245,7 @@ const App: React.FC = () => {
           <SiriHandler />
           {!readyLoaded || !accountsLoaded ? null : ready.date === "2021-06-18" &&
             Object.values(accounts).some(i => i.primary) ? (
-            <IonSplitPane when={(screen?.width ?? 0) > 900} contentId="ion-router-outlet">
+            <IonSplitPane when={width > 900} contentId="ion-router-outlet">
               <Sidebar />
               <div id="ion-router-outlet">
                 <IonRouterOutlet>

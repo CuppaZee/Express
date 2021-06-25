@@ -11,10 +11,11 @@ import {
   IonHeader,
   IonToolbar,IonTitle, IonButtons, IonPage, IonButton
 } from "@ionic/react";
-import { gridOutline, heartOutline, peopleOutline, reload, searchOutline, settingsOutline, shieldOutline } from "ionicons/icons";
+import { heartOutline, peopleOutline, reload, searchOutline, settingsOutline, shieldOutline } from "ionicons/icons";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import useUserSettings from "../utils/useUserSettings";
+import useWindowSize from "../utils/useWindowSize";
 import "./Sidebar.css"
 
 export default function Sidebar() {
@@ -27,10 +28,10 @@ export default function Sidebar() {
   });
   const { users, clans } = useUserSettings() ?? {};
   const queryClient = useQueryClient();
+  const { width } = useWindowSize();
   return (
     <IonMenu
-      style={{ maxWidth: "min(350px, 27%)" }}
-      draggable={false}
+      style={width > 900 ? { maxWidth: "max(250px, min(350px, 27%))" } : undefined}
       contentId="ion-router-outlet">
       <IonPage>
         <IonHeader>

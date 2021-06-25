@@ -90,3 +90,15 @@ ion-card ion-item {
 .cztypeimgloading::part(image) {
   display: none;
 }
+
+.main-tab-bar[data-len="3"] ion-tab-button {
+  max-width: 33.3%;
+}
+
+.main-tab-bar[data-len="4"] ion-tab-button {
+  max-width: 25%;
+}
+
+.main-tab-bar[data-len="5"] ion-tab-button {
+  max-width: 20%;
+}

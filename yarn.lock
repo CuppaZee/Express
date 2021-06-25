@@ -1301,20 +1301,20 @@
   resolved "https://registry.npmjs.org/@cuppazee/api/-/api-0.0.12.tgz"
   integrity sha512-DldHDAnyjZ/cs0o0A5XkxV92yu3ciNKYrVylQ8kqwB9+u3UZD8JHJullbgNiCEof9MR5tA4QholaNNb9hTXeVw==
 
-"@cuppazee/db@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@cuppazee/db/-/db-0.0.2.tgz#ffd81ccf11cb414e3d9d955909714ce846dc33f3"
-  integrity sha512-XZ6xIYG+utdO7eoRD0wk8p6KO+ApfEKKDhkMTh+Ceb160cHBH/HsotAoI2s75LVbb4W3WcSiSbOFWsL7HJYWnA==
+"@cuppazee/db@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@cuppazee/db/-/db-0.0.6.tgz#498b3f117400536c5fd3ee0cc43645d8863855ec"
+  integrity sha512-T/XaC4O2Stn0o6DlFrBD5bPUgbKI76awodiKFa7BSef6ZPeVpSO0iQJZNGeaIoFA0mOBlUrtHixDtxzVChrk2A==
   dependencies:
     "@msgpack/msgpack" "^2.7.0"
     lzwcompress "^1.1.0"
 
-"@cuppazee/utils@^0.0.12":
-  version "0.0.12"
-  resolved "https://registry.yarnpkg.com/@cuppazee/utils/-/utils-0.0.12.tgz#98fb105a31e7c9bce29b3a1de2295a2b921d6c20"
-  integrity sha512-snLPq4QXscXuNyoCzzU1k0b5DNZyNlKX4nGC/38DdBpU5swc/ftPufq9yP7mGbdzgpxCLlvzKlmyqNONo+DTtg==
+"@cuppazee/utils@^0.0.18":
+  version "0.0.18"
+  resolved "https://registry.yarnpkg.com/@cuppazee/utils/-/utils-0.0.18.tgz#f44dd256237367d38ba9be5ac482633837f39f78"
+  integrity sha512-et+gdnofdWWUskWjno1B9SdAR89dlEfitEoKxCP1g3sFEINd3LrG373yraSrUnubh8//rPHMSwmJJKAlIoYqIA==
   dependencies:
-    "@cuppazee/db" "^0.0.2"
+    "@cuppazee/db" "^0.0.6"
     dayjs "^1.10.5"
 
 "@eslint/eslintrc@^0.4.1":

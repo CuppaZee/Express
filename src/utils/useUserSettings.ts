@@ -136,5 +136,5 @@ export function useRootCategories() {
       return list;
     }
     return db.categories.filter(i => i.parents.find(i => i?.id === "root")).map(i => i.id);
-  }, [settings?.rootCategories]);
+  }, [settings?.rootCategories, db]);
 }

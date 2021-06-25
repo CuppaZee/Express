@@ -31,12 +31,13 @@ import useDB from "../../utils/useDB";
 import { RouteChildrenProps } from "react-router";
 import { useTranslation } from "react-i18next";
 import useFancyGrid from "../../utils/useFancyGrid";
+import useStorage from "../../utils/useStorage";
+import { InventorySettingsStorage } from "../../storage/Inventory";
 
 const UserInventoryPage: React.FC<RouteChildrenProps<{ username: string }>> = ({ match }) => {
   const params = match?.params;
   const { t } = useTranslation();
-  const [hideZeroes, setHideZeroes] = React.useState(false);
-  const [groupByState, setGroupByState] = React.useState(false);
+  const [invSettings, setInvSettings] = useStorage(InventorySettingsStorage);
   const userID = useUserID(params?.username);
   const data = useCuppaZeeData<{ data: UserInventoryInputData }>({
     endpoint: "user/inventory",
@@ -46,11 +47,8 @@ const UserInventoryPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
   });
   const db = useDB();
   const d = useMemo(
-    () =>
-      data.data
-        ? generateInventoryData(db, data.data.data, { hideZeroes, groupByState })
-        : undefined,
-    [db, data.dataUpdatedAt, hideZeroes, groupByState]
+    () => (data.data ? generateInventoryData(db, data.data.data, invSettings) : undefined),
+    [db, data.dataUpdatedAt, invSettings]
   );
   const [history, setHistory] = useState(false);
 
@@ -86,38 +84,40 @@ const UserInventoryPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
                 <IonLabel>{t("user_inventory:settings_zero")}</IonLabel>
                 <IonCheckbox
                   slot="end"
-                  onIonChange={ev => setHideZeroes(!ev.detail.checked)}
-                  checked={!hideZeroes}
+                  onIonChange={ev => setInvSettings({ ...invSettings, hideZeroes: !ev.detail.checked })}
+                  checked={!invSettings.hideZeroes}
                 />
               </IonItem>
               <IonItem>
                 <IonLabel>{t("user_inventory:settings_group")}</IonLabel>
                 <IonCheckbox
                   slot="end"
-                  onIonChange={ev => setGroupByState(!ev.detail.checked)}
-                  checked={!groupByState}
+                  onIonChange={ev => setInvSettings({ ...invSettings, groupByState: !ev.detail.checked })}
+                  checked={!invSettings.groupByState}
                 />
               </IonItem>
               <div className="fancy-grid-wrapper">
-              {d?.groups.map((g, n) => (
-                <div className="inventory-overview-card-wrapper" style={elements[n]}><IonCard
-                  key={`card_${"state" in g ? g.state : g.category.id}`}
-                  className="inventory-overview-card">
-                  <IonCardHeader>
-                    <IonCardTitle>
-                      {"state" in g
-                        ? t(`user_inventory:state_${g.state}` as const)
-                        : g.category.name}{" "}
-                      ({g.total})
-                    </IonCardTitle>
-                  </IonCardHeader>
-                  <IonCardContent className="inventory-row">
-                    {g.types?.map(i => (
-                      <InventoryImg key={i.icon ?? i.name ?? i.type?.name ?? ""} item={i} />
-                    ))}
-                  </IonCardContent>
-                </IonCard></div>
-              ))}
+                {d?.groups.map((g, n) => (
+                  <div className="inventory-overview-card-wrapper" style={elements[n]}>
+                    <IonCard
+                      key={`card_${"state" in g ? g.state : g.category.id}`}
+                      className="inventory-overview-card">
+                      <IonCardHeader>
+                        <IonCardTitle>
+                          {"state" in g
+                            ? t(`user_inventory:state_${g.state}` as const)
+                            : g.category.name}{" "}
+                          ({g.total})
+                        </IonCardTitle>
+                      </IonCardHeader>
+                      <IonCardContent className="inventory-row">
+                        {g.types?.map(i => (
+                          <InventoryImg key={i.icon ?? i.name ?? i.type?.name ?? ""} item={i} />
+                        ))}
+                      </IonCardContent>
+                    </IonCard>
+                  </div>
+                ))}
               </div>
             </>
           ) : (

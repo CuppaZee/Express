@@ -54,7 +54,7 @@ export default function useLogin() {
         primary: !Object.values(accounts).some(i => i.primary && i.user_id !== Number(user_id)),
       },
     }).then(() => {
-      history.push(`/more`, undefined, "replace", undefined, blankAnimation);
+      history.push(window.location.pathname, undefined, "replace", undefined, blankAnimation);
     });
     present({
       duration: 2000,

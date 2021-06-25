@@ -10,11 +10,20 @@ export default function Tabs() {
   const [accounts] = useStorage(AccountsStorage);
   const history = useIonRouter();
   const { t } = useTranslation();
-  const screen = useWindowSize();
+  const {width} = useWindowSize();
   const { users, clans } = useUserSettings() ?? {};
-  if ((screen?.width ?? 0) > 900) return null;
+  if (width > 900) return null;
   return (
     <IonTabBar
+      className="main-tab-bar"
+      data-len={
+        2 +
+        (Object.values(accounts).filter(i => i.primary).length ? 1 : 0) +
+        (clans?.length ? 1 : 0) +
+        (users?.find(i => i.user_id !== Object.values(accounts).find(i => i.primary)?.user_id)
+          ? 1
+          : 0)
+      }
       slot="bottom"
       onIonTabsDidChange={e => {
         history.push(e.detail.tab, "root");
@@ -42,8 +51,7 @@ export default function Tabs() {
             <IonLabel>{acc.username}</IonLabel>
           </IonTabButton>
         ))}
-      {!!users?.find(i=>i.user_id !== Object.values(accounts)
-        .find(i => i.primary)?.user_id) && (
+      {!!users?.find(i => i.user_id !== Object.values(accounts).find(i => i.primary)?.user_id) && (
         <IonTabButton selected={history.routeInfo.pathname.startsWith("/players")} tab="/players">
           <IonIcon icon={people} />
           <IonLabel>{t("pages:players")}</IonLabel>
@@ -64,12 +72,12 @@ export default function Tabs() {
           </IonAvatar>
           <IonLabel>{clans?.[0]?.name}</IonLabel>
         </IonTabButton>
-      ) : ((clans?.length ?? 0) > 0 ? (
+      ) : (clans?.length ?? 0) > 0 ? (
         <IonTabButton selected={history.routeInfo.pathname.startsWith("/clans")} tab="/clans">
           <IonIcon icon={shield} />
           <IonLabel>{t("pages:clans")}</IonLabel>
         </IonTabButton>
-      ) : null)}
+      ) : null}
       <IonTabButton selected={history.routeInfo.pathname.startsWith("/more")} tab="/more">
         <IonIcon icon={grid} />
         <IonLabel>{t("pages:more")}</IonLabel>

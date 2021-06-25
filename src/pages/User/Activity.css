@@ -69,3 +69,34 @@
 .activity-list-item-capon {
     border-left: 4px solid #ff7700;
 }
+
+.player-activity-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+    width: 100%;
+    height: 100%;
+}
+
+.player-activity-main {
+    flex-grow: 1;
+}
+
+.player-activity-filters {
+    flex-grow: 1;
+    max-width: min(40%, 400px);
+    max-height: 100%;
+    overflow: auto;
+}
+
+.player-activity-filters-save {
+    margin: 8px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.ios .player-activity-filters-save {
+    margin: 8px;
+    margin-left: 16px;
+    margin-right: 16px;
+}
