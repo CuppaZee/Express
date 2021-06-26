@@ -1,12 +1,9 @@
 import { IonAvatar, IonCard, IonImg, IonItem, IonLabel, IonNote } from "@ionic/react";
 
-import React, { MutableRefObject, useEffect, useMemo } from "react";
-import useMunzeeData from "../../utils/useMunzeeData";
+import React, { MutableRefObject, useEffect } from "react";
 import {
   ClanRewardsData,
   GameID,
-  generateClanRequirements,
-  requirementMeta,
 } from "@cuppazee/utils";
 import "./Clan.css";
 import dayjs from "dayjs";

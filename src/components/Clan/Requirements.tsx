@@ -9,12 +9,13 @@ import {
 
 import React, { MutableRefObject, useEffect, useMemo } from "react";
 import useMunzeeData from "../../utils/useMunzeeData";
-import { GameID, generateClanRequirements, requirementMeta } from "@cuppazee/utils";
+import { GameID, generateClanRequirements } from "@cuppazee/utils";
 import "./Clan.css";
 import dayjs from "dayjs";
 import { UseQueryResult } from "react-query";
 import { useTranslation } from "react-i18next";
 import { ScrollSyncController, useScrollSync } from "../../utils/useScrollSync";
+import useDB from "../../utils/useDB";
 
 export interface ClanRequirementProps {
   scrollSyncController?: MutableRefObject<ScrollSyncController>;
@@ -31,9 +32,11 @@ const ClanRequirementsCard: React.FC<ClanRequirementProps> = ({ clan_id, game_id
     params: { clan_id: clan_id ?? 1349, game_id: game_id.game_id },
   });
 
+  var db = useDB();
+
   const reqs = useMemo(
-    () => (requirements.data ? generateClanRequirements(requirements.data?.data) : null),
-    [requirements.dataUpdatedAt]
+    () => (requirements.data ? generateClanRequirements(db, requirements.data?.data) : null),
+    [requirements.dataUpdatedAt, db]
   );
   
   const [ref, onScroll] = useScrollSync<HTMLTableElement>(scrollSyncController);
@@ -88,8 +91,8 @@ const ClanRequirementsCard: React.FC<ClanRequirementProps> = ({ clan_id, game_id
                   className="clan-table-req-img"
                   src={`https://server.cuppazee.app/requirements/${req}.png`}
                 />
-                <div>{requirementMeta[req]?.top}</div>
-                <div>{requirementMeta[req]?.bottom}</div>
+                <div>{db.getClanRequirement(req).top}</div>
+                <div>{db.getClanRequirement(req).bottom}</div>
               </div>
               {[1, 2, 3, 4, 5].map(level => (
                 <div

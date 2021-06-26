@@ -11,7 +11,6 @@
   margin-bottom: 2px;
 }
 
-
 /* .tab-icon-avatar {
   height: 28px;
   width: 28px;
@@ -67,7 +66,6 @@ ion-card ion-item {
   flex-grow: 1;
 }
 
-
 :root {
   --clan-level-5: #55f40b;
   --clan-level-5-fg: #000000;
@@ -101,4 +99,22 @@ ion-card ion-item {
 
 .main-tab-bar[data-len="5"] ion-tab-button {
   max-width: 20%;
+}
+
+.useful-links-card ion-note {
+  font-size: 0.8em;
+}
+
+.clan-battle-selector {
+  width: calc(100% - 20px);
+  margin: 8px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.ios .clan-battle-selector {
+  width: calc(100% - 32px);
+  margin: 8px;
+  margin-left: 16px;
+  margin-right: 16px;
 }

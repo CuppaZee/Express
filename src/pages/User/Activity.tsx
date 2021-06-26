@@ -298,7 +298,7 @@ const UserActivityPage: React.FC<RouteChildrenProps<{ username: string; date: st
       <Header title={`${params?.username} - ${day.format("L")}`} />
       <IonContent fullscreen style={{ overflow: "hidden" }}>
         <CZRefresher queries={[user, data]} />
-        <div className="player-activity-row">
+        <div className={"player-activity-row" + ((width > 700 || tab === "main") ? " player-activity-row-main" : "")}>
           {(width > 700 || tab === "main") && (
             <div className="player-activity-main">
               <AutoSizer>

@@ -16,9 +16,7 @@ export default function Header({
   return (
     <IonHeader>
       <Helmet>
-        <title>
-          ☕️ {title}
-        </title>
+        <title>☕️ {title}</title>
       </Helmet>
       <IonToolbar>
         {React.Children.count(children) === 0 && isFetching ? (

@@ -1,6 +1,7 @@
 import { useQuery, UseQueryOptions, UseQueryResult } from "react-query";
 import stringify from "fast-json-stable-stringify";
 import useToken, { useTokenStatus } from "./useToken";
+import { useEffect, useRef } from "react";
 
 const getCuppaZeeData = async <D>(
   endpoint: string,
@@ -37,8 +38,9 @@ export default function useCuppaZeeData<D>(
   params: useCuppaZeeDataParams<D>
 ): useCuppaZeeDataResponse<D> {
   const [token, tokenStatus, _refetchToken] = useToken(params.user_id);
+  const lastToken = useRef<string | null>(null);
   const data = useQuery(
-    [params.endpoint, stringify(params.params), token],
+    [params.endpoint, stringify(params.params), params.user_id],
     async () => {
       const responseData = await getCuppaZeeData(params.endpoint, params.params, token ?? "");
       // if (responseData?.status_code === 403) {
@@ -51,6 +53,12 @@ export default function useCuppaZeeData<D>(
       enabled: !!token && params.options?.enabled,
     }
   );
+  useEffect(() => {
+    if (token !== lastToken.current && lastToken.current) {
+      data.refetch();
+    }
+    lastToken.current = token;
+  }, [token]);
   return {
     ...data,
     tokenStatus,

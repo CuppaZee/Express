@@ -1,5 +1,5 @@
 import { IonAvatar, IonIcon, IonLabel, IonTabBar, IonTabButton, useIonRouter } from "@ionic/react";
-import { grid, people, search, shield } from "ionicons/icons";
+import { grid, gridOutline, people, peopleOutline, search, searchOutline, shield, shieldOutline } from "ionicons/icons";
 import { useTranslation } from "react-i18next";
 import { AccountsStorage } from "../storage/Account";
 import useStorage from "../utils/useStorage";
@@ -29,7 +29,7 @@ export default function Tabs() {
         history.push(e.detail.tab, "root");
       }}>
       <IonTabButton selected={history.routeInfo.pathname.startsWith("/search")} tab="/search">
-        <IonIcon icon={search} />
+        <IonIcon icon={searchOutline} />
         <IonLabel>{t("pages:search")}</IonLabel>
       </IonTabButton>
       {Object.values(accounts)
@@ -53,7 +53,7 @@ export default function Tabs() {
         ))}
       {!!users?.find(i => i.user_id !== Object.values(accounts).find(i => i.primary)?.user_id) && (
         <IonTabButton selected={history.routeInfo.pathname.startsWith("/players")} tab="/players">
-          <IonIcon icon={people} />
+          <IonIcon icon={peopleOutline} />
           <IonLabel>{t("pages:players")}</IonLabel>
         </IonTabButton>
       )}
@@ -74,12 +74,12 @@ export default function Tabs() {
         </IonTabButton>
       ) : (clans?.length ?? 0) > 0 ? (
         <IonTabButton selected={history.routeInfo.pathname.startsWith("/clans")} tab="/clans">
-          <IonIcon icon={shield} />
+          <IonIcon icon={shieldOutline} />
           <IonLabel>{t("pages:clans")}</IonLabel>
         </IonTabButton>
       ) : null}
       <IonTabButton selected={history.routeInfo.pathname.startsWith("/more")} tab="/more">
-        <IonIcon icon={grid} />
+        <IonIcon icon={gridOutline} />
         <IonLabel>{t("pages:more")}</IonLabel>
       </IonTabButton>
     </IonTabBar>

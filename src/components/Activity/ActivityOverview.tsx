@@ -39,7 +39,7 @@ export default function ActivityOverview({ d, day }: ActivityOverviewProps) {
         <div className="activity-row">
           {d ? (
             Object.entries(d?.overview.capture?.types ?? {}).map(([a, b], _, l) => (
-              <ActivityImg key={a} small={l.length >= 20} icon={a.slice(49, -4)} amount={b.count} />
+              <ActivityImg key={a} points={b.points} small={l.length >= 20} icon={a.slice(49, -4)} amount={b.count} />
             ))
           ) : (
             <>
@@ -56,7 +56,7 @@ export default function ActivityOverview({ d, day }: ActivityOverviewProps) {
         </h2>
         <div className="activity-row">
           {Object.entries(d?.overview.deploy?.types ?? {}).map(([a, b], _, l) => (
-            <ActivityImg key={a} small={l.length >= 20} icon={a.slice(49, -4)} amount={b.count} />
+            <ActivityImg key={a} points={b.points} small={l.length >= 20} icon={a.slice(49, -4)} amount={b.count} />
           ))}
         </div>
         <h2>
@@ -70,7 +70,7 @@ export default function ActivityOverview({ d, day }: ActivityOverviewProps) {
         </h2>
         <div className="activity-row">
           {Object.entries(d?.overview.passive_deploy?.types ?? {}).map(([a, b], _, l) => (
-            <ActivityImg key={a} small={l.length >= 20} icon={a.slice(49, -4)} amount={b.count} />
+            <ActivityImg key={a} points={b.points} small={l.length >= 20} icon={a.slice(49, -4)} amount={b.count} />
           ))}
         </div>
         <h2>
@@ -82,7 +82,7 @@ export default function ActivityOverview({ d, day }: ActivityOverviewProps) {
         <div className="activity-row">
           {d ? (
             Object.entries(d?.overview.capon?.types ?? {}).map(([a, b], _, l) => (
-              <ActivityImg key={a} small={l.length >= 20} icon={a.slice(49, -4)} amount={b.count} />
+              <ActivityImg key={a} points={b.points} small={l.length >= 20} icon={a.slice(49, -4)} amount={b.count} />
             ))
           ) : (
             <>

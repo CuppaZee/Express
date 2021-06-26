@@ -227,8 +227,8 @@ function Settings() {
                   <IonButton
                     onClick={() => {
                       presentAlert({
-                        header: `Remove CuppaZee?`,
-                        message: `Are you sure you want to remove CuppaZee from your Accounts?`,
+                        header: `Sign out?`,
+                        message: `Are you sure you want to sign out of CuppaZee?`,
                         buttons: [
                           "Cancel",
                           {

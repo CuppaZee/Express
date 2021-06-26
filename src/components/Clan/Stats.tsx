@@ -1,26 +1,20 @@
 import {
   IonAvatar,
   IonButton,
-  IonButtons,
   IonCard,
-  IonContent,
   IonIcon,
   IonImg,
   IonItem,
   IonLabel,
   IonNote,
-  IonPage,
   IonPopover,
   IonSegment,
   IonSegmentButton,
   IonSelect,
   IonSelectOption,
-  IonSelectPopover,
 } from "@ionic/react";
-import Header from "../../components/Header";
 
-import React, { MutableRefObject, useEffect, useMemo, useState } from "react";
-import Tabs from "../../components/Tabs";
+import React, { MutableRefObject, useEffect, useMemo } from "react";
 import useMunzeeData from "../../utils/useMunzeeData";
 import {
   ClanShadowData,
@@ -29,7 +23,6 @@ import {
   GameID,
   generateClanRequirements,
   generateClanStats,
-  requirementMeta,
 } from "@cuppazee/utils";
 import useCuppaZeeData from "../../utils/useCuppaZeeData";
 import "./Clan.css";
@@ -41,7 +34,8 @@ import { UseQueryResult } from "react-query";
 import useWindowSize from "../../utils/useWindowSize";
 import usePopover from "../../utils/usePopover";
 import { useTranslation } from "react-i18next";
-import { ScrollSyncController, useScrollSync, useScrollSyncController } from "../../utils/useScrollSync";
+import { ScrollSyncController, useScrollSync } from "../../utils/useScrollSync";
+import useDB from "../../utils/useDB";
 
 export interface ClanStatsProps {
   scrollSyncController?: MutableRefObject<ScrollSyncController>;
@@ -52,7 +46,14 @@ export interface ClanStatsProps {
   queriesRef?: MutableRefObject<Set<UseQueryResult>>;
 }
 
-const ClanStatsCard: React.FC<ClanStatsProps> = ({ clan_id, game_id, sort, setSort, queriesRef, scrollSyncController }) => {
+const ClanStatsCard: React.FC<ClanStatsProps> = ({
+  clan_id,
+  game_id,
+  sort,
+  setSort,
+  queriesRef,
+  scrollSyncController,
+}) => {
   const { t } = useTranslation();
   const [clansSettings, setClansSettings] = useStorage(ClansSettingsStorage);
   const clanSettings: ClanSettings = (clansSettings[clan_id] = {
@@ -74,23 +75,35 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({ clan_id, game_id, sort, setSo
     params: { clan_id, game_id: game_id.game_id },
   });
 
+  const db = useDB();
+
   const reqs = useMemo(
-    () => (requirements.data ? generateClanRequirements(requirements.data?.data) : null),
-    [requirements.dataUpdatedAt]
+    () => (requirements.data ? generateClanRequirements(db, requirements.data?.data) : null),
+    [requirements.dataUpdatedAt, db]
   );
 
   const stats = useMemo(
     () =>
       clan.data && reqs
         ? generateClanStats(
+            db,
             clan.data?.data,
             requirements.data?.data,
             reqs,
             clan_id,
-            (clanSettings.hideShadow || (shadow.data?.data.members.length ?? 0) === 0) ? undefined : shadow.data?.data
+            clanSettings.hideShadow || (shadow.data?.data.members.length ?? 0) === 0
+              ? undefined
+              : shadow.data?.data
           )
         : null,
-    [clan.dataUpdatedAt, requirements.dataUpdatedAt, reqs, shadow.dataUpdatedAt, clanSettings.hideShadow]
+    [
+      clan.dataUpdatedAt,
+      requirements.dataUpdatedAt,
+      reqs,
+      shadow.dataUpdatedAt,
+      clanSettings.hideShadow,
+      db,
+    ]
   );
 
   const windowSize = useWindowSize();
@@ -136,7 +149,7 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({ clan_id, game_id, sort, setSo
       if (!req) {
         return "-";
       }
-      return v ? (req - v > 0 ? (req - v).toLocaleString() : "-") : "⛔";
+      return v || v === 0 ? (req - v > 0 ? (req - v).toLocaleString() : "-") : "⛔";
     }
     return v ? v.toLocaleString() : Number.isNaN(v) ? "⛔" : "-";
   }
@@ -355,12 +368,12 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({ clan_id, game_id, sort, setSo
                   src={`https://server.cuppazee.app/requirements/${req}.png`}
                 />
                 <div>
-                  {requirementMeta[req]?.top}
+                  {db.getClanRequirement(req).top}
                   {Math.abs(sort) === req && (
                     <IonIcon icon={sort === req ? chevronDown : chevronUp} />
                   )}
                 </div>
-                <div>{requirementMeta[req]?.bottom}</div>
+                <div>{db.getClanRequirement(req).bottom}</div>
               </div>
               <div
                 className={`clan-table-cell clan-table-cell-data clan-level-${

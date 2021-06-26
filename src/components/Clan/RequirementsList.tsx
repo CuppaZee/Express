@@ -11,7 +11,7 @@ import {
 
 import React, { MutableRefObject, useEffect, useMemo } from "react";
 import useMunzeeData from "../../utils/useMunzeeData";
-import { ClanRewardsData, GameID, generateClanRequirements, requirementMeta } from "@cuppazee/utils";
+import { ClanRewardsData, GameID, generateClanRequirements } from "@cuppazee/utils";
 import "./Clan.css";
 import dayjs from "dayjs";
 import { UseQueryResult } from "react-query";
@@ -19,6 +19,7 @@ import { gift, people, person } from "ionicons/icons";
 import useCuppaZeeData from "../../utils/useCuppaZeeData";
 import { CZTypeImg } from "../CZImg";
 import { useTranslation } from "react-i18next";
+import useDB from "../../utils/useDB";
 
 export interface ClanRequirementListProps {
   clan_id?: number;
@@ -42,9 +43,11 @@ const ClanRequirementsList: React.FC<ClanRequirementListProps> = ({
     params: {game_id: game_id.game_id }
   })
 
+  const db = useDB();
+
   const reqs = useMemo(
-    () => (requirements.data ? generateClanRequirements(requirements.data?.data) : null),
-    [requirements.dataUpdatedAt]
+    () => (requirements.data ? generateClanRequirements(db, requirements.data?.data) : null),
+    [requirements.dataUpdatedAt, db]
   );
 
   useEffect(() => {
@@ -88,7 +91,7 @@ const ClanRequirementsList: React.FC<ClanRequirementListProps> = ({
                     />
                     <IonLabel>
                       <b>{reqs.tasks.individual[i][level]?.toLocaleString()}</b>{" "}
-                      {requirementMeta[i]?.top} {requirementMeta[i]?.bottom}
+                      {db.getClanRequirement(i).top} {db.getClanRequirement(i).bottom}
                     </IonLabel>
                   </IonItem>
                 ))}
@@ -106,7 +109,7 @@ const ClanRequirementsList: React.FC<ClanRequirementListProps> = ({
                     />
                     <IonLabel>
                       <b>{reqs.tasks.group[i][level]?.toLocaleString()}</b>{" "}
-                      {requirementMeta[i]?.top} {requirementMeta[i]?.bottom}
+                      {db.getClanRequirement(i).top} {db.getClanRequirement(i).bottom}
                     </IonLabel>
                   </IonItem>
                 ))}

@@ -40,6 +40,9 @@ const dbCache: { value: CuppaZeeDB; onLoad: Set<() => void> } = {
 export default function useDB() {
   const [_, setValue] = useState(0);
   useEffect(() => {
+    if (dbCache.value) {
+      setValue(i => i + 1);
+    }
     const f = () => {
       setValue(i => i + 1);
     };

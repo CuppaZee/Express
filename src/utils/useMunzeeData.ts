@@ -3,6 +3,7 @@ import { useQuery, UseQueryOptions, UseQueryResult } from "react-query";
 import stringify from "fast-json-stable-stringify";
 import useToken, { useTokenStatus } from "./useToken";
 import { IonToast } from "@ionic/react";
+import { useEffect, useRef } from "react";
 
 const getMunzeeData = async <Path extends keyof Endpoints>(
   endpoint: FetchRequest<Path>["endpoint"],
@@ -45,16 +46,27 @@ export type useMunzeeDataResponse<Path extends keyof Endpoints> = UseQueryResult
 
 export default function useMunzeeData<Path extends keyof Endpoints>(params: useMunzeeDataParams<Path>): useMunzeeDataResponse<Path> {
   const [token, tokenStatus, refetchToken] = useToken(params.user_id);
-  const data = useQuery([params.endpoint, stringify(params.params), token], async () => {
-    const responseData = await getMunzeeData(params.endpoint, params.params, token ?? "");
-    if (responseData?.status_code === 403) {
-      refetchToken();
+  const lastToken = useRef<string | null>(null);
+  const data = useQuery(
+    [params.endpoint, stringify(params.params), params.user_id],
+    async () => {
+      const responseData = await getMunzeeData(params.endpoint, params.params, token ?? "");
+      if (responseData?.status_code === 403) {
+        refetchToken();
+      }
+      return responseData;
+    },
+    {
+      ...params.options,
+      enabled: !!token && params.options?.enabled !== false,
     }
-    return responseData;
-  }, {
-    ...params.options,
-    enabled: !!token && params.options?.enabled !== false,
-  })
+  );
+  useEffect(() => {
+    if (token !== lastToken.current && lastToken.current) {
+      data.refetch();
+    }
+    lastToken.current = token;
+  }, [token]);
   return {
     ...data,
     tokenStatus,

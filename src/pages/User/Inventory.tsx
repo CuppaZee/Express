@@ -39,7 +39,7 @@ const UserInventoryPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
   const { t } = useTranslation();
   const [invSettings, setInvSettings] = useStorage(InventorySettingsStorage);
   const userID = useUserID(params?.username);
-  const data = useCuppaZeeData<{ data: UserInventoryInputData }>({
+  const data = useCuppaZeeData<{ data?: UserInventoryInputData }>({
     endpoint: "user/inventory",
     params: {},
     options: { enabled: !!userID },
@@ -47,7 +47,7 @@ const UserInventoryPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
   });
   const db = useDB();
   const d = useMemo(
-    () => (data.data ? generateInventoryData(db, data.data.data, invSettings) : undefined),
+    () => (data.data?.data ? generateInventoryData(db, data.data.data, invSettings) : undefined),
     [db, data.dataUpdatedAt, invSettings]
   );
   const [history, setHistory] = useState(false);

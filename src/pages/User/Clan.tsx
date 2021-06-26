@@ -9,11 +9,12 @@ import Tabs from "../../components/Tabs";
 import useMunzeeData from "../../utils/useMunzeeData";
 import { RouteChildrenProps } from "react-router";
 import { useTranslation } from "react-i18next";
-import { GameID, generateClanRequirements, requirementMeta } from "@cuppazee/utils/lib";
+import { GameID, generateClanRequirements } from "@cuppazee/utils/lib";
 import useCuppaZeeData from "../../utils/useCuppaZeeData";
 import ClanRequirementsCard from "../../components/Clan/Requirements";
 import FancyGrid from "../../components/FancyGrid";
 import { CZLoadText } from "../../components/CZLoad";
+import useDB from "../../utils/useDB";
 
 const UserClanProgressPage: React.FC<RouteChildrenProps<{ username: string }>> = ({ match }) => {
   const params = match?.params;
@@ -23,10 +24,12 @@ const UserClanProgressPage: React.FC<RouteChildrenProps<{ username: string }>> =
     endpoint: "clan/v2/requirements",
     params: { clan_id: 1349, game_id: new GameID().game_id },
   });
+  
+  const db = useDB();
 
   const reqs = useMemo(
-    () => (requirements.data ? generateClanRequirements(requirements.data?.data) : null),
-    [requirements.dataUpdatedAt]
+    () => (requirements.data ? generateClanRequirements(db, requirements.data?.data) : null),
+    [requirements.dataUpdatedAt, db]
   );
 
   const data = useCuppaZeeData<{ data: { [key: string]: number } }>({
@@ -66,7 +69,7 @@ const UserClanProgressPage: React.FC<RouteChildrenProps<{ username: string }>> =
                 />
                 <div>
                   <IonLabel>
-                    {requirementMeta[req]?.top} {requirementMeta[req]?.bottom}
+                    {db.getClanRequirement(req).top} {db.getClanRequirement(req).bottom}
                   </IonLabel>
                   {data.data?.data ? (
                     <IonLabel>{data.data?.data?.[req]?.toLocaleString() ?? 0}</IonLabel>
