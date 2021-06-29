@@ -49,6 +49,9 @@ const ClanRequirementsList: React.FC<ClanRequirementListProps> = ({
     () => (requirements.data ? generateClanRequirements(db, requirements.data?.data) : null),
     [requirements.dataUpdatedAt, db]
   );
+  
+  const levelCount = Object.keys(requirements.data?.data?.data.levels ?? {}).length;
+  const levels = new Array(levelCount).fill(0).map((_, n) => n + 1);
 
   useEffect(() => {
     queriesRef?.current.add(requirements);
@@ -74,7 +77,7 @@ const ClanRequirementsList: React.FC<ClanRequirementListProps> = ({
       </IonItem>
       {reqs && (
         <IonCardContent className="clan-requirements-list-content">
-          {[1, 2, 3, 4, 5].map(level => (
+          {levels.map(level => (
             <div>
               <h3>{t("clan:level", {level})}</h3>
               <h4>

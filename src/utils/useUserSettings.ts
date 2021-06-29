@@ -1,10 +1,13 @@
-import { useMemo } from "react";
-import { useMutation, UseMutationResult, useQuery, useQueryClient, UseQueryResult } from "react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryResult,
+} from "react-query";
 import { AccountsStorage } from "../storage/Account";
 import { LocalSettingsStorage } from "../storage/LocalSettings";
 import useDB from "./useDB";
 import useStorage from "./useStorage";
-
 
 export interface UserSettingsUser {
   user_id: number;
@@ -20,6 +23,7 @@ export interface UserSettings {
   users: UserSettingsUser[];
   clans: UserSettingsClan[];
   rootCategories: string[];
+  colours: {[name: string]: string}
 }
 
 const baseURL = "https://server.cuppazee.app";
@@ -37,18 +41,19 @@ const getSettings = async (teaken: string, user_id: number): Promise<{ data: Use
   return await response.json();
 };
 
-const updateSettings = async (teaken: string, user_id: number, settings: Partial<UserSettings>): Promise<{ data: boolean }> => {
-  const response = await fetch(
-    `${baseURL}/auth/settings/save/v1`,
-    {
-      method: "POST",
-      body: JSON.stringify({
-        teaken,
-        user_id,
-        settings
-      })
-    }
-  );
+const updateSettings = async (
+  teaken: string,
+  user_id: number,
+  settings: Partial<UserSettings>
+): Promise<{ data: boolean }> => {
+  const response = await fetch(`${baseURL}/auth/settings/save/v1`, {
+    method: "POST",
+    body: JSON.stringify({
+      teaken,
+      user_id,
+      settings,
+    }),
+  });
   if (!response.ok) {
     throw new Error("Expired");
   }
@@ -76,7 +81,7 @@ export function useCloudUserSettings(): (UserSettings & { query?: UseQueryResult
 export default function useUserSettings(): (UserSettings & { query?: UseQueryResult }) | null {
   const [localSettings, _, localSettingsLoaded] = useStorage(LocalSettingsStorage);
 
-  const serverSettings = useCloudUserSettings()
+  const serverSettings = useCloudUserSettings();
 
   if (!serverSettings || !localSettingsLoaded) {
     return null;
@@ -91,7 +96,7 @@ export function useUserSettingsMutation() {
 
   const account = Object.values(accounts).find(i => i.primary);
   const mutation = useMutation<{ data: boolean }, unknown, Partial<UserSettings>>(
-    async (settings) => {
+    async settings => {
       if (account) {
         const d = await updateSettings(account?.teaken, account.user_id, settings);
         client.refetchQueries(["user_settings"]);
@@ -102,8 +107,8 @@ export function useUserSettingsMutation() {
   );
 
   return (settings: Partial<UserSettings>, forceUpdateCloud?: boolean) => {
-    const updateLocal: Partial<UserSettings> = {  };
-    const update: Partial<UserSettings> = {  };
+    const updateLocal: Partial<UserSettings> = {};
+    const update: Partial<UserSettings> = {};
     for (const key of Object.keys(settings) as (keyof UserSettings)[]) {
       if ((key as any) === "query") continue;
       if (localSettings[key] !== undefined && localSettings[key] !== null && !forceUpdateCloud) {
@@ -124,17 +129,15 @@ export function useUserSettingsMutation() {
 export function useRootCategories() {
   const settings = useUserSettings();
   const db = useDB();
-  return useMemo(() => {
-    if (settings?.rootCategories && db.categories.length > 0) {
-      const allCategories = db.categories
-        .filter(i => i.parents.find(i => i?.id === "root"))
-        .map(i => i.id);
-      const list = settings.rootCategories.filter(i => allCategories.includes(i));
-      for (const category of allCategories) {
-        if(!list.includes(category)) settings.rootCategories.push(category)
-      }
-      return list;
+  if (settings?.rootCategories && db.categories.length > 0) {
+    const allCategories = db.categories
+      .filter(i => i.parents.find(i => i?.id === "root"))
+      .map(i => i.id);
+    const list = settings.rootCategories.filter(i => allCategories.includes(i));
+    for (const category of allCategories) {
+      if (!list.includes(category)) settings.rootCategories.push(category);
     }
-    return db.categories.filter(i => i.parents.find(i => i?.id === "root")).map(i => i.id);
-  }, [settings?.rootCategories, db]);
+    return list;
+  }
+  return db.categories.filter(i => i.parents.find(i => i?.id === "root")).map(i => i.id);
 }

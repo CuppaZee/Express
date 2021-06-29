@@ -38,6 +38,9 @@ const ClanRequirementsCard: React.FC<ClanRequirementProps> = ({ clan_id, game_id
     () => (requirements.data ? generateClanRequirements(db, requirements.data?.data) : null),
     [requirements.dataUpdatedAt, db]
   );
+
+  const levelCount = Object.keys(requirements.data?.data?.data.levels ?? {}).length;
+  const levels = new Array(levelCount).fill(0).map((_, n) => n + 1);
   
   const [ref, onScroll] = useScrollSync<HTMLTableElement>(scrollSyncController);
 
@@ -51,7 +54,13 @@ const ClanRequirementsCard: React.FC<ClanRequirementProps> = ({ clan_id, game_id
   return (
     <IonCard>
       <IonItem
-        routerLink={hasLink ? "/clans/requirements" : undefined}
+        routerLink={
+          hasLink
+            ? game_id.game_id === new GameID().game_id
+              ? "/clans/requirements"
+              : `/clans/requirements/${game_id.month + 1}/${game_id.year}`
+            : undefined
+        }
         detail={hasLink}
         className="clan-table-header"
         lines="none">
@@ -68,18 +77,26 @@ const ClanRequirementsCard: React.FC<ClanRequirementProps> = ({ clan_id, game_id
         </div>
       </IonItem>
       {reqs && (
-        <div ref={ref} onScroll={onScroll} role="table" className="clan-table clan-table-requirements clan-table-edg">
+        <div
+          ref={ref}
+          onScroll={onScroll}
+          role="table"
+          className="clan-table clan-table-requirements clan-table-edg">
           <div role="row" className="clan-table-column">
             <div role="cell" className="clan-table-cell clan-table-cell-header">
               <div>{t("clan:levels")}</div>
             </div>
-            {[1, 2, 3, 4, 5].map(level => (
+            {levels.map(level => (
               <div role="cell" className={`clan-table-cell clan-level-${level}`} key={level}>
                 <div>{t("clan:indiv_level", { level })}</div>
               </div>
             ))}
-            {[1, 2, 3, 4, 5].map(level => (
-              <div role="cell" className={`clan-table-cell clan-level-${level}`} key={level}>
+            {levels.map(level => (
+              <div
+                data-section={level === 1 ? "group" : ""}
+                role="cell"
+                className={`clan-table-cell clan-level-${level}`}
+                key={level}>
                 <div>{t("clan:group_level", { level })}</div>
               </div>
             ))}
@@ -94,7 +111,7 @@ const ClanRequirementsCard: React.FC<ClanRequirementProps> = ({ clan_id, game_id
                 <div>{db.getClanRequirement(req).top}</div>
                 <div>{db.getClanRequirement(req).bottom}</div>
               </div>
-              {[1, 2, 3, 4, 5].map(level => (
+              {levels.map(level => (
                 <div
                   className={`clan-table-cell clan-table-cell-data clan-level-${
                     reqs.tasks.individual[req]?.[level] ? level : "null"
@@ -103,8 +120,9 @@ const ClanRequirementsCard: React.FC<ClanRequirementProps> = ({ clan_id, game_id
                   {reqs.tasks.individual[req]?.[level]?.toLocaleString() ?? "-"}
                 </div>
               ))}
-              {[1, 2, 3, 4, 5].map(level => (
+              {levels.map(level => (
                 <div
+                  data-section={level === 1 ? "group" : ""}
                   className={`clan-table-cell clan-table-cell-data clan-level-${
                     reqs.tasks.group[req]?.[level] ? level : "null"
                   }`}

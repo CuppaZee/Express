@@ -53,7 +53,9 @@ const ClanAllPage: React.FC<RouteChildrenProps<{ month?: string; year?: string }
                   handler: selected => {
                     const game_id: GameID = selected["Clan Battle"].value;
                     history.push(
-                      `/clans/${game_id.month + 1}/${game_id.year}`,
+                      game_id.game_id === new GameID().game_id
+                        ? "/clans"
+                        : `/clans/${game_id.month + 1}/${game_id.year}`,
                       undefined,
                       "replace",
                       undefined,

@@ -51,3 +51,20 @@ export default function useDB() {
   }, []);
   return dbCache.value;
 }
+
+export function useDBa() {
+  const [c, setValue] = useState(0);
+  useEffect(() => {
+    if (dbCache.value) {
+      setValue(i => i + 1);
+    }
+    const f = () => {
+      setValue(i => i + 1);
+    };
+    dbCache.onLoad.add(f);
+    return () => {
+      dbCache.onLoad.delete(f);
+    };
+  }, []);
+  return [c, dbCache.value] as const;
+}

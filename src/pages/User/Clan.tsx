@@ -16,6 +16,17 @@ import FancyGrid from "../../components/FancyGrid";
 import { CZLoadText } from "../../components/CZLoad";
 import useDB from "../../utils/useDB";
 
+export function findLastIndex<T>(
+  array: Array<T>,
+  predicate: (value: T, index: number, obj: T[]) => boolean
+): number {
+  let l = array.length;
+  while (l--) {
+    if (predicate(array[l], l, array)) return l;
+  }
+  return -1;
+}
+
 const UserClanProgressPage: React.FC<RouteChildrenProps<{ username: string }>> = ({ match }) => {
   const params = match?.params;
   const { t } = useTranslation();
@@ -39,16 +50,15 @@ const UserClanProgressPage: React.FC<RouteChildrenProps<{ username: string }>> =
   });
 
   function getLevel(req: number) {
-    const l = reqs?.tasks.individual[req]?.findIndex(i => i > (data.data?.data?.[req] ?? 0));
-    if (l === null || l === undefined) {
+    const i = reqs?.tasks.individual[req];
+    if (!i) {
       return null;
     }
+    const l = findLastIndex(i, i => i <= (data.data?.data?.[req] ?? 0));
     if (l < 0) {
-      return 5;
-    } else if (l === 0) {
-      return l;
+      return "?";
     } else {
-      return l - 1;
+      return l;
     }
   }
 

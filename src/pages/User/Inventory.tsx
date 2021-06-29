@@ -1,4 +1,5 @@
 import {
+  IonButton,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -33,6 +34,8 @@ import { useTranslation } from "react-i18next";
 import useFancyGrid from "../../utils/useFancyGrid";
 import useStorage from "../../utils/useStorage";
 import { InventorySettingsStorage } from "../../storage/Inventory";
+import { Browser } from "@capacitor/browser";
+import { Capacitor } from "@capacitor/core";
 
 const UserInventoryPage: React.FC<RouteChildrenProps<{ username: string }>> = ({ match }) => {
   const params = match?.params;
@@ -84,7 +87,9 @@ const UserInventoryPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
                 <IonLabel>{t("user_inventory:settings_zero")}</IonLabel>
                 <IonCheckbox
                   slot="end"
-                  onIonChange={ev => setInvSettings({ ...invSettings, hideZeroes: !ev.detail.checked })}
+                  onIonChange={ev =>
+                    setInvSettings({ ...invSettings, hideZeroes: !ev.detail.checked })
+                  }
                   checked={!invSettings.hideZeroes}
                 />
               </IonItem>
@@ -92,7 +97,9 @@ const UserInventoryPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
                 <IonLabel>{t("user_inventory:settings_group")}</IonLabel>
                 <IonCheckbox
                   slot="end"
-                  onIonChange={ev => setInvSettings({ ...invSettings, groupByState: !ev.detail.checked })}
+                  onIonChange={ev =>
+                    setInvSettings({ ...invSettings, groupByState: !ev.detail.checked })
+                  }
                   checked={!invSettings.groupByState}
                 />
               </IonItem>
@@ -110,6 +117,24 @@ const UserInventoryPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
                           ({g.total})
                         </IonCardTitle>
                       </IonCardHeader>
+                      {"category" in g && (g.category.accessories?.length ?? 0) > 0 && (
+                        <IonCardContent className="inventory-row">
+                          {g.category.accessories
+                            ?.filter(i => Capacitor.isNativePlatform() || i.link.startsWith("http"))
+                            .map(i => (
+                              <IonButton
+                                size="small"
+                                color={i.color}
+                                href={i.link.startsWith("~") ? i.link.slice(1) : i.link}
+                                onClick={e => {
+                                  e.preventDefault();
+                                  Browser.open({ url: e.currentTarget.href ?? "" });
+                                }}>
+                                {i.label}
+                              </IonButton>
+                            ))}
+                        </IonCardContent>
+                      )}
                       <IonCardContent className="inventory-row">
                         {g.types?.map(i => (
                           <InventoryImg key={i.icon ?? i.name ?? i.type?.name ?? ""} item={i} />

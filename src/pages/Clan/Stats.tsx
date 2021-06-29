@@ -49,7 +49,9 @@ const ClanStatsPage: React.FC<RouteChildrenProps<{ id: string; month?: string; y
                     handler: selected => {
                       const game_id: GameID = selected["Clan Battle"].value;
                       history.push(
-                        `/clan/${params?.id}/${game_id.month + 1}/${game_id.year}`,
+                        game_id.game_id === new GameID().game_id
+                          ? `/clan/${params?.id}`
+                          : `/clan/${params?.id}/${game_id.month + 1}/${game_id.year}`,
                         undefined,
                         "replace",
                         undefined,

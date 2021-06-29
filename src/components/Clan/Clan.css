@@ -29,7 +29,7 @@
   border-top: 2px solid #fff8;
 }
 
-.clan-table-requirements .clan-table-column .clan-table-cell:nth-last-child(5) {
+.clan-table-requirements .clan-table-column .clan-table-cell[data-section="group"] {
   border-top: 2px solid #fff8;
 }
 
@@ -100,39 +100,50 @@
   width: 24px;
 }
 
+.clan-level-6 {
+  background-color: var(--clan-level-6);
+  color: var(--clan-level-6-fg);
+}
+
 .clan-level-5 {
-  background-color: #55f40b;
-  color: black;
+  background-color: var(--clan-level-5);
+  color: var(--clan-level-5-fg);
 }
 
 .clan-level-4 {
-  background-color: #bfe913;
-  color: black;
+  background-color: var(--clan-level-4);
+  color: var(--clan-level-4-fg);
 }
 
 .clan-level-3 {
-  background-color: #fcd302;
-  color: black;
+  background-color: var(--clan-level-3);
+  color: var(--clan-level-3-fg);
 }
 
 .clan-level-2 {
-  background-color: #fa9102;
-  color: black;
+  background-color: var(--clan-level-2);
+  color: var(--clan-level-2-fg);
 }
 
 .clan-level-1 {
-  background-color: #ef6500;
-  color: black;
+  background-color: var(--clan-level-1);
+  color: var(--clan-level-1-fg);
 }
 
 .clan-level-0 {
-  background-color: #eb0000;
-  color: white;
+  background-color: var(--clan-level-0);
+  color: var(--clan-level-0-fg);
 }
 
 
 .clan-table-edge .clan-table-cell {
   border-left: 2px solid #333;
+}
+
+.clan-table-edge .clan-level-6 {
+  border-left: 2px solid var(--clan-level-6);
+  background-color: #55f40b22;
+  color: inherit;
 }
 
 .clan-table-edge .clan-level-5 {

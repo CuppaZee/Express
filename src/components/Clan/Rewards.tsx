@@ -47,6 +47,9 @@ const ClanRewardsCard: React.FC<ClanRewardsProps> = ({ game_id, queriesRef, hasL
 
   const rew = rewards.data?.data;
 
+  const levelCount = rew?.levels.length ?? 0;
+  const levels = new Array(levelCount).fill(0).map((_, n) => n + 1);
+
   useEffect(() => {
     queriesRef?.current.add(rewards);
     return () => {
@@ -75,7 +78,7 @@ const ClanRewardsCard: React.FC<ClanRewardsProps> = ({ game_id, queriesRef, hasL
             <div role="cell" className="clan-table-cell clan-table-cell-header">
               <div>Levels</div>
             </div>
-            {[1, 2, 3, 4, 5].map(level => (
+            {levels.map(level => (
               <div role="cell" className={`clan-table-cell clan-level-${level}`} key={level}>
                 <div>{t("clan:level", { level })}</div>
               </div>

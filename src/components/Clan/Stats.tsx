@@ -82,6 +82,9 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
     [requirements.dataUpdatedAt, db]
   );
 
+  const levelCount = Object.keys(requirements.data?.data?.data.levels ?? {}).length;
+  const levels = new Array(levelCount).fill(0).map((_, n) => n + 1);
+
   const stats = useMemo(
     () =>
       clan.data && reqs
@@ -112,6 +115,8 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
 
   const [ref, onScroll] = useScrollSync<HTMLTableElement>(scrollSyncController);
 
+  const goal = Math.max(0, Math.min(clanSettings.goal, levelCount));
+
   useEffect(() => {
     queriesRef?.current.add(clan);
     queriesRef?.current.add(requirements);
@@ -131,8 +136,8 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
     if (clanSettings.subtract) {
       return `clan-level-${
         typeof level === "number" && level > -1 && !Number.isNaN(level)
-          ? (level ?? 0) >= clanSettings.goal
-            ? clanSettings.goal
+          ? (level ?? 0) >= goal
+            ? goal
             : 0
           : "n"
       }`;
@@ -145,7 +150,7 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
   function formatReqValue(u: ClanStatsUser | ClanStatsData, r: number) {
     const v = u.requirements[r]?.value;
     if (clanSettings.subtract) {
-      const req = reqs?.tasks["user_id" in u ? "individual" : "group"][r]?.[clanSettings.goal];
+      const req = reqs?.tasks["user_id" in u ? "individual" : "group"][r]?.[goal];
       if (!req) {
         return "-";
       }
@@ -194,7 +199,7 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
               </div>
               <div>
                 <IonPopover {...popoverState}>
-                  {[1, 2, 3, 4, 5].map(i => (
+                  {levels.map(i => (
                     <IonItem
                       style={{
                         borderLeft: `4px solid var(--clan-level-${i})`,
@@ -205,7 +210,7 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
                           ...clansSettings,
                           [clan_id ?? "0"]: {
                             ...clanSettings,
-                            goal: Math.min(5, Math.max(0, i)),
+                            goal: i,
                           },
                         });
                         popoverState.onDidDismiss();
@@ -215,7 +220,7 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
                   ))}
                 </IonPopover>
                 <IonButton onClick={show}>
-                  {t("clan:level", { level: clanSettings.goal })}{" "}
+                  {t("clan:level", { level: goal })}{" "}
                   <IonIcon style={{ fontSize: "1em" }} icon={chevronDown} />
                 </IonButton>
               </div>
@@ -254,7 +259,7 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
           </div>
           <div>
             <IonPopover {...popoverState}>
-              {[1, 2, 3, 4, 5].map(i => (
+              {levels.map(i => (
                 <IonItem
                   style={{
                     borderLeft: `4px solid var(--clan-level-${i})`,
@@ -265,7 +270,7 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
                       ...clansSettings,
                       [clan_id ?? "0"]: {
                         ...clanSettings,
-                        goal: Math.min(5, Math.max(0, i)),
+                        goal: i,
                       },
                     });
                     popoverState.onDidDismiss();
@@ -275,7 +280,7 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
               ))}
             </IonPopover>
             <IonButton size="small" onClick={show}>
-              {t("clan:level", { level: clanSettings.goal })}{" "}
+              {t("clan:level", { level: goal })}{" "}
               <IonIcon style={{ fontSize: "1em" }} icon={chevronDown} />
             </IonButton>
           </div>
@@ -294,23 +299,21 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
               </div>
               <div>{t("clan:rank", { rank: clan.data?.data?.result?.rank })}</div>
             </div>
-            <div role="cell" className={`clan-table-cell clan-level-${clanSettings.goal}`}>
+            <div role="cell" className={`clan-table-cell clan-level-${goal}`}>
               <IonSelect
                 onIonChange={ev => {
                   setClansSettings({
                     ...clansSettings,
                     [clan_id ?? "0"]: {
                       ...clanSettings,
-                      goal: Math.min(5, Math.max(0, Number(ev.detail.value))),
+                      goal: Number(ev.detail.value),
                     },
                   });
                 }}
-                value={clanSettings.goal}>
-                <IonSelectOption value={1}>{t("clan:indiv_level", { level: 1 })}</IonSelectOption>
-                <IonSelectOption value={2}>{t("clan:indiv_level", { level: 2 })}</IonSelectOption>
-                <IonSelectOption value={3}>{t("clan:indiv_level", { level: 3 })}</IonSelectOption>
-                <IonSelectOption value={4}>{t("clan:indiv_level", { level: 4 })}</IonSelectOption>
-                <IonSelectOption value={5}>{t("clan:indiv_level", { level: 5 })}</IonSelectOption>
+                value={goal}>
+                {levels.map(i => (
+                  <IonSelectOption value={i}>{t("clan:indiv_level", { level: i })}</IonSelectOption>
+                ))}
               </IonSelect>
             </div>
             {users.map(user => (
@@ -336,23 +339,21 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
             <div className={`clan-table-cell clan-level-${stats.level}`}>
               <div>{t("clan:group_total")}</div>
             </div>
-            <div className={`clan-table-cell clan-level-${clanSettings.goal}`}>
+            <div className={`clan-table-cell clan-level-${goal}`}>
               <IonSelect
                 onIonChange={ev => {
                   setClansSettings({
                     ...clansSettings,
                     [clan_id ?? "0"]: {
                       ...clanSettings,
-                      goal: Math.min(5, Math.max(0, Number(ev.detail.value))),
+                      goal: Number(ev.detail.value),
                     },
                   });
                 }}
-                value={clanSettings.goal}>
-                <IonSelectOption value={1}>{t("clan:group_level", { level: 1 })}</IonSelectOption>
-                <IonSelectOption value={2}>{t("clan:group_level", { level: 2 })}</IonSelectOption>
-                <IonSelectOption value={3}>{t("clan:group_level", { level: 3 })}</IonSelectOption>
-                <IonSelectOption value={4}>{t("clan:group_level", { level: 4 })}</IonSelectOption>
-                <IonSelectOption value={5}>{t("clan:group_level", { level: 5 })}</IonSelectOption>
+                value={goal}>
+                {levels.map(i => (
+                  <IonSelectOption value={i}>{t("clan:indiv_level", { level: i })}</IonSelectOption>
+                ))}
               </IonSelect>
             </div>
           </div>
@@ -377,10 +378,10 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
               </div>
               <div
                 className={`clan-table-cell clan-table-cell-data clan-level-${
-                  reqs.tasks.individual[req]?.[clanSettings.goal] ? clanSettings.goal : "null"
+                  reqs.tasks.individual[req]?.[goal] ? goal : "null"
                 }`}
                 key="indiv">
-                {reqs.tasks.individual[req]?.[clanSettings.goal]?.toLocaleString() ?? "-"}
+                {reqs.tasks.individual[req]?.[goal]?.toLocaleString() ?? "-"}
               </div>
               {users.map(user => (
                 <div
@@ -394,10 +395,10 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
               </div>
               <div
                 className={`clan-table-cell clan-table-cell-data clan-level-${
-                  reqs.tasks.group[req]?.[clanSettings.goal] ? clanSettings.goal : "null"
+                  reqs.tasks.group[req]?.[goal] ? goal : "null"
                 }`}
                 key="group">
-                {reqs.tasks.group[req]?.[clanSettings.goal]?.toLocaleString() ?? "-"}
+                {reqs.tasks.group[req]?.[goal]?.toLocaleString() ?? "-"}
               </div>
             </div>
           ))}

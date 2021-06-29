@@ -43,7 +43,7 @@ function More() {
           </IonItem>
         </IonCard>
         <IonCard>
-          <IonItem detail={false} routerLink="/more/credits">
+          <IonItem detail routerLink="/more/credits">
             <IonIcon slot="start" icon={peopleCircleOutline} />
             <IonLabel>Contributors</IonLabel>
           </IonItem>

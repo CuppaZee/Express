@@ -51,7 +51,7 @@ const ClanRequirementsPage: React.FC<
                   handler: selected => {
                     const game_id: GameID = selected["Clan Battle"].value;
                     history.push(
-                      `/clans/requirements/${game_id.month + 1}/${game_id.year}`,
+                      game_id.game_id === new GameID().game_id ? "/clans/requirements" : `/clans/requirements/${game_id.month + 1}/${game_id.year}`,
                       undefined,
                       "replace",
                       undefined,

@@ -66,6 +66,7 @@ import ClanRequirementsPage from "./pages/Clan/Requirements";
 import { SiriShortcuts } from "capacitor-plugin-siri-shorts";
 import blankAnimation from "./utils/blankAnimation";
 import More from "./pages/More/More";
+import useUserSettings from "./utils/useUserSettings";
 
 if (!Capacitor.isNativePlatform()) {
   FirebaseAnalytics.initializeFirebase({
@@ -232,6 +233,41 @@ const ThemeHandler: React.FC = () => {
   return null;
 };
 
+
+export function pickTextColor(
+  bgColor: string,
+  lightColor: string = "#fff",
+  darkColor: string = "#000"
+) {
+  var color = bgColor.charAt(0) === "#" ? bgColor.substring(1, 7) : bgColor;
+  var r = parseInt(color.substring(0, 2), 16); // hexToR
+  var g = parseInt(color.substring(2, 4), 16); // hexToG
+  var b = parseInt(color.substring(4, 6), 16); // hexToB
+  var uicolors = [r / 255, g / 255, b / 255];
+  var c = uicolors.map(col => {
+    if (col <= 0.03928) {
+      return col / 12.92;
+    }
+    return Math.pow((col + 0.055) / 1.055, 2.4);
+  });
+  var L = 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+  return L > 0.179 ? darkColor : lightColor;
+}
+
+function ClanStyleHandler() {
+  const userSettings = useUserSettings();
+  return <style>
+    {`:root {${Object.entries(userSettings?.colours ?? {}).map(([key, value]) => {
+        try {
+          const contrasted = pickTextColor(value || "#ff5500")
+          return `--${key}: ${value};--${key}-fg: ${contrasted};`;
+        } catch (e) {
+          return `--${key}: ${value};--${key}-fg: #000000;`;
+        }
+      }).join("")}}`}
+  </style>
+}
+
 const App: React.FC = () => {
   const [ready, _1, readyLoaded] = useStorage(ReadyStorage);
   const [accounts, _2, accountsLoaded] = useStorage(AccountsStorage);
@@ -243,6 +279,7 @@ const App: React.FC = () => {
           <ThemeHandler />
           <BackHandler />
           <SiriHandler />
+          <ClanStyleHandler />
           {!readyLoaded || !accountsLoaded ? null : ready.date === "2021-06-18" &&
             Object.values(accounts).some(i => i.primary) ? (
             <IonSplitPane when={width > 900} contentId="ion-router-outlet">
