@@ -915,14 +915,6 @@
         "comment": ""
     },
     {
-        "term": "more_credits",
-        "definition": "Credits",
-        "context": "\"pages\"",
-        "term_plural": "",
-        "reference": "",
-        "comment": ""
-    },
-    {
         "term": "more_open_source",
         "definition": "Open Source",
         "context": "\"pages\"",
@@ -1262,6 +1254,94 @@
         "term": "sync_disable_title",
         "definition": "Disable Cloud Syncing for {section}?",
         "context": "\"settings\"",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "more_contributors",
+        "definition": "Contributors",
+        "context": "\"pages\"",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "more_github",
+        "definition": "GitHub",
+        "context": "\"pages\"",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "more_kofi",
+        "definition": "My Ko-fi",
+        "context": "\"pages\"",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "more_patreon",
+        "definition": "My Patreon",
+        "context": "\"pages\"",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "more_links",
+        "definition": "Useful Links",
+        "context": "\"pages\"",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "more_groups",
+        "definition": "Groups",
+        "context": "\"pages\"",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "back",
+        "definition": "Back",
+        "context": "\"pages\"",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "type_categories_title",
+        "definition": "Type Categories",
+        "context": "\"settings\"",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "battle_select_text",
+        "definition": "Battle {game_id} - {month}",
+        "context": "\"clan\"",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "battle_select_cancel",
+        "definition": "Cancel",
+        "context": "\"clan\"",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "battle_select_select",
+        "definition": "Select",
+        "context": "\"clan\"",
         "term_plural": "",
         "reference": "",
         "comment": ""

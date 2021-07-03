@@ -87,7 +87,7 @@ export default function CreditsScreen() {
   const { t } = useTranslation();
   return (
     <IonPage>
-      <Header title={t("pages:more_credits")} />
+      <Header title={t("pages:more_contributors")} />
       <IonContent scrollY={false} fullscreen>
         <div ref={ref} style={{ height: "100%", width: "100%", position: "relative" }}>
           {size && <CreditsCircles width={size.width} height={size.height} />}

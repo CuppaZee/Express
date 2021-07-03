@@ -2,6 +2,7 @@ import { IonBackButton, IonButtons, IonHeader, IonProgressBar, IonTitle, IonTool
 import React, { PropsWithChildren } from "react";
 import { useIsFetching } from "react-query";
 import { Helmet } from "react-helmet";
+import { useTranslation } from "react-i18next";
 
 export default function Header({
   title,
@@ -13,6 +14,7 @@ export default function Header({
   children?: PropsWithChildren<{}>["children"];
 }) {
   const isFetching = useIsFetching();
+  const { t } = useTranslation();
   return (
     <IonHeader>
       <Helmet>
@@ -23,7 +25,7 @@ export default function Header({
           <IonProgressBar type="indeterminate" />
         ) : null}
         <IonButtons slot="start">
-          <IonBackButton />
+          <IonBackButton text={t("pages:back")} />
         </IonButtons>
         <IonTitle>{title}</IonTitle>
       </IonToolbar>

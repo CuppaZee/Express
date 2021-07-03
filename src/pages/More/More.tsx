@@ -35,7 +35,7 @@ function More() {
         <IonCard>
           <IonItem detail={false}>
             <IonIcon slot="start" icon={gridOutline} />
-            <IonLabel>More</IonLabel>
+            <IonLabel>{t("pages:more")}</IonLabel>
           </IonItem>
           <IonItem detail lines="none" routerLink="/more/settings">
             <IonIcon slot="start" icon={settingsOutline} />
@@ -45,7 +45,7 @@ function More() {
         <IonCard>
           <IonItem detail routerLink="/more/credits">
             <IonIcon slot="start" icon={peopleCircleOutline} />
-            <IonLabel>Contributors</IonLabel>
+            <IonLabel>{t("pages:more_contributors")}</IonLabel>
           </IonItem>
           <IonItem
             detailIcon={openOutline}
@@ -56,7 +56,7 @@ function More() {
               Browser.open({ url: e.currentTarget.href ?? "" });
             }}>
             <IonIcon slot="start" icon={logoGithub} />
-            <IonLabel>GitHub</IonLabel>
+            <IonLabel>{t("pages:more_github")}</IonLabel>
           </IonItem>
           <IonItem
             detailIcon={openOutline}
@@ -67,7 +67,7 @@ function More() {
               Browser.open({ url: e.currentTarget.href ?? "" });
             }}>
             <IonIcon slot="start" icon={cafeOutline} />
-            <IonLabel>My KoFi</IonLabel>
+            <IonLabel>{t("pages:more_kofi")}</IonLabel>
           </IonItem>
           <IonItem
             detailIcon={openOutline}
@@ -78,13 +78,13 @@ function More() {
               Browser.open({ url: e.currentTarget.href ?? "" });
             }}>
             <IonIcon slot="start" icon={heartOutline} />
-            <IonLabel>My Patreon</IonLabel>
+            <IonLabel>{t("pages:more_patreon")}</IonLabel>
           </IonItem>
         </IonCard>
         <IonCard className="useful-links-card">
           <IonItem detail={false}>
             <IonIcon slot="start" icon={linkOutline} />
-            <IonLabel>Useful Links</IonLabel>
+            <IonLabel>{t("pages:more_links")}</IonLabel>
           </IonItem>
           {UsefulLinks.map(i => (
             <IonItem
@@ -106,7 +106,7 @@ function More() {
         <IonCard className="useful-links-card">
           <IonItem detail={false}>
             <IonIcon slot="start" icon={chatbubblesOutline} />
-            <IonLabel>Groups</IonLabel>
+            <IonLabel>{t("pages:more_groups")}</IonLabel>
           </IonItem>
           {Groups.map(i => (
             <IonItem

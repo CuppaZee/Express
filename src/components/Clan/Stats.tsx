@@ -60,6 +60,7 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
     goal: 5,
     hideShadow: false,
     subtract: false,
+    share: false,
     ...(clansSettings[clan_id] ?? {}),
   });
   const clan = useMunzeeData({
@@ -199,6 +200,17 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
               </div>
               <div>
                 <IonPopover {...popoverState}>
+                  <IonSegment
+                    value={clanSettings.share ? "1" : "0"}
+                    onIonChange={ev => {
+                      setClansSettings({
+                        ...clansSettings,
+                        [clan_id ?? "0"]: { ...clanSettings, share: ev.detail.value === "1" },
+                      });
+                    }}>
+                    <IonSegmentButton value="0">{t("clan:individual")}</IonSegmentButton>
+                    <IonSegmentButton value="1">Share</IonSegmentButton>
+                  </IonSegment>
                   {levels.map(i => (
                     <IonItem
                       style={{
@@ -259,6 +271,17 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
           </div>
           <div>
             <IonPopover {...popoverState}>
+              <IonSegment
+                value={clanSettings.share ? "1" : "0"}
+                onIonChange={ev => {
+                  setClansSettings({
+                    ...clansSettings,
+                    [clan_id ?? "0"]: { ...clanSettings, share: ev.detail.value === "1" },
+                  });
+                }}>
+                <IonSegmentButton value="0">{t("clan:individual")}</IonSegmentButton>
+                <IonSegmentButton value="1">Share</IonSegmentButton>
+              </IonSegment>
               {levels.map(i => (
                 <IonItem
                   style={{
@@ -312,7 +335,9 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
                 }}
                 value={goal}>
                 {levels.map(i => (
-                  <IonSelectOption value={i}>{t("clan:indiv_level", { level: i })}</IonSelectOption>
+                  <IonSelectOption value={i}>
+                    {t(clanSettings.share ? "clan:share_level" : "clan:indiv_level", { level: i })}
+                  </IonSelectOption>
                 ))}
               </IonSelect>
             </div>
@@ -352,7 +377,7 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
                 }}
                 value={goal}>
                 {levels.map(i => (
-                  <IonSelectOption value={i}>{t("clan:indiv_level", { level: i })}</IonSelectOption>
+                  <IonSelectOption value={i}>{t("clan:group_level", { level: i })}</IonSelectOption>
                 ))}
               </IonSelect>
             </div>
@@ -378,10 +403,20 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
               </div>
               <div
                 className={`clan-table-cell clan-table-cell-data clan-level-${
-                  reqs.tasks.individual[req]?.[goal] ? goal : "null"
+                  reqs.tasks.individual[req]?.[goal] ||
+                  (clanSettings.share &&
+                    reqs.tasks.group[req]?.[goal])
+                    ? goal
+                    : "null"
                 }`}
                 key="indiv">
-                {reqs.tasks.individual[req]?.[goal]?.toLocaleString() ?? "-"}
+                {(clanSettings.share
+                  ?
+                    (Math.max(
+                      reqs.tasks.individual[req]?.[goal] ?? 0,
+                      Math.ceil((reqs.tasks.group[req]?.[goal] ?? 0) / users.length) ?? 0
+                    ) || "-").toLocaleString()
+                  : reqs.tasks.individual[req]?.[goal]?.toLocaleString()) || "-"}
               </div>
               {users.map(user => (
                 <div

@@ -42,7 +42,7 @@ for (let lang in langs) {
         );
       }
     }
-    for (let param of expectedItemParams) {
+    for (let param of expectedItemParams ?? []) {
       if (!itemParams.includes(param)) {
         console.error(
           `\x1b[91mMissing parameter ${param} in ${lang}:${item.context.replace(/"/g, "")}:${item.term}\x1b[39m`

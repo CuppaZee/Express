@@ -473,13 +473,18 @@ function Settings() {
             </IonCard>
             <IonCard data-section="typecategories">
               <IonItem lines="none" className="item-card-header">
-                <IonCardTitle>Type Categories</IonCardTitle>
+                <IonCardTitle>{t("settings:type_categories_title")}</IonCardTitle>
                 {localSettings.rootCategories ? (
                   <IonButton
                     onClick={() => {
-                      confirmSyncEnable(t, presentAlert, "Type Categories", () => {
-                        setLocalSettings(omit(localSettings, "rootCategories"));
-                      });
+                      confirmSyncEnable(
+                        t,
+                        presentAlert,
+                        t("settings:type_categories_title"),
+                        () => {
+                          setLocalSettings(omit(localSettings, "rootCategories"));
+                        }
+                      );
                     }}
                     color="success"
                     slot="end">
@@ -489,12 +494,17 @@ function Settings() {
                 ) : (
                   <IonButton
                     onClick={() => {
-                      confirmSyncDisable(t, presentAlert, "Type Categories", () => {
-                        setLocalSettings({
-                          ...localSettings,
-                          rootCategories: userSettings?.rootCategories,
-                        });
-                      });
+                      confirmSyncDisable(
+                        t,
+                        presentAlert,
+                        t("settings:type_categories_title"),
+                        () => {
+                          setLocalSettings({
+                            ...localSettings,
+                            rootCategories: userSettings?.rootCategories,
+                          });
+                        }
+                      );
                     }}
                     color="danger"
                     slot="end">
