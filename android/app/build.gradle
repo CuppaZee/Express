@@ -6,6 +6,10 @@ apply plugin: 'com.google.gms.google-services' // Google Services Gradle plugin
 apply plugin: 'com.google.firebase.crashlytics'
 
 android {
+
+    buildFeatures {
+        viewBinding true
+    }
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "app.cuppazee.express"
@@ -45,13 +49,27 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
     implementation project(':capacitor-android')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation project(':capacitor-cordova-android-plugins')
+
+
+    def work_version = "2.5.0"
+
+    // Kotlin + coroutines
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+    implementation 'com.android.volley:volley:1.2.0'
+
+    implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
+    implementation "androidx.concurrent:concurrent-futures:1.1.0"
+    implementation 'com.squareup.picasso:picasso:2.8'
 }
 
 apply from: 'capacitor.build.gradle'
+apply plugin: 'kotlin-android'
 
 try {
     def servicesJSON = file('google-services.json')
