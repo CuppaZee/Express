@@ -28,19 +28,16 @@ class NewsWidget : AppWidgetProvider() {
                 val thisAppWidgetComponentName = ComponentName(context!!.packageName, javaClass.name)
                 val appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidgetComponentName)
 
-
-                for (appWidgetId in appWidgetIds) {
-                    val uploadWorkRequest: WorkRequest =
-                            OneTimeWorkRequestBuilder<NewsWidgetWorker>()
-                                    .setInputData(workDataOf(
-                                            "APP_WIDGET_ID" to appWidgetId
-                                    ))
-                                    .build()
-                    WorkManager
-                            .getInstance(context)
-                            .enqueue(uploadWorkRequest)
-                    Log.i("CZNewsWidget", "Queueing Update for ID: $appWidgetId")
-                }
+                val uploadWorkRequest: WorkRequest =
+                        OneTimeWorkRequestBuilder<NewsWidgetWorker>()
+                                .setInputData(workDataOf(
+                                        "APP_WIDGET_IDS" to appWidgetIds
+                                ))
+                                .build()
+                WorkManager
+                        .getInstance(context)
+                        .enqueue(uploadWorkRequest)
+                Log.i("CZNewsWidget", "Queueing Update")
             }
         }
     }
