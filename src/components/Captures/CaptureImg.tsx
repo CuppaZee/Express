@@ -24,7 +24,7 @@ export default function CaptureImg({ type, count }: CaptureImgProps) {
         className={`capture-img-wrapper ${count ? "" : "capture-img-wrapper-none"}`}>
         <CZTypeImg className="capture-img" img={type.icon} />
         <div>{type.name}</div>
-        <div>{count}</div>
+        <div>{count || (["munzee"].includes(type.id) ? "?" : "-")}</div>
       </div>
     </>
   );

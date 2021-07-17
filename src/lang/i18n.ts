@@ -62,7 +62,6 @@ i18n
   });
 
 i18n.on("languageChanged", (lang) => {
-  console.log(lang);
   store.then(s => s.set("LANG", lang));
   dayjs.locale(lang === "test" ? "x-pseudo" : lang.toLowerCase());
 })

@@ -67,6 +67,7 @@ import { SiriShortcuts } from "capacitor-plugin-siri-shorts";
 import blankAnimation from "./utils/blankAnimation";
 import More from "./pages/More/More";
 import useUserSettings from "./utils/useUserSettings";
+import AndroidWidgetConfigurePage from "./pages/More/AndroidWidgetConfigure";
 
 if (!Capacitor.isNativePlatform()) {
   FirebaseAnalytics.initializeFirebase({
@@ -233,6 +234,22 @@ const ThemeHandler: React.FC = () => {
   return null;
 };
 
+export function URLHandler() {
+  const router = useIonRouter();
+  useEffect(() => {
+    const r = CapApp.addListener("appUrlOpen", async o => {
+      console.log('CZ', o.url);
+      if (!o.url.includes("access_token")) {
+        router.push("/" + o.url.split("://").slice(1).join("://"));
+      }
+    });
+    return () => {
+      r.then(i => i.remove());
+    };
+  }, []);
+  return null;
+}
+
 
 export function pickTextColor(
   bgColor: string,
@@ -279,6 +296,7 @@ const App: React.FC = () => {
           <ThemeHandler />
           <BackHandler />
           <SiriHandler />
+          <URLHandler />
           <ClanStyleHandler />
           {!readyLoaded || !accountsLoaded ? null : ready.date === "2021-06-18" &&
             Object.values(accounts).some(i => i.primary) ? (
@@ -286,6 +304,11 @@ const App: React.FC = () => {
               <Sidebar />
               <div id="ion-router-outlet">
                 <IonRouterOutlet>
+                  <Route
+                    exact
+                    path="/widget_configure_activity_widget/:id"
+                    component={AndroidWidgetConfigurePage}
+                  />
                   <Route exact path="/search" component={Search} />
                   <Route exact path="/more/credits" component={Credits} />
                   <Route exact path="/more/settings" component={Settings} />

@@ -18,7 +18,7 @@ import CZRefresher from "../../components/CZRefresher";
 import Tabs from "../../components/Tabs";
 import useDB from "../../utils/useDB";
 import useMunzeeData from "../../utils/useMunzeeData";
-import { Type } from "@cuppazee/db/lib";
+import { Type, TypeHidden } from "@cuppazee/db/lib";
 import CaptureImg from "../../components/Captures/CaptureImg";
 import dayjs from "dayjs";
 import { CZTypeImg } from "../../components/CZImg";
@@ -71,7 +71,7 @@ const UserCapturesPage: React.FC<RouteChildrenProps<{ username: string; type: st
         )}
         <FancyGrid width={400}>
           {category.children
-            .filter(i => i.types.length > 0)
+            .filter(i => i.types?.filter(i => !i.hidden(TypeHidden.Capture)).length > 0)
             .map((c, n) => (
               <IonCard key={`card_${c.id}`} className="capture-overview-card">
                 <IonCardHeader>
@@ -85,9 +85,11 @@ const UserCapturesPage: React.FC<RouteChildrenProps<{ username: string; type: st
                 </IonCardHeader>
                 <IonCardContent className="capture-row">
                   <FancyGrid width={80}>
-                    {c.types?.map(i => (
-                      <CaptureImg key={i.icon} type={i} count={d.get(i) ?? 0} />
-                    ))}
+                    {c.types
+                      ?.filter(i => !i.hidden(TypeHidden.Capture))
+                      .map(i => (
+                        <CaptureImg key={i.icon} type={i} count={d.get(i) ?? 0} />
+                      ))}
                   </FancyGrid>
                 </IonCardContent>
               </IonCard>

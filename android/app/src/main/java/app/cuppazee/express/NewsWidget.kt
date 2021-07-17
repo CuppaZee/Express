@@ -28,15 +28,33 @@ class NewsWidget : AppWidgetProvider() {
                 val thisAppWidgetComponentName = ComponentName(context!!.packageName, javaClass.name)
                 val appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidgetComponentName)
 
-                val uploadWorkRequest: WorkRequest =
-                        OneTimeWorkRequestBuilder<NewsWidgetWorker>()
-                                .setInputData(workDataOf(
-                                        "APP_WIDGET_IDS" to appWidgetIds
-                                ))
-                                .build()
+
+                val constraints = Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build()
+                val uploadWorkRequest: OneTimeWorkRequest =
+                    OneTimeWorkRequestBuilder<NewsWidgetWorker>()
+                        .setConstraints(constraints)
+                        .setBackoffCriteria(
+                            BackoffPolicy.LINEAR,
+                            30,
+                            TimeUnit.SECONDS)
+                        .setInputData(workDataOf(
+                            "APP_WIDGET_IDS" to appWidgetIds
+                        ))
+                        .build()
                 WorkManager
-                        .getInstance(context)
-                        .enqueue(uploadWorkRequest)
+                    .getInstance(context)
+                    .enqueueUniqueWork("NewsWidget", ExistingWorkPolicy.REPLACE, uploadWorkRequest)
+//                val uploadWorkRequest: WorkRequest =
+//                        OneTimeWorkRequestBuilder<NewsWidgetWorker>()
+//                                .setInputData(workDataOf(
+//                                        "APP_WIDGET_IDS" to appWidgetIds
+//                                ))
+//                                .build()
+//                WorkManager
+//                        .getInstance(context)
+//                        .enqueue(uploadWorkRequest)
                 Log.i("CZNewsWidget", "Queueing Update")
             }
         }

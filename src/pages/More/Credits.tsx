@@ -6,6 +6,7 @@ import Header from "../../components/Header";
 import credits from "./credits.json";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import "./Credits.css"
 
 export type Datum = {
   username: string;
@@ -53,6 +54,7 @@ function CreditsCircles({ width, height }: PackProps) {
         return circles.map((circle, i) => (
           <Link
             to={`/player/${circle.data.username}`}
+            className="contributor-circle"
             style={{
               height: circle.r * 1.8,
               width: circle.r * 1.8,

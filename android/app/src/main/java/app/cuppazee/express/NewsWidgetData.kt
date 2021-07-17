@@ -20,7 +20,6 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
-
 class NewsWidgetWorker(appContext: Context, workerParams: WorkerParameters):
         ListenableWorker(appContext, workerParams) {
 
@@ -73,14 +72,8 @@ class NewsWidgetWorker(appContext: Context, workerParams: WorkerParameters):
                             it.set(Result.failure())
                         }
                     },
-                    { error ->
-                        val views = RemoteViews(applicationContext.packageName, R.layout.news_widget)
-                        views.setViewVisibility(R.id.news_widget_image_a, View.INVISIBLE)
-                        views.setViewVisibility(R.id.news_widget_image_b, View.INVISIBLE)
-                        views.setTextViewText(R.id.news_widget_text_a, "JSON Error")
-                        views.setTextViewText(R.id.news_widget_text_b, "Please report this to CuppaZee: $error")
-                        appWidgetManager.updateAppWidget(appWidgetIds, views)
-                        it.set(Result.failure())
+                    { _ ->
+                        it.set(Result.retry())
                     }
                 )
 

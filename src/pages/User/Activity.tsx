@@ -305,7 +305,7 @@ const UserActivityPage: React.FC<RouteChildrenProps<{ username: string; date: st
                 {({ height, width }) => (
                   <List
                     outerElementType={ListWrapper}
-                    key={`list_${overviewSize}`}
+                    key={`list_${overviewSize}_${d?.list.map(i=>i.key).join('_')}`}
                     height={height}
                     itemCount={(d?.list.length ?? 0) + 1}
                     itemData={[overviewSize]}
