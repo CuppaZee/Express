@@ -11,6 +11,7 @@ import { UseQueryResult } from "react-query";
 import useCuppaZeeData from "../../utils/useCuppaZeeData";
 import { CZTypeImg } from "../CZImg";
 import { useTranslation } from "react-i18next";
+import useError, { CZError } from "../CZError";
 
 export interface ClanRewardsProps {
   clan_id?: number;
@@ -57,6 +58,8 @@ const ClanRewardsCard: React.FC<ClanRewardsProps> = ({ game_id, queriesRef, hasL
     };
   }, [rewards]);
 
+  const error = useError([rewards]);
+
   return (
     <IonCard>
       <IonItem
@@ -72,41 +75,42 @@ const ClanRewardsCard: React.FC<ClanRewardsProps> = ({ game_id, queriesRef, hasL
           <IonNote>{dayjs(game_id.date).format("MMM YYYY")}</IonNote>
         </div>
       </IonItem>
-      {rew && (
-        <div role="table" className="clan-table clan-table-rewards clan-table-edg">
-          <div role="row" className="clan-table-column">
-            <div role="cell" className="clan-table-cell clan-table-cell-header">
-              <div>Levels</div>
-            </div>
-            {levels.map(level => (
-              <div role="cell" className={`clan-table-cell clan-level-${level}`} key={level}>
-                <div>{t("clan:level", { level })}</div>
+      {error ? <CZError {...error} /> : <>
+        {rew && (
+          <div role="table" className="clan-table clan-table-rewards clan-table-edg">
+            <div role="row" className="clan-table-column">
+              <div role="cell" className="clan-table-cell clan-table-cell-header">
+                <div>Levels</div>
               </div>
-            ))}
-          </div>
-          {rew.order.map(r => {
-            const title = getTitle(rew.rewards[r]?.name ?? "");
-            return (
-              <div className="clan-table-column">
-                <div className="clan-table-cell clan-table-cell-header">
-                  <CZTypeImg className="clan-table-req-img" img={rew.rewards[r]?.logo} />
-                  <div>{title[0]}</div>
-                  <div>{title[1] || <>&nbsp;</>}</div>
+              {levels.map(level => (
+                <div role="cell" className={`clan-table-cell clan-level-${level}`} key={level}>
+                  <div>{t("clan:level", { level })}</div>
                 </div>
-                {rew.levels.map((level, levelIndex) => (
-                  <div
-                    className={`clan-table-cell clan-table-cell-data clan-level-${
-                      level[r] ? levelIndex + 1 : "null"
-                    }`}
-                    key={levelIndex}>
-                    {level[r]?.toLocaleString() ?? "-"}
+              ))}
+            </div>
+            {rew.order.map(r => {
+              const title = getTitle(rew.rewards[r]?.name ?? "");
+              return (
+                <div className="clan-table-column">
+                  <div className="clan-table-cell clan-table-cell-header">
+                    <CZTypeImg className="clan-table-req-img" img={rew.rewards[r]?.logo} />
+                    <div>{title[0]}</div>
+                    <div>{title[1] || <>&nbsp;</>}</div>
                   </div>
-                ))}
-              </div>
-            );
-          })}
-        </div>
-      )}
+                  {rew.levels.map((level, levelIndex) => (
+                    <div
+                      className={`clan-table-cell clan-table-cell-data clan-level-${level[r] ? levelIndex + 1 : "null"
+                        }`}
+                      key={levelIndex}>
+                      {level[r]?.toLocaleString() ?? "-"}
+                    </div>
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </>}
     </IonCard>
   );
 };

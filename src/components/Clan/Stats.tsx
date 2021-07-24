@@ -36,6 +36,7 @@ import usePopover from "../../utils/usePopover";
 import { useTranslation } from "react-i18next";
 import { ScrollSyncController, useScrollSync } from "../../utils/useScrollSync";
 import useDB from "../../utils/useDB";
+import useError, { CZError } from "../CZError";
 
 export interface ClanStatsProps {
   scrollSyncController?: MutableRefObject<ScrollSyncController>;
@@ -167,6 +168,8 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
         ((sort > 0 ? a : b)[1].requirements[Math.abs(sort)]?.value ?? 0)
     )
     .map(i => i[1]);
+
+  const error = useError([clan, requirements]);
 
   return (
     <IonCard>
@@ -309,136 +312,136 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
           </div>
         </div>
       )}
-      {stats && reqs && (
-        <div
-          ref={ref}
-          onScroll={onScroll}
-          role="table"
-          className="clan-table clan-table-stats clan-table-edg">
-          <div role="row" className="clan-table-column">
-            <div role="cell" className="clan-table-cell clan-table-cell-header">
-              <div>
-                {Object.values(stats.users).length} {t("pages:players")}
+      {error ? <CZError {...error} /> : <>
+        {stats && reqs && (
+          <div
+            ref={ref}
+            onScroll={onScroll}
+            role="table"
+            className="clan-table clan-table-stats clan-table-edg">
+            <div role="row" className="clan-table-column">
+              <div role="cell" className="clan-table-cell clan-table-cell-header">
+                <div>
+                  {Object.values(stats.users).length} {t("pages:players")}
+                </div>
+                <div>{t("clan:rank", { rank: clan.data?.data?.result?.rank })}</div>
               </div>
-              <div>{t("clan:rank", { rank: clan.data?.data?.result?.rank })}</div>
+              <div role="cell" className={`clan-table-cell clan-level-${goal}`}>
+                <IonSelect
+                  onIonChange={ev => {
+                    setClansSettings({
+                      ...clansSettings,
+                      [clan_id ?? "0"]: {
+                        ...clanSettings,
+                        goal: Number(ev.detail.value),
+                      },
+                    });
+                  }}
+                  value={goal}>
+                  {levels.map(i => (
+                    <IonSelectOption value={i}>
+                      {t(clanSettings.share ? "clan:share_level" : "clan:indiv_level", { level: i })}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
+              </div>
+              {users.map(user => (
+                <Link
+                  to={`/player/${user.username}`}
+                  role="cell"
+                  className={`clan-table-cell clan-level-${user.level}`}
+                  key={user.user_id}>
+                  <IonAvatar>
+                    <IonImg
+                      src={`https://munzee.global.ssl.fastly.net/images/avatars/ua${Number(
+                        user.user_id
+                      ).toString(36)}.png`}
+                    />
+                  </IonAvatar>
+                  <div>
+                    {user.admin && <IonIcon icon={hammer} />}
+                    {user.shadow && <IonIcon icon={cafe} />}
+                    {user.username}
+                  </div>
+                </Link>
+              ))}
+              <div className={`clan-table-cell clan-level-${stats.level}`}>
+                <div>{t("clan:group_total")}</div>
+              </div>
+              <div className={`clan-table-cell clan-level-${goal}`}>
+                <IonSelect
+                  onIonChange={ev => {
+                    setClansSettings({
+                      ...clansSettings,
+                      [clan_id ?? "0"]: {
+                        ...clanSettings,
+                        goal: Number(ev.detail.value),
+                      },
+                    });
+                  }}
+                  value={goal}>
+                  {levels.map(i => (
+                    <IonSelectOption value={i}>{t("clan:group_level", { level: i })}</IonSelectOption>
+                  ))}
+                </IonSelect>
+              </div>
             </div>
-            <div role="cell" className={`clan-table-cell clan-level-${goal}`}>
-              <IonSelect
-                onIonChange={ev => {
-                  setClansSettings({
-                    ...clansSettings,
-                    [clan_id ?? "0"]: {
-                      ...clanSettings,
-                      goal: Number(ev.detail.value),
-                    },
-                  });
-                }}
-                value={goal}>
-                {levels.map(i => (
-                  <IonSelectOption value={i}>
-                    {t(clanSettings.share ? "clan:share_level" : "clan:indiv_level", { level: i })}
-                  </IonSelectOption>
-                ))}
-              </IonSelect>
-            </div>
-            {users.map(user => (
-              <Link
-                to={`/player/${user.username}`}
-                role="cell"
-                className={`clan-table-cell clan-level-${user.level}`}
-                key={user.user_id}>
-                <IonAvatar>
+            {reqs.all.map(req => (
+              <div className="clan-table-column">
+                <div
+                  onClick={() => {
+                    setSort(Math.abs(sort) === req ? -sort : req);
+                  }}
+                  className="clan-table-cell clan-table-cell-header">
                   <IonImg
-                    src={`https://munzee.global.ssl.fastly.net/images/avatars/ua${Number(
-                      user.user_id
-                    ).toString(36)}.png`}
+                    className="clan-table-req-img"
+                    src={`https://server.cuppazee.app/requirements/${req}.png`}
                   />
-                </IonAvatar>
-                <div>
-                  {user.admin && <IonIcon icon={hammer} />}
-                  {user.shadow && <IonIcon icon={cafe} />}
-                  {user.username}
+                  <div>
+                    {db.getClanRequirement(req).top}
+                    {Math.abs(sort) === req && (
+                      <IonIcon icon={sort === req ? chevronDown : chevronUp} />
+                    )}
+                  </div>
+                  <div>{db.getClanRequirement(req).bottom}</div>
                 </div>
-              </Link>
-            ))}
-            <div className={`clan-table-cell clan-level-${stats.level}`}>
-              <div>{t("clan:group_total")}</div>
-            </div>
-            <div className={`clan-table-cell clan-level-${goal}`}>
-              <IonSelect
-                onIonChange={ev => {
-                  setClansSettings({
-                    ...clansSettings,
-                    [clan_id ?? "0"]: {
-                      ...clanSettings,
-                      goal: Number(ev.detail.value),
-                    },
-                  });
-                }}
-                value={goal}>
-                {levels.map(i => (
-                  <IonSelectOption value={i}>{t("clan:group_level", { level: i })}</IonSelectOption>
-                ))}
-              </IonSelect>
-            </div>
-          </div>
-          {reqs.all.map(req => (
-            <div className="clan-table-column">
-              <div
-                onClick={() => {
-                  setSort(Math.abs(sort) === req ? -sort : req);
-                }}
-                className="clan-table-cell clan-table-cell-header">
-                <IonImg
-                  className="clan-table-req-img"
-                  src={`https://server.cuppazee.app/requirements/${req}.png`}
-                />
-                <div>
-                  {db.getClanRequirement(req).top}
-                  {Math.abs(sort) === req && (
-                    <IonIcon icon={sort === req ? chevronDown : chevronUp} />
-                  )}
-                </div>
-                <div>{db.getClanRequirement(req).bottom}</div>
-              </div>
-              <div
-                className={`clan-table-cell clan-table-cell-data clan-level-${
-                  reqs.tasks.individual[req]?.[goal] ||
-                  (clanSettings.share &&
-                    reqs.tasks.group[req]?.[goal])
-                    ? goal
-                    : "null"
-                }`}
-                key="indiv">
-                {(clanSettings.share
-                  ?
+                <div
+                  className={`clan-table-cell clan-table-cell-data clan-level-${reqs.tasks.individual[req]?.[goal] ||
+                      (clanSettings.share &&
+                        reqs.tasks.group[req]?.[goal])
+                      ? goal
+                      : "null"
+                    }`}
+                  key="indiv">
+                  {(clanSettings.share
+                    ?
                     (Math.max(
                       reqs.tasks.individual[req]?.[goal] ?? 0,
                       Math.ceil((reqs.tasks.group[req]?.[goal] ?? 0) / users.length) ?? 0
                     ) || "-").toLocaleString()
-                  : reqs.tasks.individual[req]?.[goal]?.toLocaleString()) || "-"}
-              </div>
-              {users.map(user => (
-                <div
-                  className={`clan-table-cell clan-table-cell-data ${levelClass(user, req)}`}
-                  key={user.user_id}>
-                  {formatReqValue(user, req)}
+                    : reqs.tasks.individual[req]?.[goal]?.toLocaleString()) || "-"}
                 </div>
-              ))}
-              <div className={`clan-table-cell clan-table-cell-data ${levelClass(stats, req)}`}>
-                {formatReqValue(stats, req)}
+                {users.map(user => (
+                  <div
+                    className={`clan-table-cell clan-table-cell-data ${levelClass(user, req)}`}
+                    key={user.user_id}>
+                    {formatReqValue(user, req)}
+                  </div>
+                ))}
+                <div className={`clan-table-cell clan-table-cell-data ${levelClass(stats, req)}`}>
+                  {formatReqValue(stats, req)}
+                </div>
+                <div
+                  className={`clan-table-cell clan-table-cell-data clan-level-${reqs.tasks.group[req]?.[goal] ? goal : "null"
+                    }`}
+                  key="group">
+                  {reqs.tasks.group[req]?.[goal]?.toLocaleString() ?? "-"}
+                </div>
               </div>
-              <div
-                className={`clan-table-cell clan-table-cell-data clan-level-${
-                  reqs.tasks.group[req]?.[goal] ? goal : "null"
-                }`}
-                key="group">
-                {reqs.tasks.group[req]?.[goal]?.toLocaleString() ?? "-"}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
+      </>}
     </IonCard>
   );
 };

@@ -20,6 +20,7 @@ import useCuppaZeeData from "../../utils/useCuppaZeeData";
 import { CZTypeImg } from "../CZImg";
 import { useTranslation } from "react-i18next";
 import useDB from "../../utils/useDB";
+import useError, { CZError } from "../CZError";
 
 export interface ClanRequirementListProps {
   clan_id?: number;
@@ -60,6 +61,8 @@ const ClanRequirementsList: React.FC<ClanRequirementListProps> = ({
     };
   }, [requirements]);
 
+  const error = useError([requirements, rewards]);
+
   return (
     <IonCard>
       <IonItem className="clan-table-header" lines="none">
@@ -75,70 +78,72 @@ const ClanRequirementsList: React.FC<ClanRequirementListProps> = ({
           <IonNote>{dayjs(game_id.date).format("MMM YYYY")}</IonNote>
         </div>
       </IonItem>
-      {reqs && (
-        <IonCardContent className="clan-requirements-list-content">
-          {levels.map(level => (
-            <div>
-              <h3>{t("clan:level", {level})}</h3>
-              <h4>
-                <IonIcon icon={person} /> {t("clan:individual")}
-              </h4>
-              {reqs.individual
-                .filter(i => reqs.tasks.individual[i][level])
-                .map(i => (
-                  <IonItem lines="none" className="clan-requirements-list-item">
-                    <IonImg
-                      slot="start"
-                      className="item-avatar"
-                      src={`https://server.cuppazee.app/requirements/${i}.png`}
-                    />
-                    <IonLabel>
-                      <b>{reqs.tasks.individual[i][level]?.toLocaleString()}</b>{" "}
-                      {db.getClanRequirement(i).top} {db.getClanRequirement(i).bottom}
-                    </IonLabel>
-                  </IonItem>
-                ))}
-              <h4>
-                <IonIcon icon={people} /> {t("clan:group")}
-              </h4>
-              {reqs.group
-                .filter(i => reqs.tasks.group[i][level])
-                .map(i => (
-                  <IonItem lines="none" className="clan-requirements-list-item">
-                    <IonImg
-                      slot="start"
-                      className="item-avatar"
-                      src={`https://server.cuppazee.app/requirements/${i}.png`}
-                    />
-                    <IonLabel>
-                      <b>{reqs.tasks.group[i][level]?.toLocaleString()}</b>{" "}
-                      {db.getClanRequirement(i).top} {db.getClanRequirement(i).bottom}
-                    </IonLabel>
-                  </IonItem>
-                ))}
-              {rewards.data?.data && (
-                <>
-                  <h4>
-                    <IonIcon icon={gift} /> {t("clan:rewards")}
-                  </h4>
-                  {Object.entries(rewards.data.data?.levels[level] ?? {}).map(([rew, count]) => (
+      {error ? <CZError {...error} /> : <>
+        {reqs && (
+          <IonCardContent className="clan-requirements-list-content">
+            {levels.map(level => (
+              <div>
+                <h3>{t("clan:level", { level })}</h3>
+                <h4>
+                  <IonIcon icon={person} /> {t("clan:individual")}
+                </h4>
+                {reqs.individual
+                  .filter(i => reqs.tasks.individual[i][level])
+                  .map(i => (
                     <IonItem lines="none" className="clan-requirements-list-item">
-                      <CZTypeImg
+                      <IonImg
                         slot="start"
                         className="item-avatar"
-                        img={rewards.data.data?.rewards[rew]?.logo}
+                        src={`https://server.cuppazee.app/requirements/${i}.png`}
                       />
                       <IonLabel>
-                        <b>{count?.toLocaleString()}x</b> {rewards.data.data?.rewards[rew]?.name}
+                        <b>{reqs.tasks.individual[i][level]?.toLocaleString()}</b>{" "}
+                        {db.getClanRequirement(i).top} {db.getClanRequirement(i).bottom}
                       </IonLabel>
                     </IonItem>
                   ))}
-                </>
-              )}
-            </div>
-          ))}
-        </IonCardContent>
-      )}
+                <h4>
+                  <IonIcon icon={people} /> {t("clan:group")}
+                </h4>
+                {reqs.group
+                  .filter(i => reqs.tasks.group[i][level])
+                  .map(i => (
+                    <IonItem lines="none" className="clan-requirements-list-item">
+                      <IonImg
+                        slot="start"
+                        className="item-avatar"
+                        src={`https://server.cuppazee.app/requirements/${i}.png`}
+                      />
+                      <IonLabel>
+                        <b>{reqs.tasks.group[i][level]?.toLocaleString()}</b>{" "}
+                        {db.getClanRequirement(i).top} {db.getClanRequirement(i).bottom}
+                      </IonLabel>
+                    </IonItem>
+                  ))}
+                {rewards.data?.data && (
+                  <>
+                    <h4>
+                      <IonIcon icon={gift} /> {t("clan:rewards")}
+                    </h4>
+                    {Object.entries(rewards.data.data?.levels[level] ?? {}).map(([rew, count]) => (
+                      <IonItem lines="none" className="clan-requirements-list-item">
+                        <CZTypeImg
+                          slot="start"
+                          className="item-avatar"
+                          img={rewards.data.data?.rewards[rew]?.logo}
+                        />
+                        <IonLabel>
+                          <b>{count?.toLocaleString()}x</b> {rewards.data.data?.rewards[rew]?.name}
+                        </IonLabel>
+                      </IonItem>
+                    ))}
+                  </>
+                )}
+              </div>
+            ))}
+          </IonCardContent>
+        )}
+      </>}
     </IonCard>
   );
 };

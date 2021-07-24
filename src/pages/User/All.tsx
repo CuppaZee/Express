@@ -27,6 +27,7 @@ import useUserSettings from "../../utils/useUserSettings";
 import FancyGrid from "../../components/FancyGrid";
 import { useTranslation } from "react-i18next";
 import ZeeOpsOverview from "../../components/ZeeOps/Overview";
+import useError, { CZError } from "../../components/CZError";
 
 const UserCard: React.FC<{ id: number; queries: MutableRefObject<Set<UseQueryResult>> }> = ({ id, queries }) => {
   const day = dayjs.mhqNow();
@@ -60,18 +61,21 @@ const UserCard: React.FC<{ id: number; queries: MutableRefObject<Set<UseQueryRes
       queries.current.delete(user);
     }
   }, [data, user]);
+  const error = useError([data,user]);
   return (
     <IonCard>
-      <IonItem lines="none" detail routerLink={`/player/${user.data?.data?.username}`}>
-        <IonAvatar className="item-avatar" slot="start">
-          <IonImg
-            src={`https://munzee.global.ssl.fastly.net/images/avatars/ua${id.toString(36)}.png`}
-          />
-        </IonAvatar>
-        <IonLabel>{user.data?.data?.username}</IonLabel>
-      </IonItem>
-      <ActivityOverview d={d} day={day} />
-      {!!id && <ZeeOpsOverview user_id={id} />}
+      {error ? <CZError {...error} /> : <>
+        <IonItem lines="none" detail routerLink={`/player/${user.data?.data?.username}`}>
+          <IonAvatar className="item-avatar" slot="start">
+            <IonImg
+              src={`https://munzee.global.ssl.fastly.net/images/avatars/ua${id.toString(36)}.png`}
+            />
+          </IonAvatar>
+          <IonLabel>{user.data?.data?.username}</IonLabel>
+        </IonItem>
+        <ActivityOverview d={d} day={day} />
+        {!!id && <ZeeOpsOverview user_id={id} />}
+      </>}
     </IonCard>
   );
 }

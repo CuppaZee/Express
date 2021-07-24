@@ -1,7 +1,7 @@
 import { FetchRequest, FetchResponse, Endpoints } from "@cuppazee/api";
 import { useQuery, UseQueryOptions, UseQueryResult } from "react-query";
 import stringify from "fast-json-stable-stringify";
-import useToken, { useTokenStatus } from "./useToken";
+import useToken, { useTokenDetails, useTokenStatus } from "./useToken";
 import { IonToast } from "@ionic/react";
 import { useEffect, useRef } from "react";
 
@@ -42,10 +42,11 @@ export interface useMunzeeDataParams<Path extends keyof Endpoints> {
 
 export type useMunzeeDataResponse<Path extends keyof Endpoints> = UseQueryResult<Endpoints[Path]["response"] | null> & {
   tokenStatus: useTokenStatus;
+  tokenDetails: useTokenDetails;
 };
 
 export default function useMunzeeData<Path extends keyof Endpoints>(params: useMunzeeDataParams<Path>): useMunzeeDataResponse<Path> {
-  const [token, tokenStatus, refetchToken] = useToken(params.user_id);
+  const [token, tokenStatus, refetchToken, tokenDetails] = useToken(params.user_id);
   const lastToken = useRef<string | null>(null);
   const data = useQuery(
     [params.endpoint, stringify(params.params), params.user_id],
@@ -70,5 +71,6 @@ export default function useMunzeeData<Path extends keyof Endpoints>(params: useM
   return {
     ...data,
     tokenStatus,
+    tokenDetails,
   }
 }

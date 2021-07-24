@@ -1,13 +1,19 @@
 import { useQuery } from "react-query";
-import { AccountsStorage } from "../storage/Account";
+import { Account, AccountsStorage } from "../storage/Account";
 import useStorage from "./useStorage";
 
-type useTokenResponse = [token: string | null, status: useTokenStatus, refresh: () => void];
+type useTokenResponse = [token: string | null, status: useTokenStatus, refresh: () => void, tokenDetails: useTokenDetails];
 export enum useTokenStatus {
   Success = "success",
   Loading = "loading",
   Expired = "expired",
-  Missing = "missing"
+  Missing = "missing",
+  Failed = "failed",
+}
+
+export interface useTokenDetails {
+  account?: Account;
+  user_id?: number | null;
 }
 
 export interface AccessToken {
@@ -25,9 +31,6 @@ const getToken = async (teaken: string, user_id: number): Promise<{ data: Access
       user_id
     )}`
   );
-  if (!response.ok) {
-    throw new Error("Expired");
-  }
   // TODO: FROM value
   return await response.json();
 };
@@ -49,14 +52,18 @@ export default function useToken(user_id?: number | null): useTokenResponse {
       enabled: account?.teaken !== undefined,
     }
   );
+  const tokenDetails: useTokenDetails = {
+    account,
+    user_id,
+  };
   if (!account) {
-    return [null, useTokenStatus.Missing, () => {}];
+    return [null, useTokenStatus.Missing, () => {}, tokenDetails];
   } else if (data.isSuccess && data?.data?.data?.access_token) {
-    return [data.data.data.access_token, useTokenStatus.Success, data.refetch];
+    return [data.data.data.access_token, useTokenStatus.Success, data.refetch, tokenDetails];
   } else if (data.isSuccess && !data?.data?.data?.access_token) {
-    return [null, useTokenStatus.Expired, data.refetch];
+    return [null, useTokenStatus.Expired, data.refetch, tokenDetails];
   } else if (data.isError) {
-    return [null, useTokenStatus.Expired, data.refetch];
+    return [null, useTokenStatus.Failed, data.refetch, tokenDetails];
   }
-  return [null, useTokenStatus.Loading, data.refetch];
+  return [null, useTokenStatus.Loading, data.refetch, tokenDetails];
 }

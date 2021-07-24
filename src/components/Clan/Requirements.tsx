@@ -16,6 +16,7 @@ import { UseQueryResult } from "react-query";
 import { useTranslation } from "react-i18next";
 import { ScrollSyncController, useScrollSync } from "../../utils/useScrollSync";
 import useDB from "../../utils/useDB";
+import useError, { CZError } from "../CZError";
 
 export interface ClanRequirementProps {
   scrollSyncController?: MutableRefObject<ScrollSyncController>;
@@ -51,6 +52,8 @@ const ClanRequirementsCard: React.FC<ClanRequirementProps> = ({ clan_id, game_id
     };
   }, [requirements]);
 
+  const error = useError([requirements]);
+
   return (
     <IonCard>
       <IonItem
@@ -76,64 +79,64 @@ const ClanRequirementsCard: React.FC<ClanRequirementProps> = ({ clan_id, game_id
           <IonNote>{dayjs(game_id.date).format("MMM YYYY")}</IonNote>
         </div>
       </IonItem>
-      {reqs && (
-        <div
-          ref={ref}
-          onScroll={onScroll}
-          role="table"
-          className="clan-table clan-table-requirements clan-table-edg">
-          <div role="row" className="clan-table-column">
-            <div role="cell" className="clan-table-cell clan-table-cell-header">
-              <div>{t("clan:levels")}</div>
-            </div>
-            {levels.map(level => (
-              <div role="cell" className={`clan-table-cell clan-level-${level}`} key={level}>
-                <div>{t("clan:indiv_level", { level })}</div>
-              </div>
-            ))}
-            {levels.map(level => (
-              <div
-                data-section={level === 1 ? "group" : ""}
-                role="cell"
-                className={`clan-table-cell clan-level-${level}`}
-                key={level}>
-                <div>{t("clan:group_level", { level })}</div>
-              </div>
-            ))}
-          </div>
-          {reqs.all.map(req => (
-            <div className="clan-table-column">
-              <div className="clan-table-cell clan-table-cell-header">
-                <IonImg
-                  className="clan-table-req-img"
-                  src={`https://server.cuppazee.app/requirements/${req}.png`}
-                />
-                <div>{db.getClanRequirement(req).top}</div>
-                <div>{db.getClanRequirement(req).bottom}</div>
+      {error ? <CZError {...error} /> : <>
+        {reqs && (
+          <div
+            ref={ref}
+            onScroll={onScroll}
+            role="table"
+            className="clan-table clan-table-requirements clan-table-edg">
+            <div role="row" className="clan-table-column">
+              <div role="cell" className="clan-table-cell clan-table-cell-header">
+                <div>{t("clan:levels")}</div>
               </div>
               {levels.map(level => (
-                <div
-                  className={`clan-table-cell clan-table-cell-data clan-level-${
-                    reqs.tasks.individual[req]?.[level] ? level : "null"
-                  }`}
-                  key={level}>
-                  {reqs.tasks.individual[req]?.[level]?.toLocaleString() ?? "-"}
+                <div role="cell" className={`clan-table-cell clan-level-${level}`} key={level}>
+                  <div>{t("clan:indiv_level", { level })}</div>
                 </div>
               ))}
               {levels.map(level => (
                 <div
                   data-section={level === 1 ? "group" : ""}
-                  className={`clan-table-cell clan-table-cell-data clan-level-${
-                    reqs.tasks.group[req]?.[level] ? level : "null"
-                  }`}
+                  role="cell"
+                  className={`clan-table-cell clan-level-${level}`}
                   key={level}>
-                  {reqs.tasks.group[req]?.[level]?.toLocaleString() ?? "-"}
+                  <div>{t("clan:group_level", { level })}</div>
                 </div>
               ))}
             </div>
-          ))}
-        </div>
-      )}
+            {reqs.all.map(req => (
+              <div className="clan-table-column">
+                <div className="clan-table-cell clan-table-cell-header">
+                  <IonImg
+                    className="clan-table-req-img"
+                    src={`https://server.cuppazee.app/requirements/${req}.png`}
+                  />
+                  <div>{db.getClanRequirement(req).top}</div>
+                  <div>{db.getClanRequirement(req).bottom}</div>
+                </div>
+                {levels.map(level => (
+                  <div
+                    className={`clan-table-cell clan-table-cell-data clan-level-${reqs.tasks.individual[req]?.[level] ? level : "null"
+                      }`}
+                    key={level}>
+                    {reqs.tasks.individual[req]?.[level]?.toLocaleString() ?? "-"}
+                  </div>
+                ))}
+                {levels.map(level => (
+                  <div
+                    data-section={level === 1 ? "group" : ""}
+                    className={`clan-table-cell clan-table-cell-data clan-level-${reqs.tasks.group[req]?.[level] ? level : "null"
+                      }`}
+                    key={level}>
+                    {reqs.tasks.group[req]?.[level]?.toLocaleString() ?? "-"}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        )}
+      </>}
     </IonCard>
   );
 };

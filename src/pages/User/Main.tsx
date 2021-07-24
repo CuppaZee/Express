@@ -31,6 +31,7 @@ import { RouteChildrenProps } from "react-router";
 import { useTranslation } from "react-i18next";
 import ZeeOpsOverview from "../../components/ZeeOps/Overview"
 import { useRootCategories } from "../../utils/useUserSettings";
+import useError, { CZError } from "../../components/CZError";
 
 interface UserCuppaZeeData {
   shadowClan: {
@@ -61,6 +62,7 @@ const UserMainPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
       enabled: !!userID,
     },
   });
+  const error = useError([data, user]);
   const d = useMemo(
     () =>
       data.data
@@ -90,8 +92,10 @@ const UserMainPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
         </IonHeader>
         <div className="player-main-page">
           <IonCard className="player-main-card">
-            <ActivityOverview d={d} day={day} />
-            {!!userID && <ZeeOpsOverview user_id={userID} />}
+            {error ? <CZError {...error} /> : <>
+              <ActivityOverview d={d} day={day} />
+              {!!userID && <ZeeOpsOverview user_id={userID} />}
+            </>}
           </IonCard>
           <IonCard className="player-main-card">
             <IonItem
@@ -116,9 +120,8 @@ const UserMainPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
               <IonItem
                 lines={!user.data?.data?.clan ? "inset" : "none"}
                 detail
-                routerLink={`/clan/${
-                  user.data?.data?.clan?.id ?? userCuppaZee.data?.data.shadowClan?.clan_id
-                }`}>
+                routerLink={`/clan/${user.data?.data?.clan?.id ?? userCuppaZee.data?.data.shadowClan?.clan_id
+                  }`}>
                 <IonAvatar className="item-avatar" slot="start">
                   <IonImg
                     src={`https://munzee.global.ssl.fastly.net/images/clan_logos/${Number(
@@ -151,9 +154,8 @@ const UserMainPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
                   key={i.id}
                   detail
                   lines={n === a.length - 1 ? "none" : "inset"}
-                  routerLink={`/player/${user.data?.data?.username ?? params?.username}/captures/${
-                    i.id
-                  }`}>
+                  routerLink={`/player/${user.data?.data?.username ?? params?.username}/captures/${i.id
+                    }`}>
                   <CZTypeImg img={i.icon} slot="start" className="user-captures-image" />
                   <IonLabel>{i.name}</IonLabel>
                 </IonItem>

@@ -15,6 +15,7 @@ import ClanRequirementsCard from "../../components/Clan/Requirements";
 import FancyGrid from "../../components/FancyGrid";
 import { CZLoadText } from "../../components/CZLoad";
 import useDB from "../../utils/useDB";
+import useError, { CZError } from "../../components/CZError";
 
 export function findLastIndex<T>(
   array: Array<T>,
@@ -35,7 +36,7 @@ const UserClanProgressPage: React.FC<RouteChildrenProps<{ username: string }>> =
     endpoint: "clan/v2/requirements",
     params: { clan_id: 1349, game_id: new GameID().game_id },
   });
-  
+
   const db = useDB();
 
   const reqs = useMemo(
@@ -46,8 +47,10 @@ const UserClanProgressPage: React.FC<RouteChildrenProps<{ username: string }>> =
   const data = useCuppaZeeData<{ data: { [key: string]: number } }>({
     endpoint: "user/clanprogress",
     params: { user_id: userID },
-    options: { enabled: !!userID }
+    options: { enabled: !!userID },
   });
+
+  const error = useError([requirements, data]);
 
   function getLevel(req: number) {
     const i = reqs?.tasks.individual[req];
@@ -68,44 +71,46 @@ const UserClanProgressPage: React.FC<RouteChildrenProps<{ username: string }>> =
 
       <IonContent fullscreen>
         <CZRefresher queries={[data, requirements]} />
-        <FancyGrid width={300} maxWidth={700}>
-          {reqs?.all.map(req => (
-            <IonCard key={`card_${req}`} className="clanprogress-card">
-              <IonItem className={`user-clan-level-${getLevel(req)}`} lines="none">
-                <IonImg
-                  src={`https://server.cuppazee.app/requirements/${req}.png`}
-                  slot="start"
-                  className="item-avatar"
-                />
-                <div>
-                  <IonLabel>
-                    {db.getClanRequirement(req).top} {db.getClanRequirement(req).bottom}
-                  </IonLabel>
-                  {data.data?.data ? (
-                    <IonLabel>{data.data?.data?.[req]?.toLocaleString() ?? 0}</IonLabel>
-                  ) : (
-                    <IonLabel>
-                      <CZLoadText loading={true} />
-                    </IonLabel>
-                  )}
-                </div>
-                {getLevel(req) !== null && (
-                  <div className="clanprogress-level" slot="end">
-                    <IonLabel>{t("clan:level_text")}</IonLabel>
-                    <IonLabel>
+        {error ? (
+          <CZError {...error} />
+        ) : (
+          <>
+            <FancyGrid width={300} maxWidth={700}>
+              {reqs?.all.map(req => (
+                <IonCard key={`card_${req}`} className="clanprogress-card">
+                  <IonItem className={`user-clan-level-${getLevel(req)}`} lines="none">
+                    <IonImg
+                      src={`https://server.cuppazee.app/requirements/${req}.png`}
+                      slot="start"
+                      className="item-avatar"
+                    />
+                    <div>
+                      <IonLabel>
+                        {db.getClanRequirement(req).top} {db.getClanRequirement(req).bottom}
+                      </IonLabel>
                       {data.data?.data ? (
-                        getLevel(req)
+                        <IonLabel>{data.data?.data?.[req]?.toLocaleString() ?? 0}</IonLabel>
                       ) : (
-                        <CZLoadText loading={true} />
+                        <IonLabel>
+                          <CZLoadText loading={true} />
+                        </IonLabel>
                       )}
-                    </IonLabel>
-                  </div>
-                )}
-              </IonItem>
-            </IonCard>
-          ))}
-        </FancyGrid>
-        <ClanRequirementsCard hasLink game_id={new GameID()} />
+                    </div>
+                    {getLevel(req) !== null && (
+                      <div className="clanprogress-level" slot="end">
+                        <IonLabel>{t("clan:level_text")}</IonLabel>
+                        <IonLabel>
+                          {data.data?.data ? getLevel(req) : <CZLoadText loading={true} />}
+                        </IonLabel>
+                      </div>
+                    )}
+                  </IonItem>
+                </IonCard>
+              ))}
+            </FancyGrid>
+            <ClanRequirementsCard hasLink game_id={new GameID()} />
+          </>
+        )}
       </IonContent>
       <Tabs />
     </IonPage>

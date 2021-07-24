@@ -36,6 +36,7 @@ import useStorage from "../../utils/useStorage";
 import { InventorySettingsStorage } from "../../storage/Inventory";
 import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
+import useError, { CZError } from "../../components/CZError";
 
 const UserInventoryPage: React.FC<RouteChildrenProps<{ username: string }>> = ({ match }) => {
   const params = match?.params;
@@ -54,6 +55,8 @@ const UserInventoryPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
     [db, data.dataUpdatedAt, invSettings]
   );
   const [history, setHistory] = useState(false);
+
+  const error = useError([data]);
 
   const [gridRef, elements] = useFancyGrid(
     (history ? d?.history.length : d?.groups.length) || 0,
@@ -80,7 +83,7 @@ const UserInventoryPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
 
       <IonContent fullscreen>
         <CZRefresher queries={[data]} />
-        <div ref={gridRef}>
+        {error ? <CZError {...error} /> : <div ref={gridRef}>
           {!history ? (
             <>
               <IonItem>
@@ -169,7 +172,7 @@ const UserInventoryPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
               ))}
             </div>
           )}
-        </div>
+        </div>}
       </IonContent>
       <Tabs />
     </IonPage>

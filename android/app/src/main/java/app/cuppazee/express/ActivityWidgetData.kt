@@ -53,6 +53,7 @@ class ActivityWidgetWorker(appContext: Context, workerParams: WorkerParameters):
                     views.setTextViewText(R.id.activity_widget_text_username, "")
                     views.setTextViewText(R.id.activity_widget_text_captures, "")
                     views.setTextViewText(R.id.activity_widget_text_deploys, "")
+                    views.setTextViewText(R.id.activity_widget_text_passive, "")
                     views.setTextViewText(R.id.activity_widget_text_capon, "")
                     views.setTextViewText(R.id.activity_widget_text_total_points, "")
                     views.setTextViewText(
@@ -71,7 +72,7 @@ class ActivityWidgetWorker(appContext: Context, workerParams: WorkerParameters):
                     val queue = newRequestQueue(applicationContext)
 
                     val url =
-                        "https://server.cuppazee.app/widget/activity?timestamp=${System.currentTimeMillis()}&username=${username}"
+                        "https://server.cuppazee.app/widget/activity/v2?timestamp=${System.currentTimeMillis()}&username=${username}"
 
                     val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
                         { response ->
@@ -80,6 +81,7 @@ class ActivityWidgetWorker(appContext: Context, workerParams: WorkerParameters):
 
                             try {
                                 val data = response.getJSONObject("data")
+                                val overview = data.getJSONObject("overview")
                                 views.setViewVisibility(
                                     R.id.activity_widget_image_avatar,
                                     View.VISIBLE
@@ -101,20 +103,29 @@ class ActivityWidgetWorker(appContext: Context, workerParams: WorkerParameters):
                                     R.id.activity_widget_text_username,
                                     data.getString("username")
                                 )
+                                val capture = overview.getJSONObject("capture")
                                 views.setTextViewText(
                                     R.id.activity_widget_text_captures,
-                                    data.getInt("capture_count")
-                                        .toString() + " Caps  (" + data.getInt("capture_points") + " Pts)"
+                                    capture.getInt("count")
+                                        .toString() + " Caps  (" + capture.getInt("points") + " Pts)"
                                 )
+                                val deploy = overview.getJSONObject("deploy")
                                 views.setTextViewText(
                                     R.id.activity_widget_text_deploys,
-                                    data.getInt("deploy_count")
-                                        .toString() + " Deps  (" + data.getInt("deploy_points") + " Pts)"
+                                    deploy.getInt("count")
+                                        .toString() + " Deps  (" + deploy.getInt("points") + " Pts)"
                                 )
+                                val passiveDeploy = overview.getJSONObject("passive_deploy")
+                                views.setTextViewText(
+                                    R.id.activity_widget_text_passive,
+                                    passiveDeploy.getInt("count")
+                                        .toString() + " Pass Deps  (" + passiveDeploy.getInt("points") + " Pts)"
+                                )
+                                val capon = overview.getJSONObject("capon")
                                 views.setTextViewText(
                                     R.id.activity_widget_text_capon,
-                                    data.getInt("capon_count")
-                                        .toString() + " Capons  (" + data.getInt("capon_points") + " Pts)"
+                                    capon.getInt("count")
+                                        .toString() + " Capons  (" + capon.getInt("points") + " Pts)"
                                 )
                                 views.setTextViewText(
                                     R.id.activity_widget_text_total_points,
@@ -148,6 +159,7 @@ class ActivityWidgetWorker(appContext: Context, workerParams: WorkerParameters):
                                     "Please report this to CuppaZee: $error"
                                 );
                                 views.setTextViewText(R.id.activity_widget_text_deploys, "");
+                                views.setTextViewText(R.id.activity_widget_text_passive, "");
                                 views.setTextViewText(R.id.activity_widget_text_capon, "");
                                 views.setTextViewText(R.id.activity_widget_text_total_points, "");
                                 views.setTextViewText(

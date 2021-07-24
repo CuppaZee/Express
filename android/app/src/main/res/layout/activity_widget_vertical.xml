@@ -37,6 +37,16 @@
         android:textColor="#ffffff"
         android:textSize="12dp" />
     <TextView
+        android:id="@+id/activity_widget_text_passive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
+        android:contentDescription="@string/appwidget_text"
+        android:text="@string/activity_widget_loading"
+        android:textColor="#ffffff"
+        android:textSize="12dp" />
+    <TextView
         android:id="@+id/activity_widget_text_capon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

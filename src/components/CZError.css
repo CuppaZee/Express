@@ -1,0 +1,17 @@
+.czerror-wrapper {
+  padding: 4px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.czerror-wrapper h4, .czerror-wrapper h6 {
+  margin: 0;
+  margin-bottom: 2px;
+}
+
+.czerror-buttons {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
