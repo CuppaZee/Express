@@ -125,7 +125,7 @@ const ClanRequirementsList: React.FC<ClanRequirementListProps> = ({
                     <h4>
                       <IonIcon icon={gift} /> {t("clan:rewards")}
                     </h4>
-                    {Object.entries(rewards.data.data?.levels[level] ?? {}).map(([rew, count]) => (
+                    {Object.entries(rewards.data.data?.levels[level - 1] ?? {}).map(([rew, count]) => (
                       <IonItem lines="none" className="clan-requirements-list-item">
                         <CZTypeImg
                           slot="start"
