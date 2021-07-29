@@ -106,7 +106,14 @@ persistQueryClient({
   queryClient,
   persistor: {
     async persistClient(client) {
-      return await (await store).set("@czexpress/querycache", JSON.stringify(client));
+      try {
+        client.clientState.queries.forEach(query => {
+          query.state.isFetching = false;
+        })
+        return await (await store).set("@czexpress/querycache", JSON.stringify(client));
+      } catch {
+        return await(await store).set("@czexpress/querycache", JSON.stringify(client));
+      }
     },
     async restoreClient() {
       return JSON.parse((await (await store).get("@czexpress/querycache")) ?? "null");
