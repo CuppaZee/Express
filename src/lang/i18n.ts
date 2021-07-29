@@ -78,9 +78,9 @@ store.then(s => s.get("LANG").then((r) => {
 }));
 
 export const LANGS = [
-  // ["cs", "Čeština"],
+  ["cs", "Čeština"],
   // ["da", "Dansk"],
-  // ["de", "Deutsch"],
+  ["de", "Deutsch"],
   ["en-GB", "English (UK)"],
   ["en", "English (US)"],
   ["fi", "Suomi"],
