@@ -18,12 +18,12 @@ export default function ActivityImg(props: ActivityImgProps) {
   const { t } = useTranslation();
   return (
     <>
-      <IonPopover cssClass="activity-img-popover" {...popoverState}>
+      <IonPopover className="activity-img-popover" alignment="center" {...popoverState}>
         <CZTypeImg className="activity-img" img={props.icon} />
         <h6 style={{ margin: 0 }}>
           {props.amount}x {db.getType(props.icon)?.name ?? db.strip(props.icon)}
         </h6>
-        <div>{t("user_activity:overview_points", {count: props.points})}</div>
+        <div>{t("user_activity:overview_points", { count: props.points })}</div>
       </IonPopover>
       <div
         onClick={show}

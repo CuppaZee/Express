@@ -28,7 +28,7 @@
   opacity: 0.4;
 }
 
-.capture-img-popover .popover-viewport {
+.capture-img-popover > div {
   padding: 8px;
   display: flex;
   flex-direction: column;

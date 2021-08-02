@@ -12,7 +12,7 @@ export default function InventoryImg({ item }: InventoryImgProps) {
   const [popoverState, show] = usePopover();
   return (
     <>
-      <IonPopover cssClass="inventory-img-popover" {...popoverState}>
+      <IonPopover className="inventory-img-popover" alignment="center" {...popoverState}>
         <CZTypeImg className="inventory-img" img={item.icon ?? item.name ?? ""} />
         <p>
           {item.amount}x {item.name}
@@ -21,10 +21,7 @@ export default function InventoryImg({ item }: InventoryImgProps) {
       <div
         onClick={show}
         className={`inventory-img-wrapper ${item.amount ? "" : "inventory-img-wrapper-none"}`}>
-        <CZTypeImg
-          className="inventory-img"
-          img={item.icon ?? item.name ?? ""}
-        />
+        <CZTypeImg className="inventory-img" img={item.icon ?? item.name ?? ""} />
         {item.amount}
       </div>
     </>

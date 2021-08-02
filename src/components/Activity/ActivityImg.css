@@ -19,7 +19,7 @@
   width: 20px;
 }
 
-.activity-img-popover .popover-viewport {
+.activity-img-popover > div {
   padding: 8px;
   display: flex;
   flex-direction: column;

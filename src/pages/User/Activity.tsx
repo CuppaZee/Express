@@ -12,6 +12,7 @@ import {
   IonCardTitle,
   IonCheckbox,
   IonButton,
+  useIonModal,
 } from "@ionic/react";
 import "./Activity.css";
 import Header from "../../components/Header";
@@ -38,6 +39,7 @@ import datetimeLocale from "../../utils/datetimeLocale";
 import { Category, TypeState } from "@cuppazee/db/lib";
 import useScreen from "../../utils/useScreen";
 import useWindowSize from "../../utils/useWindowSize";
+import { DatetimeChangeEventDetail } from "@ionic/core";
 
 
 const types: {
@@ -103,6 +105,12 @@ const Heights = {
     margin: 8,
   },
 };
+
+function DateTimePicker(props: any) {
+  return <IonContent>
+    <IonDatetime {...props} />
+  </IonContent>
+}
 
 function calculateHeight(l: UserActivityItem, platformName: "ios" | "android") {
   let total = 0;
@@ -180,7 +188,30 @@ const UserActivityPage: React.FC<RouteChildrenProps<{ username: string; date: st
   ).mode.value;
 
   const [tab, setTab] = useState("main");
-  const {width} = useWindowSize();
+  const { width } = useWindowSize();
+  
+  const [openDatetime, dismissDatetime] = useIonModal(DateTimePicker, {
+    ...datetimeLocale(),
+    min: user.data?.data?.join_time,
+    max: today.format("YYYY-MM-DD"),
+    value: day.format("YYYY-MM-DD"),
+    presentation: "date",
+    size: "cover",
+    onIonChange: (ev: CustomEvent<DatetimeChangeEventDetail>) => {
+      dismissDatetime();
+      if (dayjs(ev.detail.value ?? "").format("YYYY-MM-DD") !== day.format("YYYY-MM-DD")) {
+        history.push(
+          `/player/${params?.username}/activity/${dayjs(ev.detail.value ?? "").format(
+            "YYYY-MM-DD"
+          )}`,
+          undefined,
+          "replace",
+          undefined,
+          blankAnimation
+        );
+      }
+    },
+  });
 
   const ListWrapper = forwardRef(function ({ children, ...props }: any, ref) {
     return (
@@ -206,35 +237,17 @@ const UserActivityPage: React.FC<RouteChildrenProps<{ username: string; date: st
           style={i.style}
           key="overview">
           <IonCard>
-            <IonItem>
+            <IonItem onClick={() => openDatetime({ cssClass: "iondatetime-modal" })}>
               <IonIcon slot="start" icon={calendarOutline} />
               <IonLabel>{t("user_activity:date")}</IonLabel>
-              <IonDatetime
-                {...datetimeLocale()}
-                min={user.data?.data?.join_time}
-                max={today.format("YYYY-MM-DD")}
-                value={day.format("YYYY-MM-DD")}
-                onIonChange={ev => {
-                  if (
-                    dayjs(ev.detail.value ?? "").format("YYYY-MM-DD") !== day.format("YYYY-MM-DD")
-                  ) {
-                    history.push(
-                      `/player/${params?.username}/activity/${dayjs(ev.detail.value ?? "").format(
-                        "YYYY-MM-DD"
-                      )}`,
-                      undefined,
-                      "replace",
-                      undefined,
-                      blankAnimation
-                    );
-                  }
-                }}
-              />
+              <IonLabel style={{ textAlign: "right" }} slot="end">{day.format("L")}</IonLabel>
             </IonItem>
-            {width <= 700 && <IonItem detail onClick={() => setTab("filters")}>
-              <IonIcon slot="start" icon={filterCircleOutline} />
-              <IonLabel>{t("user_activity:filter_edit")}</IonLabel>
-            </IonItem>}
+            {width <= 700 && (
+              <IonItem detail onClick={() => setTab("filters")}>
+                <IonIcon slot="start" icon={filterCircleOutline} />
+                <IonLabel>{t("user_activity:filter_edit")}</IonLabel>
+              </IonItem>
+            )}
             <ActivityOverview d={d} day={day} />
           </IonCard>
         </div>

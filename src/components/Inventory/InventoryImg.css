@@ -15,7 +15,7 @@
   opacity: 0.4;
 }
 
-.inventory-img-popover .popover-viewport {
+.inventory-img-popover > div {
   padding: 8px;
   display: flex;
   flex-direction: column;
