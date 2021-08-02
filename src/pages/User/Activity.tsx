@@ -233,7 +233,7 @@ const UserActivityPage: React.FC<RouteChildrenProps<{ username: string; date: st
             </IonItem>
             {width <= 700 && <IonItem detail onClick={() => setTab("filters")}>
               <IonIcon slot="start" icon={filterCircleOutline} />
-              <IonLabel>Filters</IonLabel>
+              <IonLabel>{t("user_activity:filter_edit")}</IonLabel>
             </IonItem>}
             <ActivityOverview d={d} day={day} />
           </IonCard>
