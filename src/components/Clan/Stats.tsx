@@ -216,6 +216,7 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
                   </IonSegment>
                   {levels.map(i => (
                     <IonItem
+                      key={i}
                       style={{
                         borderLeft: `4px solid var(--clan-level-${i})`,
                         color: `var(--clan-level-${i})`,
@@ -287,6 +288,7 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
               </IonSegment>
               {levels.map(i => (
                 <IonItem
+                  key={i}
                   style={{
                     borderLeft: `4px solid var(--clan-level-${i})`,
                     color: `var(--clan-level-${i})`,
@@ -339,7 +341,7 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
                   }}
                   value={goal}>
                   {levels.map(i => (
-                    <IonSelectOption value={i}>
+                    <IonSelectOption key={i} value={i}>
                       {t(clanSettings.share ? "clan:share_level" : "clan:indiv_level", { level: i })}
                     </IonSelectOption>
                   ))}
@@ -381,13 +383,13 @@ const ClanStatsCard: React.FC<ClanStatsProps> = ({
                   }}
                   value={goal}>
                   {levels.map(i => (
-                    <IonSelectOption value={i}>{t("clan:group_level", { level: i })}</IonSelectOption>
+                    <IonSelectOption key={i} value={i}>{t("clan:group_level", { level: i })}</IonSelectOption>
                   ))}
                 </IonSelect>
               </div>
             </div>
             {reqs.all.map(req => (
-              <div className="clan-table-column">
+              <div key={req} className="clan-table-column">
                 <div
                   onClick={() => {
                     setSort(Math.abs(sort) === req ? -sort : req);

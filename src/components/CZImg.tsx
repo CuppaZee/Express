@@ -1,5 +1,5 @@
 import { IonImg } from "@ionic/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type IonImgProps = NonNullable<typeof IonImg["defaultProps"]>;
 
@@ -49,9 +49,14 @@ export interface CZTypeImgProps extends Omit<IonImgProps, "src"> {
 }
 
 export function CZTypeImg({ img, ...props }: CZTypeImgProps) {
+  const existsRef = useRef(0);
   const [loaded, setLoaded] = useState("");
+  useEffect(() => {
+    existsRef.current++;
+    return () => {existsRef.current--}
+  });
   return <CZImg onIonImgDidLoad={() => {
-    if (loaded !== img) {
+    if (loaded !== img && existsRef.current > 0) {
       setLoaded(img);
     }
   }} {...props} img={img} type="types" className={props.className + (loaded !== img ? " cztypeimgloading" : "")} />

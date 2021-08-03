@@ -68,6 +68,7 @@ import blankAnimation from "./utils/blankAnimation";
 import More from "./pages/More/More";
 import useUserSettings from "./utils/useUserSettings";
 import AndroidWidgetConfigurePage from "./pages/More/AndroidWidgetConfigure";
+import { HelmetProvider } from "react-helmet-async";
 
 if (!Capacitor.isNativePlatform()) {
   FirebaseAnalytics.initializeFirebase({
@@ -372,7 +373,9 @@ export default function AppWrapper() {
   return (
     <QueryClientProvider client={queryClient}>
       <JotaiProvider>
-        <App />
+        <HelmetProvider>
+          <App />
+        </HelmetProvider>
       </JotaiProvider>
     </QueryClientProvider>
   );

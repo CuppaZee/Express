@@ -96,7 +96,7 @@ const UsersPage: React.FC = () => {
         </IonHeader>
         <FancyGrid width={500}>
           {users?.map(i => (
-            <UserCard queries={queriesRef} id={i.user_id} />
+            <UserCard key={i.user_id} queries={queriesRef} id={i.user_id} />
           ))}
         </FancyGrid>
       </IonContent>

@@ -94,6 +94,7 @@ const ClanAllPage: React.FC<RouteChildrenProps<{ month?: string; year?: string }
         )}
         {clans?.map(i => (
           <ClanStatsCard
+            key={i.clan_id}
             scrollSyncController={scrollSyncController}
             queriesRef={queriesRef}
             clan_id={i.clan_id}

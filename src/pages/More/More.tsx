@@ -88,6 +88,7 @@ function More() {
           </IonItem>
           {UsefulLinks.map(i => (
             <IonItem
+              key={i.name}
               detailIcon={openOutline}
               lines="none"
               href={i.link}
@@ -110,6 +111,7 @@ function More() {
           </IonItem>
           {Groups.map(i => (
             <IonItem
+              key={i.name}
               detailIcon={logoFacebook}
               lines="none"
               href={i.link}

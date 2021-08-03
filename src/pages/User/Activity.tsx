@@ -17,30 +17,28 @@ import {
 import "./Activity.css";
 import Header from "../../components/Header";
 
+import { useVirtual } from "react-virtual";
+
 import { generateUserActivityData, UserActivityItem, UserActivityType } from "@cuppazee/utils";
-import React, { forwardRef, useMemo, useState } from "react";
+import React, { useMemo, useReducer, useRef, useState } from "react";
 import useUserID from "../../utils/useUserID";
 import useActivity from "../../utils/useActivity";
 import dayjs from "dayjs";
 import useMunzeeData from "../../utils/useMunzeeData";
 import CZRefresher from "../../components/CZRefresher";
 import { CZTypeImg } from "../../components/CZImg";
-import { calendarOutline, filter, filterCircleOutline, filterOutline } from "ionicons/icons";
+import { calendarOutline, filterCircleOutline } from "ionicons/icons";
 import ActivityOverview from "../../components/Activity/ActivityOverview";
 import Tabs from "../../components/Tabs";
 import blankAnimation from "../../utils/blankAnimation";
-import { VariableSizeList as List } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
 import useDB from "../../utils/useDB";
 import { Browser } from "@capacitor/browser";
 import { RouteChildrenProps } from "react-router";
 import { useTranslation } from "react-i18next";
 import datetimeLocale from "../../utils/datetimeLocale";
 import { Category, TypeState } from "@cuppazee/db/lib";
-import useScreen from "../../utils/useScreen";
 import useWindowSize from "../../utils/useWindowSize";
 import { DatetimeChangeEventDetail } from "@ionic/core";
-
 
 const types: {
   label: string;
@@ -213,15 +211,26 @@ const UserActivityPage: React.FC<RouteChildrenProps<{ username: string; date: st
     },
   });
 
-  const ListWrapper = forwardRef(function ({ children, ...props }: any, ref) {
-    return (
-      <div ref={ref as any} {...props}>
-        {children}
-      </div>
-    );
+  const [a, u] = useReducer(i => i + 1, 0);
+  const scrollingRef = useRef();
+  const rowVirtualizer = useVirtual({
+    size: (d?.list.length ?? 0) + 1,
+    keyExtractor: i => i === 0 ? "overview" : d?.list[i - 1]?.key ?? i,
+    parentRef: scrollingRef,
+    estimateSize: React.useCallback(
+      i => {
+        if (i === 0) {
+          return overviewSize - 8;
+        }
+        const l = d?.list[i - 1];
+        if (!l) return 0;
+        return calculateHeight(l, mode === "ios" ? "ios" : "android");
+      },
+      [d, overviewSize, tab, a]
+    ),
   });
 
-  function Row(i: any) {
+  const Row = React.useCallback(function (i: any) {
     if (i.index === 0) {
       return (
         <div
@@ -293,7 +302,7 @@ const UserActivityPage: React.FC<RouteChildrenProps<{ username: string; date: st
                   </IonNote>
                 )}
                 <IonLabel style={{ lineHeight: 1 }}>{i.name}</IonLabel>
-                {i.type === "capture" && <IonNote>{t("user_activity:owned_by_user", {user: i.creator})}</IonNote>}
+                {i.type === "capture" && <IonNote>{t("user_activity:owned_by_user", { user: i.creator })}</IonNote>}
               </div>
               <div slot="end" className="activity-list-time-label">
                 <IonLabel>{dayjs(i.time).format("HH:mm")}</IonLabel>
@@ -304,42 +313,54 @@ const UserActivityPage: React.FC<RouteChildrenProps<{ username: string; date: st
         </IonCard>
       </div>
     );
-  }
+  }, [d]);
 
   return (
     <IonPage>
       <Header title={`${params?.username} - ${day.format("L")}`} />
       <IonContent fullscreen style={{ overflow: "hidden" }}>
-        <CZRefresher queries={[user, data]} />
-        <div className={"player-activity-row" + ((width > 700 || tab === "main") ? " player-activity-row-main" : "")}>
+        <div
+          className={
+            "player-activity-row" +
+            (width > 700 || tab === "main" ? " player-activity-row-main" : "")
+          }>
           {(width > 700 || tab === "main") && (
-            <div className="player-activity-main">
-              <AutoSizer>
-                {({ height, width }) => (
-                  <List
-                    outerElementType={ListWrapper}
-                    key={`list_${overviewSize}_${d?.list.map(i=>i.key).join('_')}`}
-                    height={height}
-                    itemCount={(d?.list.length ?? 0) + 1}
-                    itemData={[overviewSize]}
-                    itemSize={i => {
-                      if (i === 0) {
-                        return overviewSize - 8;
-                      }
-                      const l = d?.list[i - 1];
-                      if (!l) return 0;
-                      return calculateHeight(l, mode === "ios" ? "ios" : "android");
-                      // const main =
-                      //   l.type === "capture" ? (mode === "ios" ? 73 : 70) : mode === "ios" ? 67 : 64;
-                      // const subs = (mode === "ios" ? 45 : 40) * (l.sub_captures?.length ?? 0);
-                      // return main + ((subs || 1) - 1) - 8;
+            <IonContent
+              ref={async r => {
+                const s = (await r?.getScrollElement()) as any;
+                if (s && scrollingRef.current !== s) {
+                  scrollingRef.current = s;
+                  u();
+                }
+              }}
+              className="player-activity-main"
+              style={{
+                overflow: "auto",
+              }}>
+              <CZRefresher queries={[user, data]} />
+              <div
+                className="ListInner"
+                style={{
+                  height: `${rowVirtualizer.totalSize}px`,
+                  width: "100%",
+                  position: "relative",
+                }}>
+                {rowVirtualizer.virtualItems.map(virtualRow => (
+                  <Row
+                    key={virtualRow.index}
+                    index={virtualRow.index}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: `${virtualRow.size}px`,
+                      transform: `translateY(${virtualRow.start}px)`,
                     }}
-                    width={width}>
-                    {Row}
-                  </List>
-                )}
-              </AutoSizer>
-            </div>
+                  />
+                ))}
+              </div>
+            </IonContent>
           )}
           {(width > 700 || tab === "filters") && (
             <div className={width > 700 ? "player-activity-filters" : "player-activity-main"}>
@@ -357,7 +378,7 @@ const UserActivityPage: React.FC<RouteChildrenProps<{ username: string; date: st
                   <IonCardTitle>{t("user_activity:filter_types")}</IonCardTitle>
                 </IonCardHeader>
                 {types.map((i, n, a) => (
-                  <IonItem lines={n === a.length - 1 ? "none" : "inset"}>
+                  <IonItem key={i.value} lines={n === a.length - 1 ? "none" : "inset"}>
                     <IonLabel>{i.label}</IonLabel>
                     <IonCheckbox
                       checked={filters.activity.has(i.value)}
@@ -378,7 +399,7 @@ const UserActivityPage: React.FC<RouteChildrenProps<{ username: string; date: st
                   <IonCardTitle>{t("user_activity:filter_state")}</IonCardTitle>
                 </IonCardHeader>
                 {states.map((i, n, a) => (
-                  <IonItem lines={n === a.length - 1 ? "none" : "inset"}>
+                  <IonItem key={i.value} lines={n === a.length - 1 ? "none" : "inset"}>
                     <IonLabel>{i.label}</IonLabel>
                     <IonCheckbox
                       checked={filters.state.has(i.value)}
@@ -399,7 +420,7 @@ const UserActivityPage: React.FC<RouteChildrenProps<{ username: string; date: st
                   <IonCardTitle>{t("user_activity:filter_category")}</IonCardTitle>
                 </IonCardHeader>
                 {d?.categories.map((i, n, a) => (
-                  <IonItem lines={n === a.length - 1 ? "none" : "inset"}>
+                  <IonItem key={i.id} lines={n === a.length - 1 ? "none" : "inset"}>
                     <IonLabel>{i.name}</IonLabel>
                     <IonCheckbox
                       checked={filters.category.has(i)}

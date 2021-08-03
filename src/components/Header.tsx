@@ -1,7 +1,7 @@
 import { IonBackButton, IonButton, IonButtons, IonHeader, IonProgressBar, IonTitle, IonToolbar } from "@ionic/react";
 import React, { PropsWithChildren, useEffect, useState } from "react";
 import { useIsFetching } from "react-query";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import "./Header.css";
 import dayjs from "dayjs";
