@@ -1,0 +1,15 @@
+.mhq-time {
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+.mhq-time h6 {
+  margin: 0;
+}
+.mhq-time div {
+  font-size: 0.6em;
+  opacity: 0.8;
+}

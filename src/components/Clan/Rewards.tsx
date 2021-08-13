@@ -91,7 +91,7 @@ const ClanRewardsCard: React.FC<ClanRewardsProps> = ({ game_id, queriesRef, hasL
             {rew.order.map(r => {
               const title = getTitle(rew.rewards[r]?.name ?? "");
               return (
-                <div className="clan-table-column">
+                <div key={r} className="clan-table-column">
                   <div className="clan-table-cell clan-table-cell-header">
                     <CZTypeImg className="clan-table-req-img" img={rew.rewards[r]?.logo} />
                     <div>{title[0]}</div>

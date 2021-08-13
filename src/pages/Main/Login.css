@@ -18,6 +18,7 @@ ion-card ion-item {
 .login-legal-buttons {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: stretch;
     padding-top: 0;
 }

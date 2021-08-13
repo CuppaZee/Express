@@ -104,3 +104,12 @@ ion-card ion-item {
   margin-left: 16px;
   margin-right: 16px;
 }
+
+
+.iondatetime-modal {
+  --width: min(calc(100% - 16px), 350px);
+  --height: min(calc(100% - 16px), 300px);
+}
+.iondatetime-modal ion-datetime {
+  width: 100%;
+}

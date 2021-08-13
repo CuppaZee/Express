@@ -18,23 +18,17 @@ import {
   IonNote,
 } from "@ionic/react";
 import {
-  brushOutline,
   cafeOutline,
-  chatbubbleOutline,
   chatbubblesOutline,
-  globeOutline,
   gridOutline,
   heartOutline,
   linkOutline,
   listOutline,
   logoFacebook,
   logoGithub,
-  mapOutline,
-  micOutline,
   openOutline,
   peopleCircleOutline,
   peopleOutline,
-  playCircleOutline,
   reload,
   searchOutline,
   settingsOutline,
@@ -191,6 +185,7 @@ export default function Sidebar() {
             </IonItem>
             {UsefulLinks.map(i => (
               <IonItem
+                key={i.name}
                 detailIcon={openOutline}
                 lines="none"
                 href={i.link}
@@ -213,6 +208,7 @@ export default function Sidebar() {
             </IonItem>
             {Groups.map(i => (
               <IonItem
+                key={i.name}
                 detailIcon={logoFacebook}
                 lines="none"
                 href={i.link}

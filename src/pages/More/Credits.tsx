@@ -53,6 +53,7 @@ function CreditsCircles({ width, height }: PackProps) {
         const circles = packData.descendants().slice(1); // skip outer hierarchies
         return circles.map((circle, i) => (
           <Link
+            key={circle.data.user_id}
             to={`/player/${circle.data.username}`}
             className="contributor-circle"
             style={{

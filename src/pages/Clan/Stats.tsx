@@ -81,6 +81,7 @@ const ClanStatsPage: React.FC<RouteChildrenProps<{ id: string; month?: string; y
           </IonButton>
           {params && (
             <ClanStatsCard
+              key={params?.id}
               scrollSyncController={scrollSyncController}
               clan_id={Number(params?.id)}
               game_id={game_id}

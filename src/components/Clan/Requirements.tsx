@@ -106,7 +106,7 @@ const ClanRequirementsCard: React.FC<ClanRequirementProps> = ({ clan_id, game_id
               ))}
             </div>
             {reqs.all.map(req => (
-              <div className="clan-table-column">
+              <div key={req} className="clan-table-column">
                 <div className="clan-table-cell clan-table-cell-header">
                   <IonImg
                     className="clan-table-req-img"

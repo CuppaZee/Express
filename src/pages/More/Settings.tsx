@@ -232,7 +232,7 @@ function Settings() {
                         buttons: [
                           "Cancel",
                           {
-                            text: "Remove",
+                            text: "Sign out",
                             handler: () => {
                               setReady({ date: "" });
                               setAccounts({});
@@ -413,7 +413,7 @@ function Settings() {
                     color="success"
                     slot="end">
                     <IonIcon icon={cloud} />
-                    &nbsp;Enable Cloud Syncing
+                    &nbsp;{t("settings:sync_enable")}
                   </IonButton>
                 ) : (
                   <IonButton
@@ -489,7 +489,7 @@ function Settings() {
                     color="success"
                     slot="end">
                     <IonIcon icon={cloud} />
-                    &nbsp;Enable Cloud Syncing
+                    &nbsp;{t("settings:sync_enable")}
                   </IonButton>
                 ) : (
                   <IonButton

@@ -13,7 +13,7 @@ export default function CaptureImg({ type, count }: CaptureImgProps) {
   const [popoverState, show] = usePopover();
   return (
     <>
-      <IonPopover cssClass="capture-img-popover" {...popoverState}>
+      <IonPopover className="capture-img-popover" alignment="center" {...popoverState}>
         <CZTypeImg className="capture-img" img={type.icon} />
         <p>
           {count}x {type.name}

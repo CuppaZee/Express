@@ -69,7 +69,7 @@ const UserCapturesPage: React.FC<RouteChildrenProps<{ username: string; type: st
                   <IonCardTitle>{category.name}</IonCardTitle>
                 </IonCardHeader>
                 {category.children.map(i => (
-                  <IonItem detail routerLink={`/player/${params?.username}/captures/${i.id}`}>
+                  <IonItem key={i.id} detail routerLink={`/player/${params?.username}/captures/${i.id}`}>
                     <CZTypeImg img={i.icon} slot="start" className="captures-category-image" />
                     <IonLabel>{i.name}</IonLabel>
                   </IonItem>
@@ -92,7 +92,7 @@ const UserCapturesPage: React.FC<RouteChildrenProps<{ username: string; type: st
                     </IonCardHeader>
                     <IonCardContent className="capture-card-content">
                       {c.groups.map(g => (
-                        <>
+                        <React.Fragment key={g.title ?? ""}>
                           <h6 style={{ textAlign: "center" }}>{g.title}</h6>
                           <div className="capture-row">
                             <FancyGrid width={80}>
@@ -103,7 +103,7 @@ const UserCapturesPage: React.FC<RouteChildrenProps<{ username: string; type: st
                                 ))}
                             </FancyGrid>
                           </div>
-                        </>
+                        </React.Fragment>
                       ))}
                     </IonCardContent>
                   </IonCard>

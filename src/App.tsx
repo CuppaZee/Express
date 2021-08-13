@@ -68,6 +68,7 @@ import blankAnimation from "./utils/blankAnimation";
 import More from "./pages/More/More";
 import useUserSettings from "./utils/useUserSettings";
 import AndroidWidgetConfigurePage from "./pages/More/AndroidWidgetConfigure";
+import { HelmetProvider } from "react-helmet-async";
 
 if (!Capacitor.isNativePlatform()) {
   FirebaseAnalytics.initializeFirebase({
@@ -106,7 +107,14 @@ persistQueryClient({
   queryClient,
   persistor: {
     async persistClient(client) {
-      return await (await store).set("@czexpress/querycache", JSON.stringify(client));
+      try {
+        client.clientState.queries.forEach(query => {
+          query.state.isFetching = false;
+        })
+        return await (await store).set("@czexpress/querycache", JSON.stringify(client));
+      } catch {
+        return await(await store).set("@czexpress/querycache", JSON.stringify(client));
+      }
     },
     async restoreClient() {
       return JSON.parse((await (await store).get("@czexpress/querycache")) ?? "null");
@@ -365,7 +373,9 @@ export default function AppWrapper() {
   return (
     <QueryClientProvider client={queryClient}>
       <JotaiProvider>
-        <App />
+        <HelmetProvider>
+          <App />
+        </HelmetProvider>
       </JotaiProvider>
     </QueryClientProvider>
   );

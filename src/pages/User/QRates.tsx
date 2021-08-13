@@ -47,7 +47,7 @@ const UserQRatesPage: React.FC<RouteChildrenProps<{ username: string; type: stri
             <IonCard key={`card_${c.qrate_id}`} className="qrate-card">
               <IonCardHeader>
                 <IonCardSubtitle>
-                  {t("user_qrates:found", { date: dayjs(c.time_found).format("L LT") })}
+                  {t("user_qrates:found", { date: dayjs.mhqParse(c.time_found).local().format("L LT") })}
                 </IonCardSubtitle>
                 <IonCardTitle>
                   {c.name}{" "}

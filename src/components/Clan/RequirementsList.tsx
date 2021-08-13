@@ -82,7 +82,7 @@ const ClanRequirementsList: React.FC<ClanRequirementListProps> = ({
         {reqs && (
           <IonCardContent className="clan-requirements-list-content">
             {levels.map(level => (
-              <div>
+              <div key={level}>
                 <h3>{t("clan:level", { level })}</h3>
                 <h4>
                   <IonIcon icon={person} /> {t("clan:individual")}
@@ -90,7 +90,7 @@ const ClanRequirementsList: React.FC<ClanRequirementListProps> = ({
                 {reqs.individual
                   .filter(i => reqs.tasks.individual[i][level])
                   .map(i => (
-                    <IonItem lines="none" className="clan-requirements-list-item">
+                    <IonItem key={i} lines="none" className="clan-requirements-list-item">
                       <IonImg
                         slot="start"
                         className="item-avatar"
@@ -108,7 +108,7 @@ const ClanRequirementsList: React.FC<ClanRequirementListProps> = ({
                 {reqs.group
                   .filter(i => reqs.tasks.group[i][level])
                   .map(i => (
-                    <IonItem lines="none" className="clan-requirements-list-item">
+                    <IonItem key={`group_${i}`} lines="none" className="clan-requirements-list-item">
                       <IonImg
                         slot="start"
                         className="item-avatar"
@@ -125,8 +125,8 @@ const ClanRequirementsList: React.FC<ClanRequirementListProps> = ({
                     <h4>
                       <IonIcon icon={gift} /> {t("clan:rewards")}
                     </h4>
-                    {Object.entries(rewards.data.data?.levels[level] ?? {}).map(([rew, count]) => (
-                      <IonItem lines="none" className="clan-requirements-list-item">
+                    {Object.entries(rewards.data.data?.levels[level - 1] ?? {}).map(([rew, count]) => (
+                      <IonItem key={rew} lines="none" className="clan-requirements-list-item">
                         <CZTypeImg
                           slot="start"
                           className="item-avatar"
