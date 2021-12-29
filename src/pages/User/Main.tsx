@@ -1,6 +1,9 @@
 import {
+  IonAlert,
   IonAvatar,
   IonCard,
+  IonCardSubtitle,
+  IonCardTitle,
   IonContent,
   IonHeader,
   IonIcon,
@@ -20,7 +23,7 @@ import { useMemo } from "react";
 import useUserID from "../../utils/useUserID";
 import useActivity from "../../utils/useActivity";
 import dayjs from "dayjs";
-import useMunzeeData from "../../utils/useMunzeeData";
+import useMunzeeData, { usePatches } from "../../utils/useMunzeeData";
 import CZRefresher from "../../components/CZRefresher";
 import ActivityOverview from "../../components/Activity/ActivityOverview";
 import Tabs from "../../components/Tabs";
@@ -80,6 +83,7 @@ const UserMainPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
     [data.dataUpdatedAt, db]
   );
   const rootCategories = useRootCategories();
+  const patches = usePatches();
   return (
     <IonPage>
       <Header title={params?.username} />
@@ -91,11 +95,23 @@ const UserMainPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
           </IonToolbar>
         </IonHeader>
         <div className="player-main-page">
+          {patches?.expressBanner ? (
+            <IonCard className="player-main-card" style={{ padding: 4 }}>
+              <IonCardTitle>{patches.expressBanner}</IonCardTitle>
+              <IonCardSubtitle style={{ textTransform: "none" }}>
+                {patches.expressBannerSubtitle}
+              </IonCardSubtitle>
+            </IonCard>
+          ) : null}
           <IonCard className="player-main-card">
-            {error ? <CZError {...error} /> : <>
-              <ActivityOverview d={d} day={day} />
-              {!!userID && <ZeeOpsOverview user_id={userID} />}
-            </>}
+            {error ? (
+              <CZError {...error} />
+            ) : (
+              <>
+                <ActivityOverview d={d} day={day} />
+                {!!userID && <ZeeOpsOverview user_id={userID} />}
+              </>
+            )}
           </IonCard>
           <IonCard className="player-main-card">
             <IonItem
@@ -120,8 +136,9 @@ const UserMainPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
               <IonItem
                 lines={!user.data?.data?.clan ? "inset" : "none"}
                 detail
-                routerLink={`/clan/${user.data?.data?.clan?.id ?? userCuppaZee.data?.data.shadowClan?.clan_id
-                  }`}>
+                routerLink={`/clan/${
+                  user.data?.data?.clan?.id ?? userCuppaZee.data?.data.shadowClan?.clan_id
+                }`}>
                 <IonAvatar className="item-avatar" slot="start">
                   <IonImg
                     src={`https://munzee.global.ssl.fastly.net/images/clan_logos/${Number(
@@ -154,8 +171,9 @@ const UserMainPage: React.FC<RouteChildrenProps<{ username: string }>> = ({
                   key={i.id}
                   detail
                   lines={n === a.length - 1 ? "none" : "inset"}
-                  routerLink={`/player/${user.data?.data?.username ?? params?.username}/captures/${i.id
-                    }`}>
+                  routerLink={`/player/${user.data?.data?.username ?? params?.username}/captures/${
+                    i.id
+                  }`}>
                   <CZTypeImg img={i.icon} slot="start" className="user-captures-image" />
                   <IonLabel>{i.name}</IonLabel>
                 </IonItem>

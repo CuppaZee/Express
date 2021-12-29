@@ -2,21 +2,23 @@ import { FetchRequest, FetchResponse, Endpoints } from "@cuppazee/api";
 import { useQuery, UseQueryOptions, UseQueryResult } from "react-query";
 import stringify from "fast-json-stable-stringify";
 import useToken, { useTokenDetails, useTokenStatus } from "./useToken";
-import { IonToast } from "@ionic/react";
 import { useEffect, useRef } from "react";
 
 const getMunzeeData = async <Path extends keyof Endpoints>(
   endpoint: FetchRequest<Path>["endpoint"],
-  params: FetchRequest<Path>["params"] & {httpMethod?: "get"},
-  token: string
+  params: FetchRequest<Path>["params"] & { httpMethod?: "get" },
+  token: string,
+  patches: string[]
 ): Promise<FetchResponse<Path> | null> => {
-  const start = performance.now();
+  // const start = performance.now();
   var body = new FormData();
   body.append("data", JSON.stringify(params));
   body.append("access_token", token);
-  const mid = performance.now();
+  // const mid = performance.now();
   var response = await fetch(
-    "https://api.munzee.com/" +
+    (patches?.includes(endpoint ?? "")
+      ? "https://api.cuppazee.app/patches/"
+      : "https://api.munzee.com/") +
       endpoint?.replace(/{([A-Za-z0-9_]+)}/g, string => {
         return params?.[string[1] as keyof FetchRequest<Path>["params"]] || "";
       }) +
@@ -33,6 +35,27 @@ const getMunzeeData = async <Path extends keyof Endpoints>(
   return await response.json();
 };
 
+async function getPatches() {
+  try {
+    const response = await fetch("https://api.cuppazee.app/patches");
+    if (!response.ok) return [];
+    const data = await response.json();
+    return data.data ?? {};
+  } catch {
+    return {};
+  }
+}
+
+export function usePatches():
+  | { patchedMunzeeAPIEndpoints?: string[]; expressBanner?: string; expressBannerSubtitle?: string; }
+  | undefined {
+  const data = useQuery(["patches"], () => getPatches());
+  if (data.data) {
+    return data.data;
+  }
+  return undefined;
+}
+
 export interface useMunzeeDataParams<Path extends keyof Endpoints> {
   endpoint: FetchRequest<Path>["endpoint"];
   params: FetchRequest<Path>["params"] & { httpMethod?: "get" };
@@ -47,11 +70,16 @@ export type useMunzeeDataResponse<Path extends keyof Endpoints> = UseQueryResult
 
 export default function useMunzeeData<Path extends keyof Endpoints>(params: useMunzeeDataParams<Path>): useMunzeeDataResponse<Path> {
   const [token, tokenStatus, refetchToken, tokenDetails] = useToken(params.user_id);
+  const patches = usePatches();
   const lastToken = useRef<string | null>(null);
   const data = useQuery(
-    [params.endpoint, stringify(params.params), params.user_id],
+    [params.endpoint, stringify(params.params), params.user_id, patches?.patchedMunzeeAPIEndpoints?.join(",")],
     async () => {
-      const responseData = await getMunzeeData(params.endpoint, params.params, token ?? "");
+      const responseData = await getMunzeeData(
+        params.endpoint,
+        params.params,
+        token ?? "",
+        patches?.patchedMunzeeAPIEndpoints ?? []);
       if (responseData?.status_code === 403) {
         refetchToken();
       }
@@ -59,7 +87,7 @@ export default function useMunzeeData<Path extends keyof Endpoints>(params: useM
     },
     {
       ...params.options,
-      enabled: !!token && params.options?.enabled !== false,
+      enabled: !!token && params.options?.enabled !== false && patches !== undefined,
     }
   );
   useEffect(() => {
