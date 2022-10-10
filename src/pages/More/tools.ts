@@ -8,12 +8,6 @@ export const UsefulLinks = [
     link: "https://anchor.fm/munzeemaniacs",
   },
   {
-    name: "Eeznum",
-    description: "Munzee Stats and Tools",
-    icon: globeOutline,
-    link: "http://eeznum.co.uk",
-  },
-  {
     name: "munzee.g2.co.nz",
     description: "Destination and POI Planners",
     icon: mapOutline,
